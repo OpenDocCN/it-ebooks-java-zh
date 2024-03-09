@@ -1,0 +1,5 @@
+# 编辑器和 IDE
+
+## 编辑器和 IDE
+
+Clojure plugins for many editors and IDEs are available. For emacs there is clojure-mode and swank-clojure, both at [`github.com/technomancy/swank-clojure`](https://github.com/technomancy/swank-clojure) . swank-clojure uses the Superior Lisp Interaction Mode for Emacs (Slime) described at [`common-lisp.net/project/slime/`](http://common-lisp.net/project/slime/) . For Vim there is VimClojure [`kotka.de/projects/clojure/vimclojure.html`](http://kotka.de/projects/clojure/vimclojure.html) . For NetBeans there is enclojure at [`enclojure.org/`](http://enclojure.org/) . For IDEA there a "La Clojure" at [`plugins.intellij.net/plugin/?id=4050`](http://plugins.intellij.net/plugin/?id=4050) . For Eclipse there is Counter Clockwise at [`dev.clojure.org/display/doc/Getting+Started+with+Eclipse+and+Counterclockwise`](http://dev.clojure.org/display/doc/Getting+Started+with+Eclipse+and+Counterclockwise) .
