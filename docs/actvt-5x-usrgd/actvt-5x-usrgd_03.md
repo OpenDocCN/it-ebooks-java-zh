@@ -441,7 +441,8 @@ signal 开始事件，可以用来通过一个已命名的信号（signal）来�
 
 signalStartEvent 的 XML 格式是标准的 startEvent 声明，其中包含一个 signalEventDefinition 子元素：
 
- <signal id="theSignal" name="The Signal" class="calibre27">```
+```
+<signal id="theSignal" name="The Signal" class="calibre27">
 <process id="processWithSignalStart1">
     <startEvent id="theStart">
       <signalEventDefinition id="theSignalEventDefinition" signalRef="theSignal"  />
