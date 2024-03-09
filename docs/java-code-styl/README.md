@@ -1,6 +1,6 @@
-# Introduction
+# Java 编码规范
 
-# Code Conventions for the Java Programming Language 中文翻译《Java 编码规范》
+## Code Conventions for the Java Programming Language 中文翻译
 
 Chinese translation of the [Code Conventions for the Java Programming Language](http://www.oracle.com/technetwork/java/index-135089.html) document. This document contains the standard conventions that we at Sun follow and recommend that others follow. It covers filenames, file organization, indentation, comments, declarations, statements, white space, naming conventions, programming practices and includes a code example.
 

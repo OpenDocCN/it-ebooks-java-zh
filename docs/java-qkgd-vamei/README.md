@@ -1,4 +1,4 @@
-# Java 快速教程
+# Java 快速教程（Vamei）
 
 > 作者：[Vamei](http://www.cnblogs.com/vamei)
 > 

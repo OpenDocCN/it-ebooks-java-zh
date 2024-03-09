@@ -1,6 +1,4 @@
-# 介紹
-
-# Essential Java.《Java 编程要点》
+# Java 编程要点
 
 ![](img/java_logo.jpg)
 
