@@ -1,5 +1,3 @@
-# 说明
-
 # RxJava Essentials 中文翻译版
 
 ![](img/rxjava.jpg)

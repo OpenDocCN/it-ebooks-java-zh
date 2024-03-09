@@ -1,6 +1,6 @@
-# 介紹
+# JSSE 参考指南
 
-# Java Secure Socket Extension (JSSE) Reference Guide 《JSSE 参考指南》
+## Java Secure Socket Extension (JSSE) Reference Guide
 
 This is a Chinese translation of [Java Secure Socket Extension (JSSE) Reference Guide](https://docs.oracle.com/javase/8/docs/technotes/guides/security/jsse/JSSERefGuide.html), and also provides a lot of useful examples about JSSE.
 

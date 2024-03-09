@@ -1,5 +1,3 @@
-# 介紹
-
 # Java 8 教程汇总
 
 # Java 8 Lambda 序列化？
