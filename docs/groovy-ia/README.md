@@ -1,5 +1,3 @@
-# 实战 Groovy
-
 # 实战 Groovy 系列
 
 > 来源：[实战 Groovy 系列](http://www.ibm.com/developerworks/cn/java/j-pg/)

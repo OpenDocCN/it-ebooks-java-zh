@@ -1,4 +1,4 @@
-# 前言
+# IntelliJ IDEA 使用教程
 
 ## 介绍(Introduce)
 
