@@ -22,7 +22,7 @@ Selector 是 Java NIO 中的一个组件，用于检查一个或多个 NIO Chann
 
 创建一个 Selector 可以通过 Selector.open()方法：
 
-```
+```java
 Selector selector = Selector.open();
 ```
 
@@ -30,7 +30,7 @@ Selector selector = Selector.open();
 
 为了同 Selector 挂了 Channel，我们必须先把 Channel 注册到 Selector 上，这个操作使用 SelectableChannel。register()：
 
-```
+```java
 channel.configureBlocking(false);
 SelectionKey key = channel.register(selector, SelectionKey.OP_READ);
 ```
@@ -55,7 +55,7 @@ Channel 必须是非阻塞的。所以 FileChannel 不适用 Selector，因为 F
 
 如果对多个事件感兴趣可利用位的或运算结合多个常量，比如：
 
-```
+```java
 int interestSet = SelectionKey.OP_READ | SelectionKey.OP_WRITE;
 ```
 
@@ -75,7 +75,7 @@ int interestSet = SelectionKey.OP_READ | SelectionKey.OP_WRITE;
 
 这个“关注集合”实际上就是我们希望处理的事件的集合，它的值就是注册时传入的参数，我们可以用按为与运算把每个事件取出来：
 
-```
+```java
 int interestSet = selectionKey.interestOps();
 
 boolean isInterestedInAccept  = interestSet & SelectionKey.OP_ACCEPT;
@@ -88,13 +88,13 @@ boolean isInterestedInWrite   = interestSet & SelectionKey.OP_WRITE;
 
 "就绪集合"中的值是当前 channel 处于就绪的值，一般来说在调用了 select 方法后都会需要用到就绪状态，select 的介绍在胡须文章中继续展开。
 
-```
+```java
 int readySet = selectionKey.readyOps();
 ```
 
 从“就绪集合”中取值的操作类似月“关注集合”的操作，当然还有更简单的方法，SelectionKey 提供了一系列返回值为 boolean 的的方法：
 
-```
+```java
 selectionKey.isAcceptable();
 selectionKey.isConnectable();
 selectionKey.isReadable();
@@ -105,7 +105,7 @@ selectionKey.isWritable();
 
 从 SelectionKey 操作 Channel 和 Selector 非常简单：
 
-```
+```java
 Channel  channel  = selectionKey.channel();
 Selector selector = selectionKey.selector();
 ```
@@ -114,7 +114,7 @@ Selector selector = selectionKey.selector();
 
 我们可以给一个 SelectionKey 附加一个 Object，这样做一方面可以方便我们识别某个特定的 channel，同时也增加了 channel 相关的附加信息。例如，可以把用于 channel 的 buffer 附加到 SelectionKey 上：
 
-```
+```java
 selectionKey.attach(theObject);
 
 Object attachedObj = selectionKey.attachment();
@@ -122,7 +122,7 @@ Object attachedObj = selectionKey.attachment();
 
 附加对象的操作也可以在 register 的时候就执行：
 
-```
+```java
 SelectionKey key = channel.register(selector, SelectionKey.OP_READ, theObject);
 ```
 
@@ -144,7 +144,7 @@ select()方法的返回值是一个 int 整形，代表有多少 channel 处于�
 
 在调用 select 并返回了有 channel 就绪之后，可以通过选中的 key 集合来获取 channel，这个操作通过调用 selectedKeys()方法：
 
-```
+```java
 Set<SelectionKey> selectedKeys = selector.selectedKeys();
 ```
 
@@ -152,7 +152,7 @@ Set<SelectionKey> selectedKeys = selector.selectedKeys();
 
 遍历这些 SelectionKey 可以通过如下方法：
 
-```
+```java
 Set<SelectionKey> selectedKeys = selector.selectedKeys();
 
 Iterator<SelectionKey> keyIterator = selectedKeys.iterator();
@@ -196,7 +196,7 @@ y 由于调用 select 而被阻塞的线程，可以通过调用 Selector.wakeup
 
 这有一个完整的案例，首先打开一个 Selector,然后注册 channel，最后锦亭 Selector 的状态：
 
-```
+```java
 Selector selector = Selector.open();
 
 channel.configureBlocking(false);

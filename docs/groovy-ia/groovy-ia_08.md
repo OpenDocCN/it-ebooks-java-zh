@@ -1,7 +1,5 @@
 # 实战 Groovy: 关于 MOP 和迷你语言
 
-# 实战 Groovy: 关于 MOP 和迷你语言
-
 *Groovy 让元对象协议从实验室走进应用程序*
 
 将耳朵贴到地上仔细听 —— MOP 正在前进！了解一下元对象协议（Meta Object Protocol，MOP）吧，这是一种将应用程序、语言和应用程序构建 *为*语言的翻新方法。
@@ -28,7 +26,7 @@
 
 ##### 清单 1\. MOP 得到调用的句柄
 
-```
+```java
  class MOPHandler {     
 
   def invokeMethod(String method, Object params) {     
@@ -52,7 +50,7 @@
 
 ##### 清单 2\. 您不相信我，是不是？
 
-```
+```java
  aglover@glove-ubutu:~/projects/groovy-mop$ groovy
   ./src/groovy/com/vanward/groovy/MOPHandler1.groovy
  MOPHandler was asked to invoke helloWorld
@@ -114,7 +112,7 @@ DbUnit 是一项 JUnit 扩展，它在每一次运行测试之前，使数据库
 
 ##### 清单 3\. 字典应用程序的开始测试类
 
-```
+```java
  package test.com.vanward.groovy
  import com.vanward.groovy.SimpleDictionary
  import groovy.util.GroovyTestCase
@@ -162,7 +160,7 @@ DbUnit 是一项 JUnit 扩展，它在每一次运行测试之前，使数据库
 
 ##### 清单 4\. 示例种子文件
 
-```
+```java
  <?xml version='1.0' encoding='UTF-8'?>
  <dataset>
  <word WORD_ID="1" SPELLING="pugnacious" PART_OF_SPEECH="Adjective"/>   
@@ -212,7 +210,7 @@ DbUnit 是一项 JUnit 扩展，它在每一次运行测试之前，使数据库
 
 ##### 清单 5\. 确定词性
 
-```
+```java
  private determinePartOfSpeech(question){
   def matcher = question =~ 'is(.*)(An|A)(Verb|Adjective|Adverb|Noun)'
   matcher.matches()
@@ -228,7 +226,7 @@ DbUnit 是一项 JUnit 扩展，它在每一次运行测试之前，使数据库
 
 ##### 清单 6\. 测试单词词性的确定
 
-```
+```java
  void testPartOfSpeechFalse() {
   def val = dictionary.isPugnaciousAVerb()
   assertFalse("pugnacious is not a verb", val)
@@ -247,7 +245,7 @@ DbUnit 是一项 JUnit 扩展，它在每一次运行测试之前，使数据库
 
 ##### 清单 7\. getSynonyms 实现
 
-```
+```java
  private getSynonyms(question){
   def matcher = question =~ '(synonymsOf)(.*)'
   matcher.matches()
@@ -266,7 +264,7 @@ DbUnit 是一项 JUnit 扩展，它在每一次运行测试之前，使数据库
 
 ##### 清单 8\. 不要忘记测试这个方法！
 
-```
+```java
  void testSynonymsForWord() {
   def val = dictionary.synonymsOfPugnacious()
   def expect = ["belligerent","aggressive"]
@@ -285,7 +283,7 @@ DbUnit 是一项 JUnit 扩展，它在每一次运行测试之前，使数据库
 
 ##### 清单 9\. 删除单词
 
-```
+```java
  private removeWord(word){
   def matcher = word =~ '(remove|delete)(.*)'
   matcher.matches()
@@ -298,7 +296,7 @@ DbUnit 是一项 JUnit 扩展，它在每一次运行测试之前，使数据库
 
 ##### 清单 10\. 测试这两种情况
 
-```
+```java
  void testDeleteWord() {
   dictionary.deleteGlib()
   def val =  dictionary.glib()
@@ -321,7 +319,7 @@ DbUnit 是一项 JUnit 扩展，它在每一次运行测试之前，使数据库
 
 ##### 清单 11\. 创建一个单词
 
-```
+```java
  private createWord(word, defsAndSyms){
   def wordId = id++
   def definitionId = wordId + 10
@@ -349,7 +347,7 @@ DbUnit 是一项 JUnit 扩展，它在每一次运行测试之前，使数据库
 
 ##### 清单 12\. 创建单词逻辑的测试用例
 
-```
+```java
  void testCreateWord() {     
   dictionary.bloviate("Verb",
        ["To discourse at length in a pompous or boastful manner"],
@@ -374,7 +372,7 @@ DbUnit 是一项 JUnit 扩展，它在每一次运行测试之前，使数据库
 
 ##### 清单 13\. 查单词的定义并不困难！
 
-```
+```java
  private getDefinitions(word){     
   def definitions = []                      
   sql.eachRow("select definition.definition from definition, word " +
@@ -390,7 +388,7 @@ DbUnit 是一项 JUnit 扩展，它在每一次运行测试之前，使数据库
 
 ##### 清单 14\. 测试两种情况 —— 方法调用和属性
 
-```
+```java
  void testFindWord() {
   def val = dictionary.pugnacious()
   def expect = "Combative in nature; belligerent."
@@ -415,7 +413,7 @@ DbUnit 是一项 JUnit 扩展，它在每一次运行测试之前，使数据库
 
 ##### 清单 15\. MOP 的核心逻辑
 
-```
+```java
  def invokeMethod(String methodName, Object params) {     
   if(isGetDefinitions(methodName, params)){
     return getDefinitions(methodName)
@@ -455,7 +453,7 @@ DbUnit 是一项 JUnit 扩展，它在每一次运行测试之前，使数据库
 
 ##### 清单 16\. 太好了，属性很简单！
 
-```
+```java
  def getProperty(String property){
   return getDefinitions(property)
  } 
@@ -467,7 +465,7 @@ DbUnit 是一项 JUnit 扩展，它在每一次运行测试之前，使数据库
 
 ##### 清单 17\. 字典展示
 
-```
+```java
  import com.vanward.groovy.SimpleDictionary
  def dict = new SimpleDictionary()  
  dict.vanward("Adjective", ["Being on, or towards the front"],

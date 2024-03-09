@@ -1,7 +1,5 @@
 # 实战 Groovy: 使用 Groovy 模板进行 MVC 编程
 
-# 实战 Groovy: 使用 Groovy 模板进行 MVC 编程
-
 *使用 Groovy 模板引擎框架简化报表视图*
 
 视图是 MVC 编程的一个重要部分，而 MVC 编程本身又是企业应用程序开发的一个重要组件。在这篇实战 Groovy 的文章中，Andrew Glover 向您介绍了 Groovy 的模板引擎框架是如何用来简化视图编程的，并如何使您的代码更加经久容易维护。
@@ -26,7 +24,7 @@
 
 ##### 清单 1\. Groovy 中的多行字符串
 
-```
+```java
  String example1 = "This is a multiline
   string which is going to
   cover a few lines then
@@ -37,7 +35,7 @@ Groovy 还支持 here-docs 的概念，如清单 2 所示。*here-doc*是创建�
 
 ##### 清单 2\. Groovy 中的 Here-docs
 
-```
+```java
  itext =
 """
  This is another multiline String
@@ -54,7 +52,7 @@ Groovy 使用 `GString`来简化运行时替换。如果您不知道 GString 是
 
 ##### 清单 3\. Groovy 中的 GString
 
-```
+```java
  lang = "Groovy"
  println "Uncle man, Uncle man, I dig ${lang}." 
 ```
@@ -65,7 +63,7 @@ Groovy 使用 `GString`来简化运行时替换。如果您不知道 GString 是
 
 ##### 清单 4\. GString 自动调用
 
-```
+```java
  lang = "Groovy"
  println "I dig any language with ${lang.length()} characters in its name!" 
 ```
@@ -80,7 +78,7 @@ Groovy 使用 `GString`来简化运行时替换。如果您不知道 GString 是
 
 ##### 清单 5\. 一个创建 GroovyTestCase 的模板
 
-```
+```java
  import groovy.util.GroovyTestCase
  class <%=test_suite %> extends GroovyTestCase {
   <% for(tc in test_cases) {
@@ -93,7 +91,7 @@ Groovy 使用 `GString`来简化运行时替换。如果您不知道 GString 是
 
 ##### 清单 6\. GString 的使用
 
-```
+```java
  <person>
   <name first="${p.fname}" last="${p.lname}"/>
  </person> 
@@ -115,7 +113,7 @@ Groovy 使用 `GString`来简化运行时替换。如果您不知道 GString 是
 
 ##### 清单 7\. 用来展示映射的简单代码
 
-```
+```java
  My favorite dynamic language is ${favlang} 
 ```
 
@@ -123,7 +121,7 @@ Groovy 使用 `GString`来简化运行时替换。如果您不知道 GString 是
 
 ##### 清单 8\. 为一个简单的模板映射值
 
-```
+```java
  package com.vanward.groovy.tmpl
  import groovy.text.Template
  import groovy.text.SimpleTemplateEngine
@@ -157,7 +155,7 @@ Groovy 使用 `GString`来简化运行时替换。如果您不知道 GString 是
 
 ##### 清单 9\. Groovy 中的 Person 类
 
-```
+```java
  class Person{
  age
  fname
@@ -172,7 +170,7 @@ Groovy 使用 `GString`来简化运行时替换。如果您不知道 GString 是
 
 ##### 清单 10\. 在 Person 类与模板之间建立映射
 
-```
+```java
  import java.io.File
  import groovy.text.Template
  import groovy.text.SimpleTemplateEngine
@@ -194,7 +192,7 @@ Groovy 使用 `GString`来简化运行时替换。如果您不知道 GString 是
 
 ##### 清单 11\. Person 模板的输出结果
 
-```
+```java
  <person>
   <name first="Sam" last="Covery"/>
  </person> 
@@ -206,7 +204,7 @@ Groovy 使用 `GString`来简化运行时替换。如果您不知道 GString 是
 
 ##### 清单 12\. 映射测试用例列表
 
-```
+```java
  fle = new File("unit_test.tmpl")
  coll = ["testBinding", "testToString", "testAdd"]
  binding = ["test_suite":"TemplateTest", "test_cases":coll]
@@ -227,7 +225,7 @@ Groovy 使用 `GString`来简化运行时替换。如果您不知道 GString 是
 
 ##### 清单 13\. 糟糕的代码
 
-```
+```java
  nfile.withPrintWriter{ pwriter |
   pwriter.println("<md5report>")
     for(f in scanner){
@@ -249,7 +247,7 @@ Groovy 使用 `GString`来简化运行时替换。如果您不知道 GString 是
 
 ##### 清单 14\. 为原来的代码应用模板
 
-```
+```java
  <md5report>
  <% for(clzz in clazzes) {
   println "<md5 class=\"${clzz.name}\" value=\"${clzz.value}\"/>"
@@ -267,7 +265,7 @@ Groovy 使用 `GString`来简化运行时替换。如果您不知道 GString 是
 
 ##### 清单 15\. 在 Groovy 中定义的 CheckSumClass
 
-```
+```java
  class CheckSumClass{
   name
   value
@@ -285,7 +283,7 @@ Groovy 中类的定义非常简单，不是吗？
 
 ##### 清单 16\. 重构代码创建一个 ChecksumClass 的集合
 
-```
+```java
  clssez = []
  for(f in scanner){
   f.eachLine{ line |
@@ -303,7 +301,7 @@ Groovy 中类的定义非常简单，不是吗？
 
 ##### 清单 17\. 使用模板映射重构原来的代码
 
-```
+```java
  fle = new File("report.tmpl")
  binding = ["clazzes": clzzez]
  engine = new SimpleTemplateEngine()
@@ -319,7 +317,7 @@ Groovy 中类的定义非常简单，不是吗？
 
 ##### 清单 18\. 看，新的代码！
 
-```
+```java
  /**
  *
  */

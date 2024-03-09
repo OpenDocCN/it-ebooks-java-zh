@@ -4,7 +4,7 @@
 
 `if` 这个 special form 跟 java 里面的 if 的语义是一样的， 它接受三个参数， 第一个是需要判断的条件，第二个表达式是条件成立的时候要执行的表达式，第三个参数是可选的，在条件不成立的时候执行。如果需要执行多个表达式，那么把多个表达式包在 do 里面。看例子：
 
-```
+```java
 (import '(java.util Calendar GregorianCalendar))
 (let [gc (GregorianCalendar.)
       day-of-week (.get gc Calendar/DAY_OF_WEEK)
@@ -17,14 +17,14 @@
 
 宏 `when` 和 `when-not` 提供和 if 类似的功能， 只是它们只在条件成立（或者不成立）时候执行一个表达式。另一个不同是，你可以执行任意数目的表达式而不用用 do 把他们包起来。
 
-```
+```java
 (when is-weekend (println "play"))
 (when-not is-weekend (println "work") (println "sleep")) 
 ```
 
 宏 `if-let` 把一个值 bind 到一个变量，然后根据这个 binding 的值来决定到底执行哪个表达式。下面的代码会打印队列里面第一个等待的人的名字，或者打印“no waiting”如果队列里面没有人的话。
 
-```
+```java
 (defn process-next [waiting-line]
   (if-let [name (first waiting-line)]
     (println name "is next")
@@ -36,7 +36,7 @@
 
 `when-let` 宏跟 `if-let` 类似, 不同之处跟上面 `if` 和 `when` 的不同之处是类似的。 他们没有 else 部分，同时还支持执行任意多个表达式。比如:
 
-```
+```java
 (defn summarize
   "prints the first item in a collection
   followed by a period for each remaining item"
@@ -57,7 +57,7 @@
 
 下面的例子让用户输入一个数字，如果用户输入的数字是 1，2，3，那么程序会打印这些数字对应的英文单词。否则它会打印”unexpected value”。在那之后，它会测试一个本地 binding 的类型，如果是个数字它会打印这个数字乘以 2 的结果；如果是字符串， 那么打印这个字符串的长度乘以 2 的结果。
 
-```
+```java
 (print "Enter a number: ") (flush) ; stays in a buffer otherwise
 (let [reader (java.io.BufferedReader. *in*) ; stdin
       line (.readLine reader)
@@ -80,7 +80,7 @@
 
 下面的例子让用户输入水的温度， 然后打印出水的状态： 是冻住了，还是烧开了，还是一般状态。
 
-```
+```java
 (print "Enter water temperature in Celsius: ") (flush)
 (let [reader (java.io.BufferedReader. *in*)
       line (.readLine reader)

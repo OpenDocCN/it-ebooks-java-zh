@@ -8,7 +8,7 @@
 
 我首先创建一个模板，纯粹起视图功能。在 app/views 文件夹中，新建文件 index.scala.html （如果已有，则删除并重新创建）。
 
-```
+```java
 <!DOCTYPE html>
 <html>
   <header>
@@ -25,7 +25,7 @@
 
 修改 app/controllers/Application.java：
 
-```
+```java
 package controllers;
 
 import play.*;
@@ -50,7 +50,7 @@ ok()中接收的是 views.html.index.render()，实际上就是 app/views/index.
 
 这一部分，我把对象作为参数传给模板，然后在模板中显示对象中包含的数据。修改 index.scala.html：
 
-```
+```java
 @(title: String, content: String)
 
 <!DOCTYPE html>
@@ -69,7 +69,7 @@ ok()中接收的是 views.html.index.render()，实际上就是 app/views/index.
 
 修改动作：
 
-```
+```java
 public static Result index() {
     return ok(views.html.index.render("Play", "Hello World! Parameters passed. "));
 }
@@ -89,7 +89,7 @@ public static Result index() {
 
 我还可以用 Scala 的语法，在模板中实现更复杂的逻辑。比如下面的模板中使用循环：
 
-```
+```java
 @(title: String, content: String, lines: List[String])
 
 <!DOCTYPE html>
@@ -113,7 +113,7 @@ public static Result index() {
 
 修改动作，把一个字符串类型的表作为参数传递给模板：
 
-```
+```java
 package controllers;
 
 import play.*;
@@ -139,7 +139,7 @@ public class Application extends Controller {
 
 模板中还可以有 if 选择结构，比如
 
-```
+```java
 @if(item) {
   <p>True</p>
 } else {

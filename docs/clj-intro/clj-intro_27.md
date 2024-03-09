@@ -6,7 +6,7 @@ Clojure 可以创建基于 Swing 的 GUI 程序。下面是一个简单的例子
 
 ![Swing input frame](img/22IF3u.png) ![Swing output dialog](img/JZ7vay.png)
 
-```
+```java
 (ns com.ociweb.swing
   (:import
     (java.awt BorderLayout)

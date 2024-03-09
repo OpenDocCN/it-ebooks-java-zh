@@ -8,7 +8,7 @@ Java 是完全面向对象的语言。Java 通过虚拟机的运行机制，实�
 
 先来看一个 HelloWorld.java 程序。这个程序在屏幕上打印出一串字符"Hello World!":
 
-```
+```java
 public class HelloWorld
 {
     public static void main(String[] args)
@@ -35,7 +35,7 @@ Java 程序要经过编译器编译才能执行。在 Linux 或 Mac 下，可以
 
 使用 javac 来编译。在命令行中输入下面语句编译:
 
-```
+```java
 $javac HelloWorld.java
 ```
 
@@ -43,7 +43,7 @@ $javac HelloWorld.java
 
 使用 java 命令来运行。Java 会搜寻该类中的 main 方法，并执行。
 
-```
+```java
 $java HelloWorld
 ```
 
@@ -73,7 +73,7 @@ boolean   1bit      true      布尔值
 
 在 Java 中，变量需要先声明(declare)才能使用。在声明中，我说明变量的类型，赋予变量以特别名字，以便在后面的程序中调用它。你可以在程序中的任意位置声明变量。 比如:
 
-```
+```java
 public class Test
 {
     public static void main(String[] args)
@@ -116,7 +116,7 @@ int[] a = new int[] {1, 3, 5, 7, 9};
 
 表达式是变量、常量和运算符的组合，它表示一个数据。1 + 1 是常见的表达式。再比如:
 
-```
+```java
 public class Test
 {
     public static void main(String[] args)
@@ -201,7 +201,7 @@ Java 中控制结构(control flow)的语法与 C 类似。它们都使用{}来�
 
 **选择 (if)**
 
-```
+```java
 if (conditon1) {
     statements;
     ...
@@ -309,7 +309,7 @@ else {
 
 我们定义一个 human 类:
 
-```
+```java
 class Human 
 {
     void breath()
@@ -330,7 +330,7 @@ class Human
 
 现在，我们创建对象 aPerson，并调用对象的方法 breath:
 
-```
+```java
 public class Test
 {
     public static void main(String[] args)

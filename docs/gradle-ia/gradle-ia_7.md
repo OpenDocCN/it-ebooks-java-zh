@@ -38,7 +38,7 @@ Gradle 集成了很多 Java 和 Groovy 测试框架，在本章的最后你会�
 
 Java 插件引入了两个配置来声明测试代码的编译期和运行期依赖:testCompile 和 testRuntime，我们来看一下怎么声明一个对 JUnit 框架的编译期依赖：
 
-```
+```java
     dependencies {
         testCompile　'junit:junit:4.11'
     }
@@ -74,7 +74,7 @@ Java 插件引入了两个配置来声明测试代码的编译期和运行期依
 
 你将给你之前的 ToDo 应用的存储类 InMemoryToDoRepository.java 编写单元测试，为了突出不同框架的相同和不同之处，所有的单元测试都会验证同一个类的功能。接下来你给子项目 repository 编写测试，放置测试代码的正确位置是在测试的标准布局里，在 src/test/java 目录下创建一个名叫 InMemoryToDoRepositoryTest.java 的类，你可以学习测试驱动开发的相关理论，在代码中添加适当的断言语句，下面这段代码用来测试插入功能的正确性。
 
-```
+```java
     import com.manning.gia.todo.model.ToDoItem;
     import org.junit.Before;
     import org.junit.Test;
@@ -104,7 +104,7 @@ Java 插件引入了两个配置来声明测试代码的编译期和运行期依
 
 接下来你需要在依赖配置中添加 JUnit 的依赖：
 
-```
+```java
     project(':repository')repositories {
         mavenCentral()
     }
@@ -118,7 +118,7 @@ Java 插件引入了两个配置来声明测试代码的编译期和运行期依
 
 之前我们讲过 test 任务会先编译源代码，生成 Jar 文件，然后编译测试代码最后执行测试，下面的命令行输出显示了有一个断言出错的情况：
 
-```
+```java
     $ gradle :repository:test
     :model:compileJava
     :model:processResources UP-TO-DATE
@@ -150,7 +150,7 @@ Java 插件引入了两个配置来声明测试代码的编译期和运行期依
 
 从输出可以看出一个断言失败了，这正是你想看到的，显示的信息并没有告诉你为什么测试失败了，指示告诉你第２４行的断言失败了，如果你有很多个测试，你需要打开测试报告才能找到出错的原因，你可以在任务使用-i 选项打印日志输出：
 
-```
+```java
     $ gradle :repository:test –i
     ...
     com.manning.gia.todo.repository.InMemoryToDoRepositoryTest
@@ -167,7 +167,7 @@ Java 插件引入了两个配置来声明测试代码的编译期和运行期依
 
 在堆栈树我们可以找到出错的原因是 newId 的值我们假定是 null 的实际上为１，所以断言出错了，修改之后再运行可以看到所有测试都通过了：
 
-```
+```java
     $ gradle :repository:test
     :model:compileJava
     :model:processResources UP-TO-DATE
@@ -199,7 +199,7 @@ Gradle 可以生成更加视觉化的测试报告，你可以在 build/reports/t
 
 如下图所示来配置脚本文件：
 
-```
+```java
     project(':repository'){
         repositories {
             mavenCentral()

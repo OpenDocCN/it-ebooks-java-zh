@@ -25,7 +25,7 @@
 
 我将要创建一个页面。这个页面的视图定义在 res/layout/activity_main.xml 中。从[安卓第四夜 概念漫游（下）](http://www.cnblogs.com/vamei/p/3889215.html)中，我们已经知道，这个 XML 文件描述了一个视图树。内容如下：
 
-```
+```java
 <LinearLayout 
 
     android:orientation="vertical"
@@ -55,7 +55,7 @@
 
 Button 还有一个 id，即 author。在程序中我们可以借用这个 id 来引用该按钮。Button 上文本是一个字符串。注意符号@，表示这里引用了一个名为 btn_text 的字符资源。我们当然可以像"Welcome"那样直接使用一个字符串，但引用字符资源有额外的好处。我们可以在程序的多处重复利用的同一个资源条目，从而便于修改。该字符串保存在 res/values/strings.xml 中：
 
-```
+```java
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Vamei</string>
@@ -71,7 +71,7 @@ Button 还有一个 id，即 author。在程序中我们可以借用这个 id �
 
 上面 XML 定义的视图是静态的。想要实现动态的应用，我还需要一个配套的 Activity。在 src 文件夹下的 me.vamei.vamei 包中，会有一个 MainActivity.java。这个 Java 文件中包含一个 MainActivity 类，继承自 Activity。我将其中的代码修改为：
 
-```
+```java
 package me.vamei.vamei;
 
 import android.app.Activity;
@@ -117,7 +117,7 @@ onCreate()方法中主要做了两件事：
 
 已经完成的 Activity 需要在 AndoriManifest.xml 中注册。这是安卓应用的配置文件，可以进行许多权限相关的设定。我的 AndroidManifest.xml 如下：
 
-```
+```java
 <?xml version="1.0" encoding="utf-8"?>
 <manifest 
     package="me.vamei.vamei"

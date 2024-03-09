@@ -1,7 +1,5 @@
 # 实战 Groovy: for each 剖析
 
-# 实战 Groovy: for each 剖析
-
 *使用最熟悉的方法进行迭代*
 
 在这一期的 [*实战 Groovy*](http://www.ibm.com/developerworks/cn/java/j-pg/) 中，Scott Davis 提出了一组非常好的遍历方法，这些方法可以遍历数组、列表、文件、URL 以及很多其它内容。最令人印象深刻的是，Groovy 提供了一种一致的机制来遍历所有这些集合和其它内容。
@@ -14,7 +12,7 @@
 
 ##### 清单 1\. Java 列表迭代
 
-```
+```java
 import java.util.*;
 
 public class ListTest{
@@ -46,7 +44,7 @@ Groovy 是一款运行在 Java 平台之上的现代编程语言。它能够与�
 
 ##### 清单 2\. Java 数组迭代
 
-```
+```java
 public class ArrayTest{
   public static void main(String[] args){
     String[] list = {"Java", "Groovy", "JavaScript"};
@@ -63,7 +61,7 @@ public class ArrayTest{
 
 ##### 清单 3\. Java 语言的 for-each 迭代
 
-```
+```java
 import java.util.*;
 
 public class MixedTest{
@@ -99,7 +97,7 @@ Eric S. Raymond 在他的 *The Art of Unix Programming*（参见 参考资料）
 
 ##### 清单 4\. Groovy 列表迭代
 
-```
+```java
 def list = ["Java", "Groovy", "JavaScript"]
 list.each{language->
   println language
@@ -112,7 +110,7 @@ list.each{language->
 
 ##### 清单 5\. 使用 Groovy 的 `it` 变量的迭代
 
-```
+```java
 // shorter, using the default it variable
 def list = ["Java", "Groovy", "JavaScript"]
 list.each{ println it }
@@ -125,7 +123,7 @@ Groovy 允许您对数组和 `List` 交替使用 `each()` 方法。为了将 `Ar
 
 ##### 清单 6\. Groovy 数组迭代
 
-```
+```java
 def list = ["Java", "Groovy", "JavaScript"] as String[]
 list.each{println it} 
 ```
@@ -134,7 +132,7 @@ list.each{println it}
 
 ##### 清单 7\. Groovy 反射
 
-```
+```java
 def s = "Hello World"
 println s
 println s.class
@@ -163,7 +161,7 @@ public boolean java.lang.String.equals(java.lang.Object)
 
 ##### 清单 8\. Groovy map 迭代
 
-```
+```java
 def map = ["Java":"server", "Groovy":"server", "JavaScript":"web"]
 map.each{ println it } 
 ```
@@ -172,7 +170,7 @@ map.each{ println it }
 
 ##### 清单 9\. 从 map 获得键和值
 
-```
+```java
 def map = ["Java":"server", "Groovy":"server", "JavaScript":"web"]
 map.each{
   println it.key
@@ -191,7 +189,7 @@ map.each{k,v->
 
 ##### 清单 10\. 获得 map 值
 
-```
+```java
 def map = ["Java":"server", "Groovy":"server", "JavaScript":"web"]
 
 //identical results
@@ -203,7 +201,7 @@ println map.Java
 
 ##### 清单 11\. Groovy map 和 `null`
 
-```
+```java
 def list = ["Java", "Groovy", "JavaScript"]
 println list.class
 // java.util.ArrayList
@@ -230,7 +228,7 @@ println map.getClass()
 
 ##### 清单 12\. `String` 迭代
 
-```
+```java
 def name = "Jane Smith"
 name.each{letter->
   println letter
@@ -241,7 +239,7 @@ name.each{letter->
 
 ##### 清单 13\. 使用下划线替代空格
 
-```
+```java
 def name = "Jane Smith"
 println "replace spaces"
 name.each{
@@ -266,7 +264,7 @@ Groovy 提供了原生的 `Range` 类型，可以直接迭代。使用两个点�
 
 ##### 清单 14\. Range 迭代
 
-```
+```java
 def range = 5..10
 range.each{
   println it
@@ -285,7 +283,7 @@ range.each{
 
 ##### 清单 15\. `Date` 迭代
 
-```
+```java
 def today = new Date()
 def nextWeek = today + 7
 (today..nextWeek).each{
@@ -313,7 +311,7 @@ Java `enum` 是按照特定顺序保存的随意的值集合。清单 16 展示�
 
 ##### 清单 16\. `enum` 迭代
 
-```
+```java
 enum DAY{
   MONDAY, TUESDAY, WEDNESDAY, THURSDAY,
     FRIDAY, SATURDAY, SUNDAY
@@ -338,7 +336,7 @@ DAY.each{
 
 ##### 清单 17\. `ResultSet` 迭代
 
-```
+```java
 import groovy.sql.*
 
 def sql = Sql.newInstance(
@@ -376,7 +374,7 @@ sql.eachRow("select * from languages"){ row ->
 
 ##### 清单 18\. Java 文件迭代
 
-```
+```java
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
@@ -416,7 +414,7 @@ public class WalkFile {
 
 ##### 清单 19\. Groovy 文件迭代
 
-```
+```java
 def f = new File("languages.txt")
 f.eachLine{language->
   println "I know ${language}"
@@ -431,7 +429,7 @@ f.eachLine{language->
 
 ##### 清单 20\. 分解文件的每一行
 
-```
+```java
 // languages.txt
 // notice the space between the language and the version
 Java 1.5
@@ -465,7 +463,7 @@ JavaScript
 
 ##### 清单 21\. 目录迭代
 
-```
+```java
 def dir = new File(".")
 dir.eachFile{file->
   println file
@@ -476,7 +474,7 @@ dir.eachFile{file->
 
 ##### 清单 22\. 分离文件和目录
 
-```
+```java
 def dir = new File(".")
 dir.eachFile{file->
   if(file.isFile()){
@@ -493,7 +491,7 @@ dir.eachFile{file->
 
 ##### 清单 23\. 三元操作符
 
-```
+```java
 def dir = new File(".")
 dir.eachFile{file->
   println file.isDirectory() ? "DIR:  ${file}" : "FILE: ${file}"
@@ -514,7 +512,7 @@ dir.eachFile{file->
 
 ##### 清单 24\. URL 迭代
 
-```
+```java
 def url = new URL("http://www.ibm.com")
 url.eachLine{line->
   println line
@@ -535,7 +533,7 @@ url.eachLine{line->
 
 ##### 清单 25\. languages.xml 文件
 
-```
+```java
 <langs>
   <language>Java</language>
   <language>Groovy</language>
@@ -547,7 +545,7 @@ Groovy 提供了一个 `each()` 方法，但是需要做一些修改。如果使
 
 ##### 清单 26\. XML 迭代
 
-```
+```java
 def langs = new XmlSlurper().parse("languages.xml")
 langs.language.each{
   println it
@@ -565,7 +563,7 @@ JavaScript
 
 ##### 清单 27\. Web 服务调用的 XML 迭代
 
-```
+```java
 def langs = new XmlSlurper().parse("http://somewhere.com/languages")
 langs.language.each{
   println it

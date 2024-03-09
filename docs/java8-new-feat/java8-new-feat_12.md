@@ -14,14 +14,14 @@ Nashorn，发音“nass-horn”,是德国二战时一个坦克的命名，同时
 
 jjs 是在 java_home/bin 下面自带的，作为例子，让我们创建一个 func.js， 内容如下：
 
-```
+```java
 function f(){return 1;};
 print(f() + 1); 
 ```
 
 运行这个文件，把这个文件作为参数传给 jjs
 
-```
+```java
 jjs func.js 
 ```
 
@@ -29,7 +29,7 @@ jjs func.js
 
 另一个方面是 javax.script，也是以前 Rhino 余留下来的 API
 
-```
+```java
 ScriptEngineManager manager = new ScriptEngineManager();
 ScriptEngine engine = manager.getEngineByName( "JavaScript" );
 System.out.println( engine.getClass().getName() );
@@ -48,7 +48,7 @@ Result: 2
 
 javascript 运行在 jvm 已经不是新鲜事了，Rhino 早在 jdk6 的时候已经存在，但现在为何要替代 Rhino，官方的解释是 Rhino 相比其他 javascript 引擎（比如 google 的 V8）实在太慢了，要改造 Rhino 还不如重写。既然性能是 Nashorn 的一个亮点，下面就测试下性能对比，为了对比两者之间的性能，需要用到[Esprima](http://www.oschina.net/search?scope=project&q=esprima)，一个 ECMAScript 解析框架，用它来解析未压缩版的 jquery（大约 268kb），测试核心代码如下：
 
-```
+```java
 static void rhino(String parser, String code) {
         String source = "speedtest";
         int line = 1;

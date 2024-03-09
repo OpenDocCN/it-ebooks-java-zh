@@ -18,7 +18,7 @@ Java 允许我们在类的内部定义一个类。如果这个类是没有 stati
 
 在使用内部类时，我们要先创建外部对象。由于内部类是外部对象的一个成员，我们可以在对象的内部自由使用内部类:
 
-```
+```java
 public class Test
 {
     public static void main(String[] args)
@@ -72,7 +72,7 @@ class Human
 
 如果我们使用其他访问权限，内部类也能从外部访问，比如:
 
-```
+```java
 public class Test
 {
     public static void main(String[] args)
@@ -142,7 +142,7 @@ Human.Cup soloCup = me.new Cup();
 
 我们看下面的例子:
 
-```
+```java
 public class Test
 {
     public static void main(String[] args)
@@ -203,7 +203,7 @@ Jerry
 
 我们可以直接创建嵌套 static 类的对象，而不需要依附于外部类的某个对象。相应的，嵌套 static 类也无法调用外部对象的方法，也无法读取或修改外部对象的数据。从效果上看，嵌套 static 类拓展了类的命名空间(name space)，比如下面的 Human.Mongolian:
 
-```
+```java
 public class Test
 {
     public static void main(String[] args)

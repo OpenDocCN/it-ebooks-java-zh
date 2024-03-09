@@ -8,7 +8,7 @@
 
 我可以用纯粹 html 的方式产生一个表单。在 app/views 下增加模板 form.scala.html:
 
-```
+```java
 <!DOCTYPE html>
 <html>
   <body>
@@ -22,7 +22,7 @@
 
 在 Application 控制器中，增加一个动作 form()，显示模板:
 
-```
+```java
 public static Result form() {
     return ok(views.html.form.render());
 }
@@ -30,7 +30,7 @@ public static Result form() {
 
 在 routes 中增加导航
 
-```
+```java
 GET     /form                       controllers.Application.form()
 ```
 
@@ -42,7 +42,7 @@ GET     /form                       controllers.Application.form()
 
 在文本框中输入任意字符，点击 submit 后，表单将以 POST 方法提交到/postForm 这一 URL。增添负责处理该 URL 的动作，Application.postForm()
 
-```
+```java
 public static Result postForm() {
     DynamicForm in   = Form.form().bindFromRequest();
     String result    = in.get("content");
@@ -56,7 +56,7 @@ DynamicForm 和 Form 都来自 play.data。Form.form().bindFormRequest()从请�
 
 增加 routes 记录
 
-```
+```java
 POST    /postForm                   controllers.Application.postForm()
 ```
 
@@ -70,7 +70,7 @@ POST    /postForm                   controllers.Application.postForm()
 
 首先修改 app/views/form.scala.html
 
-```
+```java
 <!DOCTYPE html>
 <html>
   <body>
@@ -91,7 +91,7 @@ POST    /postForm                   controllers.Application.postForm()
 
 创建 app/util/文件夹，在其中创建 User.java。User 类用于在 Play 内部指代上面的表单：
 
-```
+```java
 package util;
 
 import play.data.validation.Constraints.Email;
@@ -110,7 +110,7 @@ User 类指代一个表单的数据。我还为两个属性增加了标注。Pla
 
 修改动作 postForm()。User 类的对象 user 用来保存表单数据。
 
-```
+```java
 public static Result postForm() {
     Form<User> userForm = Form.form(User.class);
     User user = userForm.bindFromRequest().get();
@@ -128,7 +128,7 @@ public static Result postForm() {
 
 修改 form.scala.html 为
 
-```
+```java
 @(userForm: Form[util.User])
 
 <!DOCTYPE html>
@@ -148,7 +148,7 @@ public static Result postForm() {
 
 修改原有的动作 form()
 
-```
+```java
 public static Result form() {
     Form<User> userForm = Form.form(User.class);
     return ok(views.html.form.render(userForm));

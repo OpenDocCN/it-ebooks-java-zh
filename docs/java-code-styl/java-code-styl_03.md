@@ -22,7 +22,7 @@ Java 源文件还遵循以下规则：
 
 所有的源文件都应该在开头有一个 C 语言风格的注释，其中列出类名、版本信息、日期和版权声明:
 
-```
+```java
  /*
      * Classname
      * 
@@ -38,7 +38,7 @@ Java 源文件还遵循以下规则：
 
 在多数 Java 源文件中，第一个非注释行是 `package` 语句。在它之后可以跟 `import` 语句。例如 :
 
-```
+```java
  package java.awt;
 
     import java.awt.peer.CanvasPeer; 

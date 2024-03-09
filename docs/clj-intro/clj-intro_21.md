@@ -8,14 +8,14 @@
 
 要想知道一个东西到底是函数还是宏， 可以在 REPL 里面输入 `(doc _name_)` 或者查看它的元数据。如果是一个宏的话，那么它的元数据里面包含一个 `:macro` key， 并且它的值为 `true` 。 比如，我们要看看 `and` , 是不是宏， 在 REPL 里面输入下面的命令:
 
-```
+```java
 ((meta (var and)) :macro) ; long way -> true
 (^#'and :macro) ; short way -> true 
 ```
 
 让我们通过一些例子来看看如何编写并且使用宏。假设我们代码里面很多地方要对一个数字进行判断，通过判断它是接近 0， 是正的， 是负的来执行不同的逻辑；我们又不想这种判断的代码到处重复，那么这种情况下我们就可以使用宏了。我们使用 `defmacro` 宏来定义一个宏。
 
-```
+```java
 (defmacro around-zero [number negative-expr zero-expr positive-expr]
   `(let [number# ~number] ; so number is only evaluated once
     (cond
@@ -30,14 +30,14 @@ Clojure 的 reader 会把所有调用 around-aero 的地方全部换成 defmacro
 
 下面是两个使用这个宏的例子：(输出都应该是 " `+` ").
 
-```
+```java
 (around-zero 0.1 (println "-") (println "0") (println "+"))
 (println (around-zero 0.1 "-" "0" "+")) ; same thing 
 ```
 
 如果对于每种条件执行多于一个表达式， 那么用 do 把他们包起来。看下面例子：
 
-```
+```java
 (around-zero 0.1
   (do (log "really cold!") (println "-"))
   (println "0")
@@ -46,14 +46,14 @@ Clojure 的 reader 会把所有调用 around-aero 的地方全部换成 defmacro
 
 为了验证这个宏是否被正确展开， 在 REPL 里面输入这个：
 
-```
+```java
 (macroexpand-1
   '(around-zero 0.1 (println "-") (println "0") (println "+"))) 
 ```
 
 它会输出下面这个(为了容易看懂， 我加了缩进)
 
-```
+```java
 (clojure.core/let [number__3382__auto__ 0.1]
   (clojure.core/cond
     (clojure.core/< (Math/abs number__3382__auto__) 1.0E-15) (println "0")
@@ -63,14 +63,14 @@ Clojure 的 reader 会把所有调用 around-aero 的地方全部换成 defmacro
 
 下面是一个使用这个宏来返回一个描述输入数字的属性的字符串的函数。
 
-```
+```java
 (defn number-category [number]
   (around-zero number "negative" "zero" "positive")) 
 ```
 
 下面是一些示例用法：
 
-```
+```java
 (println (number-category -0.1)) ; -> negative
 (println (number-category 0)) ; -> zero
 (println (number-category 0.1)) ; -> positive 
@@ -80,7 +80,7 @@ Clojure 的 reader 会把所有调用 around-aero 的地方全部换成 defmacro
 
 下面是一个接受两个参数的宏。第一个是一个接受一个参数的函数, 这个参数是一个弧度， 如果它是一个三角函数 sin， cos。第二个参数是一个弧度。如果这个被写成一个函数而不是一个 宏的话， 那么我们需要传递一个 `#(Math/sin %)` 而不是简单的 `Math/sin` 作为参数。注意 那些后面的#符号， 它会产生一个唯一的、不冲突的本地 binding。 `#` 和 `~` 都必须在反引号引着的列表里面才能使用。
 
-```
+```java
 (defmacro trig-y-category [fn degrees]
   `(let [radians# (Math/toRadians ~degrees)
          result# (~fn radians#)]
@@ -89,7 +89,7 @@ Clojure 的 reader 会把所有调用 around-aero 的地方全部换成 defmacro
 
 让我们试一下。下面代码的期望输出应该是 "zero", "positive", "zero" 和 "negative".
 
-```
+```java
 (doseq [angle (range 0 360 90)] ; 0, 90, 180 and 270
   (println (trig-y-category Math/sin angle))) 
 ```

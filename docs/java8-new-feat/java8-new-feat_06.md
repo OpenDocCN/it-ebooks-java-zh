@@ -1,7 +1,5 @@
 # 六、泛型的目标类型推断
 
-# 六、泛型的目标类型推断
-
 > 来源：[Java 8 新特性探究（六）泛型的目标类型推断](http://my.oschina.net/benhaile/blog/184390)
 
 ### **简单理解泛型**
@@ -10,13 +8,13 @@
 
 理解 Java 泛型最简单的方法是把它看成一种便捷语法，能节省你某些 Java 类型转换(casting)上的操作：
 
-```
+```java
 List<Apple> box = new ArrayList<Apple>();box.add(new Apple());Apple apple =box.get(0); 
 ```
 
 上面的代码自身已表达的很清楚：box 是一个装有 Apple 对象的 List。get 方法返回一个 Apple 对象实例，这个过程不需要进行类型转换。没有泛型，上面的代码需要写成这样：
 
-```
+```java
 Apple apple = (Apple)box.get(0); 
 ```
 
@@ -28,13 +26,13 @@ Apple apple = (Apple)box.get(0);
 
 在以前的版本中使用泛型类型，需要在声明并赋值的时候，两侧都加上泛型类型。例如：
 
-```
+```java
 Map<String, String> myMap = new HashMap<String, String>(); 
 ```
 
 你可能觉得:老子在声明变量的的时候已经指明了参数类型，为毛还要在初始化对象时再指定？幸好，在 Java SE 7 中，这种方式得以改进，现在你可以使用如下语句进行声明并赋值：
 
-```
+```java
 Map<String, String> myMap = new HashMap<>(); //注意后面的"<>" 
 ```
 
@@ -42,7 +40,7 @@ Map<String, String> myMap = new HashMap<>(); //注意后面的"<>"
 
 但是：Java SE 7 在创建泛型实例时的类型推断是有限制的：只有构造器的参数化类型在上下文中被显著的声明了，才可以使用类型推断，否则不行。例如：下面的例子在 java 7 无法正确编译（但现在在 java8 里面可以编译，因为根据方法参数来自动推断泛型的类型）：
 
-```
+```java
 List<String> list = new ArrayList<>();
 list.add("A");// 由于 addAll 期望获得 Collection<? extends String>类型的参数，因此下面的语句无法通过
 list.addAll(new ArrayList<>()); 
@@ -58,7 +56,7 @@ java8 里面泛型的目标类型推断主要 2 个：
 
 让我们看看官网的例子
 
-```
+```java
 class List<E> {
    static <Z> List<Z> nil() { ... };
    static <Z> List<Z> cons(Z head, List<Z> tail) { ... };
@@ -68,7 +66,7 @@ class List<E> {
 
 根据 JEP101 的特性，我们在调用上面方法的时候可以这样写
 
-```
+```java
 //通过方法赋值的目标参数来自动推断泛型的类型
 List<String> l = List.nil();
 //而不是显示的指定类型

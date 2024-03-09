@@ -14,7 +14,7 @@
 
 这篇文章里面的代码示例里面通常会以注释的形式说明每行代码的结果/输出，看下面的例子：
 
-```
+```java
 (+ 1 2) ; showing return value: 3
 (println "Hello") ; return nil, showing output:Hello 
 ```

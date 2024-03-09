@@ -11,7 +11,7 @@
 
 打开一个 SocketChannel 可以这样操作：
 
-```
+```java
 SocketChannel socketChannel = SocketChannel.open();
 socketChannel.connect(new InetSocketAddress("http://jenkov.com", 80));
 ```
@@ -20,7 +20,7 @@ socketChannel.connect(new InetSocketAddress("http://jenkov.com", 80));
 
 关闭一个 SocketChannel 只需要调用他的 close 方法，如下：
 
-```
+```java
 socketChannel.close();
 ```
 
@@ -28,7 +28,7 @@ socketChannel.close();
 
 从一个 SocketChannel 连接中读取数据，可以通过 read()方法，如下：
 
-```
+```java
 ByteBuffer buf = ByteBuffer.allocate(48);
 
 int bytesRead = socketChannel.read(buf);
@@ -42,7 +42,7 @@ int bytesRead = socketChannel.read(buf);
 
 向 SocketChannel 中写入数据是通过 write()方法，write 也需要一个 Buffer 作为参数。下面看一下具体的示例：
 
-```
+```java
 String newData = "New String to write to file..." + System.currentTimeMillis();
 
 ByteBuffer buf = ByteBuffer.allocate(48);
@@ -66,7 +66,7 @@ while(buf.hasRemaining()) {
 
 如果我们设置了一个 SocketChannel 是非阻塞的，那么调用 connect()后，方法会在链接建立前就直接返回。为了检查当前链接是否建立成功，我们可以调用 finishConnect(),如下：
 
-```
+```java
 socketChannel.configureBlocking(false);
 socketChannel.connect(new InetSocketAddress("http://jenkov.com", 80));
 

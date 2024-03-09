@@ -1,7 +1,5 @@
 # Chapter 8\. BPMN 2.0 Constructs 关于 BPMN 2.0 架构
 
-# Chapter 8\. BPMN 2.0 Constructs 关于 BPMN 2.0 架构
-
 本章介绍 Activiti 支持的 BPMN 2.0 结构， 以及对 BPMN 标准的扩展。
 
 # Custom extensions 自定义扩展
@@ -51,7 +49,7 @@ BPMN 2.0 标准对于各方都是一个好东西。最终用户不用担心会�
 
 另外，你可以使用 cron 表达式指定 timeCycle，下面的例子是从整点开始，每 5 分钟执行一次：
 
-```
+```java
 0 0/5 * * * ? 
 ```
 
@@ -61,7 +59,7 @@ BPMN 2.0 标准对于各方都是一个好东西。最终用户不用担心会�
 
 你可以在定时器事件定义中使用表达式，这样你就可以通过流程变量来影响那个定时器定义。 流程定义必须包含 ISO 8601（或 cron）格式的字符串，以匹配对应的时间类型。
 
-```
+```java
 <boundaryEvent id="escalationTimer" cancelActivity="true" attachedToRef="firstLineSupport">
      <timerEventDefinition>
       <timeDuration>${duration}</timeDuration>
@@ -79,7 +77,7 @@ BPMN 2.0 标准对于各方都是一个好东西。最终用户不用担心会�
 
 错误事件定义会引用一个 error 元素。下面是一个 error 元素的例子，引用了一个错误声明：
 
-```
+```java
 <endEvent id="myErrorEndEvent">
   <errorEventDefinition errorRef="myError" />
 </endEvent> 
@@ -93,7 +91,7 @@ BPMN 2.0 标准对于各方都是一个好东西。最终用户不用担心会�
 
 信号事件定义使用 signalEventDefinition 元素。 signalRef 属性会引用 definitions 根节点里定义的 signal 子元素。 下面是一个流程的实例，其中会抛出一个信号，并被中间事件捕获。
 
-```
+```java
 <definitions... >
         <!-- declaration of the signal -->
         <signal id="alertSignal" name="alert" />
@@ -119,7 +117,7 @@ signalEventDefinition 引用相同的 signal 元素。
 
 既可以通过 bpmn 节点由流程实例触发一个信号，也可以通过 API 触发。 下面的 org.activiti.engine.RuntimeService 中的方法 可以用来手工触发一个信号。
 
-```
+```java
 RuntimeService.signalEventReceived(String signalName);
 RuntimeService.signalEventReceived(String signalName, String executionId); 
 ```
@@ -134,7 +132,7 @@ signalEventReceived(String signalName); 和 signalEventReceived(String signalNam
 
 可以查询所有订阅了特定信号事件的执行：
 
-```
+```java
 List<Execution> executions = runtimeService.createExecutionQuery()
       .signalEventSubscriptionName("alert")
       .list(); 
@@ -150,7 +148,7 @@ List<Execution> executions = runtimeService.createExecutionQuery()
 
 如果想要限制信号事件的范围，可以使用信号事件定义的 scope 属性（不是 BPMN2.0 的标准属性）：
 
-```
+```java
 <signal id="alertSignal" name="alert" activiti:scope="processInstance"/> 
 ```
 
@@ -180,7 +178,7 @@ List<Execution> executions = runtimeService.createExecutionQuery()
 
 一个消息事件的定义是使用 messageeventdefinition 元素声明。属性 messageref 引用一个消息元素声明为定义的根元素的子元素。以下是摘录的一个过程，其中两个消息事件声明的开始事件和中间捕捉事件消息引用。
 
-```
+```java
 <definitions id="definitions" 
 
   targetNamespace="Examples"
@@ -210,7 +208,7 @@ List<Execution> executions = runtimeService.createExecutionQuery()
 
 在你的应用接收一个消息之后，你必须决定如何处理它。 如果消息应该触发启动一个新流程实例， 在下面的 RuntimeService 的两个方法中选择一个执行：
 
-```
+```java
 ProcessInstance startProcessInstanceByMessage(String messageName);
 ProcessInstance startProcessInstanceByMessage(String messageName, Map<String, Object> processVariables);
 ProcessInstance startProcessInstanceByMessage(String messageName, String businessKey, Map<String, Object> processVariables); 
@@ -220,7 +218,7 @@ ProcessInstance startProcessInstanceByMessage(String messageName, String busines
 
 如果消息需要被运行中的流程实例处理，首先要根据消息找到对应的流程实例 （参考下一节）然后触发这个等待中的流程。 RuntimeService 提供了如下方法可以基于消息事件的订阅来触发流程继续执行
 
-```
+```java
 void messageEventReceived(String messageName, String executionId);
 void messageEventReceived(String messageName, String executionId, HashMap<String, Object> processVariables); 
 ```
@@ -233,7 +231,7 @@ Activiti 支持消息开始事件和中间消息事件。
 
     ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery()
 
-    ```
+    ```java
      .messageEventSubscription("newCallCenterBooking")
         .singleResult(); 
     ```
@@ -244,7 +242,7 @@ Activiti 支持消息开始事件和中间消息事件。
 
     Execution execution = runtimeService.createExecutionQuery()
 
-    ```
+    ```java
      .messageEventSubscriptionName("paymentReceived")
         .variableValueEquals("orderId", message.getOrderId())
         .singleResult(); 
@@ -274,7 +272,7 @@ Activiti 支持消息开始事件和中间消息事件。
 
 登录的用户必须使用 IdentityService.setAuthenticatedUserId(String) 方法设置， 并像这样包含在 try-finally 代码中：
 
-```
+```java
 try {
   identityService.setAuthenticatedUserId("bono");
   runtimeService.startProcessInstanceByKey("someProcessKey");
@@ -291,7 +289,7 @@ try {
 
 空开始事件技术上意味着没有指定启动流程实例的触发条件。 这就是说引擎不能预计什么时候流程实例会启动。 空开始事件用于，当流程实例要通过 API 启动的场景， 通过调用 startProcessInstanceByXXX 方法。
 
-```
+```java
 ProcessInstance processInstance = runtimeService.startProcessInstanceByXXX(); 
 ```
 
@@ -307,7 +305,7 @@ ProcessInstance processInstance = runtimeService.startProcessInstanceByXXX();
 
 空开始事件的 XML 结构是普通的开始事件定义，没有任何子元素 （其他开始事件类型都有一个子元素来声明自己的类型）
 
-```
+```java
 <startEvent id="start" name="my start event" /> 
 ```
 
@@ -315,7 +313,7 @@ ProcessInstance processInstance = runtimeService.startProcessInstanceByXXX();
 
 formKey：引用用户在启动新流程实例时需要填写的表单模板， 更多信息可以参考 Chapter 9\. Forms 表单。 实例：
 
-```
+```java
 <startEvent id="request" activiti:formKey="org/activiti/examples/taskforms/request.form" /> 
 ```
 
@@ -343,7 +341,7 @@ formKey：引用用户在启动新流程实例时需要填写的表单模板， 
 
 示例：流程会启动 4 次，每次间隔 5 分钟，从 2011 年 3 月 11 日，12:13 开始计时。
 
-```
+```java
 <startEvent id="theStart">
         <timerEventDefinition>
             <timeCycle>R4/2011-03-11T12:13/PT5M</timeCycle>
@@ -353,7 +351,7 @@ formKey：引用用户在启动新流程实例时需要填写的表单模板， 
 
 示例：流程会根据选中的时间启动一次。
 
-```
+```java
 <startEvent id="theStart">
         <timerEventDefinition>
             <timeDate>2011-03-11T12:13:14</timeDate>
@@ -375,7 +373,7 @@ formKey：引用用户在启动新流程实例时需要填写的表单模板， 
 
 启动流程实例，消息开始事件可以使用 下列 RuntimeService 中的方法来触发：
 
-```
+```java
 ProcessInstance startProcessInstanceByMessage(String messageName);
 ProcessInstance startProcessInstanceByMessage(String messageName, Map<String, Object> processVariables);
 ProcessInstance startProcessInstanceByMessage(String messageName, String businessKey, Map<String, Object< processVariables); 
@@ -402,7 +400,7 @@ ProcessInstance startProcessInstanceByMessage(String messageName, String busines
 
 消息开始事件的 XML 内容时在普通开始事件申请中包含一个 messageEventDefinition 子元素：
 
-```
+```java
 <definitions id="definitions" 
 
   targetNamespace="Examples"
@@ -441,7 +439,7 @@ signal 开始事件，可以用来通过一个已命名的信号（signal）来�
 
 signalStartEvent 的 XML 格式是标准的 startEvent 声明，其中包含一个 signalEventDefinition 子元素：
 
-```
+```java
 <signal id="theSignal" name="The Signal" class="calibre27">
 <process id="processWithSignalStart1">
     <startEvent id="theStart">
@@ -472,7 +470,7 @@ signalStartEvent 的 XML 格式是标准的 startEvent 声明，其中包含一�
 
 错误开始事件的 XML 内容是普通开始事件定义中，包含一个 errorEventDefinition 子元素。
 
-```
+```java
 <startEvent id="messageStart" >
         <errorEventDefinition errorRef="someError" />
 </startEvent> 
@@ -498,7 +496,7 @@ signalStartEvent 的 XML 格式是标准的 startEvent 声明，其中包含一�
 
 空结束事件的 XML 内容是普通结束事件定义，不包含子元素(其他结束事件类型都会包含声明类型的子元素)
 
-```
+```java
 <endEvent id="end" name="my end event" /> 
 ```
 
@@ -518,7 +516,7 @@ signalStartEvent 的 XML 格式是标准的 startEvent 声明，其中包含一�
 
 错误结束事件的内容是一个错误事件， 子元素为 errorEventDefinition。
 
-```
+```java
 <endEvent id="myErrorEndEvent">
   <errorEventDefinition errorRef="myError" />
 </endEvent> 
@@ -526,7 +524,7 @@ signalStartEvent 的 XML 格式是标准的 startEvent 声明，其中包含一�
 
 errorRef 属性引用定义在流程外部的 error 元素：
 
-```
+```java
 <error id="myError" errorCode="123" />
 ...
 <process id="myProcess">  
@@ -535,7 +533,7 @@ errorRef 属性引用定义在流程外部的 error 元素：
 
 error 的 errorCode 用来查找 匹配的捕获边界错误事件。 如果 errorRef 与任何 error 都不匹配， 就会使用 errorRef 来作为 errorCode 的缩写。 这是 activiti 特定的缩写。 更具体的 说，见如下代码：
 
-```
+```java
 <error id="myError" errorCode="error123" />
 ...
 <process id="myProcess">  
@@ -547,7 +545,7 @@ error 的 errorCode 用来查找 匹配的捕获边界错误事件。 如果 err
 
 等价于
 
-```
+```java
 <endEvent id="myErrorEndEvent">
   <errorEventDefinition errorRef="error123" />
 </endEvent> 
@@ -573,7 +571,7 @@ error 的 errorCode 用来查找 匹配的捕获边界错误事件。 如果 err
 
 取消结束事件内容是一个结束事件， 包含 cancelEventDefinition 子元素。
 
-```
+```java
 <endEvent id="myCancelEndEvent">
   <cancelEventDefinition />
 </endEvent> 
@@ -585,7 +583,7 @@ error 的 errorCode 用来查找 匹配的捕获边界错误事件。 如果 err
 
 所以边界事件的定义方式都一样：
 
-```
+```java
 <boundaryEvent id="myBoundaryEvent" attachedToRef="theActivity">
       <XXXEventDefinition/>
 </boundaryEvent> 
@@ -613,7 +611,7 @@ error 的 errorCode 用来查找 匹配的捕获边界错误事件。 如果 err
 
 定时器边界任务定义是一个正规的边界事件。 指定类型的子元素是 timerEventDefinition 元素。
 
-```
+```java
 <boundaryEvent id="escalationTimer" cancelActivity="true" attachedToRef="firstLineSupport">
    <timerEventDefinition>
     <timeDuration>PT4H</timeDuration>
@@ -631,7 +629,7 @@ error 的 errorCode 用来查找 匹配的捕获边界错误事件。 如果 err
 
 因为 BPMN 2.0 中，中断和非中断的事件还是有区别的。默认是中断事件。 非中断事件的情况，不会中断原始环节，那个环节还停留在原地。 对应的，会创建一个新分支，并沿着事件的流向继续执行。 在 XML 内容中，要把 cancelActivity 属性设置为 false：
 
-```
+```java
 <boundaryEvent id="escalationTimer" cancelActivity="false" attachedToRef="firstLineSupport"/> 
 ```
 
@@ -663,7 +661,7 @@ error 的 errorCode 用来查找 匹配的捕获边界错误事件。 如果 err
 
 边界错误事件定义为普通的边界事件：
 
-```
+```java
 <boundaryEvent id="catchError" attachedToRef="mySubProcess">
   <errorEventDefinition errorRef="myError"/>
 </boundaryEvent> 
@@ -671,7 +669,7 @@ error 的 errorCode 用来查找 匹配的捕获边界错误事件。 如果 err
 
 和错误结束事件一样， errorRef 引用了 process 元素外部的一个错误定义：
 
-```
+```java
 <error id="myError" errorCode="123" />
 ...
 <process id="myProcess">
@@ -714,7 +712,7 @@ errorCode 用来匹配捕获的错误：
 
 边界信号事件定义为普通的边界事件：
 
-```
+```java
 <boundaryEvent id="boundary" attachedToRef="task" cancelActivity="true">       
           <signalEventDefinition signalRef="alertSignal"/>
 </boundaryEvent> 
@@ -742,7 +740,7 @@ errorCode 用来匹配捕获的错误：
 
 边界消息事件定义为标准的边界事件：
 
-```
+```java
 <boundaryEvent id="boundary" attachedToRef="task" cancelActivity="true">       
           <messageEventDefinition messageRef="newCustomerMessage"/>
 </boundaryEvent> 
@@ -776,7 +774,7 @@ errorCode 用来匹配捕获的错误：
 
 取消边界事件定义为普通边界事件：
 
-```
+```java
 <boundaryEvent id="boundary" attachedToRef="transaction" >       
           <cancelEventDefinition />
 </boundaryEvent> 
@@ -813,7 +811,7 @@ errorCode 用来匹配捕获的错误：
 
 补偿边界事件定义为标准边界事件：
 
-```
+```java
 <boundaryEvent id="compensateBookHotelEvt" attachedToRef="bookHotel" >       
           <compensateEventDefinition />
 </boundaryEvent>
@@ -829,7 +827,7 @@ errorCode 用来匹配捕获的错误：
 
 所有中间捕获事件都使用同样的方式定义：
 
-```
+```java
 <intermediateCatchEvent id="myIntermediateCatchEvent" >
       <XXXEventDefinition/>
 </intermediateCatchEvent> 
@@ -856,7 +854,7 @@ errorCode 用来匹配捕获的错误：
 
 定时器中间事件定义为标准中间捕获事件。 指定类型的子元素为 timerEventDefinition 元素
 
-```
+```java
 <intermediateCatchEvent id="timer">
         <timerEventDefinition>
             <timeDuration>PT5M</timeDuration>
@@ -884,7 +882,7 @@ errorCode 用来匹配捕获的错误：
 
 信号中间事件定义为普通的中间捕获事件。 对应类型的子元素是 signalEventDefinition 元素。
 
-```
+```java
 <intermediateCatchEvent id="signal">
         <signalEventDefinition signalRef="newCustomerSignal" />
 </intermediateCatchEvent> 
@@ -910,7 +908,7 @@ errorCode 用来匹配捕获的错误：
 
 消息中间事件定义为标准中间捕获事件。 指定类型的子元素是 messageEventDefinition 元素。
 
-```
+```java
 <intermediateCatchEvent id="message">
         <messageEventDefinition signalRef="newCustomerMessage" />
 </intermediateCatchEvent> 
@@ -924,7 +922,7 @@ errorCode 用来匹配捕获的错误：
 
 所有内部触发事件的定义都是同样
 
-```
+```java
 <intermediateThrowEvent id="myIntermediateThrowEvent" >
       <XXXEventDefinition/>
 </intermediateThrowEvent> 
@@ -943,7 +941,7 @@ errorCode 用来匹配捕获的错误：
 
 通过添加执行监听器，就可以很好地监控一些 KPI。
 
-```
+```java
 <intermediateThrowEvent id="noneEvent">
   <extensionElements>
     <activiti:executionListener class="org.activiti.engine.test.bpmn.event.IntermediateNoneEventTest$MyExecutionListener" event="start" />
@@ -974,7 +972,7 @@ errorCode 用来匹配捕获的错误：
 
 消息中间事件定义为标准中间触发事件。 指定类型的子元素是 signalEventDefinition 元素。
 
-```
+```java
 <intermediateThrowEvent id="signal">
         <signalEventDefinition signalRef="newCustomerSignal" />
 </intermediateThrowEvent> 
@@ -982,7 +980,7 @@ errorCode 用来匹配捕获的错误：
 
 异步信号事件如下所示：
 
-```
+```java
 <intermediateThrowEvent id="signal">
         <signalEventDefinition signalRef="newCustomerSignal" activiti:async="true" />
 </intermediateThrowEvent> 
@@ -1036,7 +1034,7 @@ errorCode 用来匹配捕获的错误：
 
 补偿中间事件定义为普通的中间触发事件。 对应类型的子元素 是 compensateEventDefinition 元素。
 
-```
+```java
 <intermediateThrowEvent id="throwCompensation">
         <compensateEventDefinition />
 </intermediateThrowEvent> 
@@ -1044,7 +1042,7 @@ errorCode 用来匹配捕获的错误：
 
 另外，可选参数 activityRef 可以用来触发特定作用域/节点的补偿：
 
-```
+```java
 <intermediateThrowEvent id="throwCompensation">
         <compensateEventDefinition activityRef="bookHotel" />
 </intermediateThrowEvent> 
@@ -1068,7 +1066,7 @@ errorCode 用来匹配捕获的错误：
 
 顺序流需要流程范围内唯一的 id， 以及对起点与 终点元素的引用。
 
-```
+```java
 <sequenceFlow id="flow1" sourceRef="theStart" targetRef="theTask" /> 
 ```
 
@@ -1090,7 +1088,7 @@ errorCode 用来匹配捕获的错误：
 
 条件顺序流定义为一个正常的顺序流， 包含 conditionExpression 子元素。 注意目前只支持 tFormalExpressions， 如果没有设置 xsi:type="" , 就会默认值支持目前支持的表达式类型
 
-```
+```java
 <sequenceFlow id="flow" sourceRef="theStart" targetRef="theTask">
   <conditionExpression xsi:type="tFormalExpression">
     <![CDATA[${order.price > 100 && order.price < 250}]]>
@@ -1124,7 +1122,7 @@ errorCode 用来匹配捕获的错误：
 
 默认顺序流通过对应节点的 default 属性定义。 下面的 XML 代码演示了排他网关设置了默认顺序流 flow 2 。 只有当 conditionA 和 conditionB 都返回 false 时， 才会选择它作为外出连线继续执行。
 
-```
+```java
 <exclusiveGateway id="exclusiveGw" name="Exclusive Gateway" default="flow2" />
 <sequenceFlow id="flow1" sourceRef="exclusiveGw" targetRef="task1">
   <conditionExpression xsi:type="tFormalExpression">${conditionA}</conditionExpression>
@@ -1173,7 +1171,7 @@ errorCode 用来匹配捕获的错误：
 
 它对应的 XML 内容如下：
 
-```
+```java
 <exclusiveGateway id="exclusiveGw" name="Exclusive Gateway" />
 
 <sequenceFlow id="flow2" sourceRef="exclusiveGw" targetRef="theTask1">
@@ -1214,7 +1212,7 @@ errorCode 用来匹配捕获的错误：
 
 定义并行网关只需要一行 XML：
 
-```
+```java
 <parallelGateway id="myParallelGateway" /> 
 ```
 
@@ -1222,7 +1220,7 @@ errorCode 用来匹配捕获的错误：
 
 参考如下代码：
 
-```
+```java
 <startEvent id="theStart" />
 <sequenceFlow id="flow1" sourceRef="theStart" targetRef="fork" />
 
@@ -1247,7 +1245,7 @@ errorCode 用来匹配捕获的错误：
 
 上面例子中，流程启动之后，会创建两个任务：
 
-```
+```java
 ProcessInstance pi = runtimeService.startProcessInstanceByKey("forkJoin");
 TaskQuery query = taskService.createTaskQuery()
                          .processInstanceId(pi.getId())
@@ -1292,7 +1290,7 @@ assertEquals("Ship Order", task2.getName());
 
 定义一个包含网关需要一行 XML：
 
-```
+```java
 <inclusiveGateway id="myInclusiveGateway" /> 
 ```
 
@@ -1300,7 +1298,7 @@ assertEquals("Ship Order", task2.getName());
 
 参考如下代码：
 
-```
+```java
 <startEvent id="theStart" />
 <sequenceFlow id="flow1" sourceRef="theStart" targetRef="fork" />
 
@@ -1329,7 +1327,7 @@ assertEquals("Ship Order", task2.getName());
 
 在上面的例子中，流程开始之后，如果流程变量为 paymentReceived == false 和 shipOrder == true， 就会创建两个任务。如果，只有一个流程变量为 true，就会只创建一个任务。 如果没有条件为 true，就会抛出一个异常。 如果想避免异常，可以定义一个默认顺序流。下面的例子中，会创建一个任务，发货任务：
 
-```
+```java
 HashMap<String, Object> variableMap = new HashMap<String, Object>();
           variableMap.put("receivedPayment", true);
           variableMap.put("shipOrder", true);
@@ -1378,7 +1376,7 @@ assertEquals("Ship Order", task.getName());
 
 ![](img/325a9f91.png)
 
-```
+```java
 <definitions id="definitions"
 
         targetNamespace="Examples">
@@ -1441,13 +1439,13 @@ assertEquals("Ship Order", task.getName());
 
 XML 中的用户任务定义如下。id 属性是必须的。name 属性是可选的。
 
-```
+```java
 <userTask id="theTask" name="Important task" /> 
 ```
 
 用户任务也可以设置描述。实际上所有 BPMN 2.0 元素 都可以设置描述。 添加 documentation 元素可以定义描述。
 
-```
+```java
 <userTask id="theTask" name="Schedule meeting" >
   <documentation>
           Schedule an engineering meeting for next week with the new hire.
@@ -1456,7 +1454,7 @@ XML 中的用户任务定义如下。id 属性是必须的。name 属性是可�
 
 描述文本可以通过标准的 java 方法来获得:
 
-```
+```java
 task.getDescription() 
 ```
 
@@ -1466,7 +1464,7 @@ task.getDescription()
 
 我们提供了一个节点扩展，在任务定义中设置一个表达式，这样在任务创建时就可以为它设置初始持续时间。表达式应该是 java.util.Date， java.util.String (ISO8601 格式)，ISO8601 持续时间 (比如 PT50M )或 null。 例如：你可以在流程中使用上述格式输入日期，或在前一个服务任务中计算一个时间。 这里使用了持续时间，持续时间会基于当前时间进行计算，再通过给定的时间段累加。 比如，使用"PT30M"作为持续时间，任务就会从现在开始持续 30 分钟。
 
-```
+```java
 <userTask id="theTask" name="Important task" activiti:dueDate="${dateVariable}"/> 
 ```
 
@@ -1474,7 +1472,7 @@ task.getDescription()
 
 用户任务可以直接分配给一个用户。 这可以通过 humanPerformer 元素定义。humanPerformer 定义需要一个 resourceAssignmentExpression 来实际定义用户。 当前，只支持 formalExpressions。
 
-```
+```java
 <process ... >
 
   ...
@@ -1492,13 +1490,13 @@ task.getDescription()
 
 直接分配给用户的任务可以通过 TaskService 像下面这样获取：
 
-```
+```java
 List<Task> tasks = taskService.createTaskQuery().taskAssignee("kermit").list(); 
 ```
 
 任务也可以加入到人员的候选任务列表中。 这时，需要使用 potentialOwner 元素。 用法和 humanPerformer 元素类似。注意它需要指定表达式中的每个项目是人员还是群组（引擎猜不出来）。
 
-```
+```java
 <process ... >
 
   ...
@@ -1514,7 +1512,7 @@ List<Task> tasks = taskService.createTaskQuery().taskAssignee("kermit").list();
 
 使用 potential owner 元素定义的任务，可以像下面这样获取 （使用 TaskQuery 的发那个发与查询设置了执行者的任务类似）：
 
-```
+```java
 List<Task> tasks = taskService.createTaskQuery().taskCandidateUser("kermit"); 
 ```
 
@@ -1522,7 +1520,7 @@ List<Task> tasks = taskService.createTaskQuery().taskCandidateUser("kermit");
 
 如果没有显示指定设置的是用户还是群组，引擎会默认当做群组处理。所以下面的设置与使用 group(accountancy) 效果一样。
 
-```
+```java
 <formalExpression>accountancy</formalExpression> 
 ```
 
@@ -1558,7 +1556,7 @@ BPMN 标准支持一个指定的用户或 humanperformer 或一组用户，形�
 
 支持的身份链接类型有：
 
-```
+```java
 public class IdentityLinkType {
   /* Activiti native roles */
   public static final String ASSIGNEE = "assignee";
@@ -1573,7 +1571,7 @@ BPMN 标准和 Activiti 实例授权身份是 user（用户）和 group（组）
 
 如果额外的链接类型是必需的，自定义资源可以被定义为与下面的语法扩展元素：
 
-```
+```java
 <userTask id="theTask" name="make profit">
   <extensionElements>
     <activiti:customResource activiti:name="businessAdministrator">
@@ -1587,7 +1585,7 @@ BPMN 标准和 Activiti 实例授权身份是 user（用户）和 group（组）
 
 自定义链接表达式添加到 TaskDefinition 类：
 
-```
+```java
  protected Map<String, Set<Expression>> customUserIdentityLinkExpressions = 
       new HashMap<String, Set<Expression>>(); 
   protected Map<String, Set<Expression>> customGroupIdentityLinkExpressions = 
@@ -1618,7 +1616,7 @@ BPMN 标准和 Activiti 实例授权身份是 user（用户）和 group（组）
 
 最后，该 IdentityLinkType 类必须扩展支持自定义身份链接类型：
 
-```
+```java
 package com.yourco.engine.task;
 
 public class IdentityLinkType
@@ -1638,7 +1636,7 @@ public class IdentityLinkType
 
 如果上面的方式还不满足需求，可以使用任务监听器在创建事件委托自定义任务逻辑：
 
-```
+```java
 <userTask id="task1" name="My task" >
   <extensionElements>
     <activiti:taskListener event="create" class="org.activiti.MyAssignmentHandler" />
@@ -1648,7 +1646,7 @@ public class IdentityLinkType
 
 该 DelegateTask ，传递到 TaskListener 的实现，允许设置的受让人和候选的用户或组：
 
-```
+```java
 public class MyAssignmentHandler implements TaskListener {
 
   public void notify(DelegateTask delegateTask) {
@@ -1666,19 +1664,19 @@ public class MyAssignmentHandler implements TaskListener {
 
 使用 spring 时，可以使用向上面章节中介绍的自定义分配属性，使用表达式 把任务监听器设置为 spring 代理的 bean， 让这个监听器监听任务的创建事件。 下面的例子中，执行者会通过调用 ldapService 这个 spring bean 的 findManagerOfEmployee 方法获得。 流程变量 emp 会作为参数传递给 bean。
 
-```
+```java
 <userTask id="task" name="My Task" activiti:assignee="${ldapService.findManagerForEmployee(emp)}"/> 
 ```
 
 也可以用来设置候选人和候选组：
 
-```
+```java
 <userTask id="task" name="My Task" activiti:candidateUsers="${ldapService.findAllSales()}"/> 
 ```
 
 注意方法返回类型只能为 String 或 Collection <string class="calibre27">（对应候选人和候选组）：</string>
 
-```
+```java
 public class FakeLdapService {
 
   public String findManagerForEmployee(String employee) {
@@ -1708,7 +1706,7 @@ public class FakeLdapService {
 
 脚本任务定义需要指定 script 和 scriptFormat。
 
-```
+```java
 <scriptTask id="theScriptTask" name="Execute script" scriptFormat="groovy">
   <script>
     sum = 0
@@ -1723,7 +1721,7 @@ scriptFormat 的值必须兼容 [JSR-223](http://jcp.org/en/jsr/detail?id=223)�
 
 注意，groovy 脚本引擎放在 groovy-all.jar 中。在 2.0 版本之前， 脚本引擎是 Groovy jar 的一部分。这样，需要添加如下依赖：
 
-```
+```java
 <dependency>
       <groupId>org.codehaus.groovy</groupId>
       <artifactId>groovy-all</artifactId>
@@ -1735,7 +1733,7 @@ scriptFormat 的值必须兼容 [JSR-223](http://jcp.org/en/jsr/detail?id=223)�
 
 到达脚本任务的流程可以访问的所有流程变量，都可以在脚本中使用。实例中，脚本变量'inputArray'其实是流程变量（整数数组）。
 
-```
+```java
 <script>
     sum = 0
     for ( i in inputArray ) {
@@ -1746,7 +1744,7 @@ scriptFormat 的值必须兼容 [JSR-223](http://jcp.org/en/jsr/detail?id=223)�
 
 也可以在脚本中设置流程变量，直接调用 execution.setVariable("variableName",variableValue)。 默认，不会自动保存变量（注意 ：activiti 5.12 之前存在这个问题）。 可以在脚本中自动保存任何变量。 （比如上例中的 sum ），只要把 scriptTask 的 autoStoreVariables 属性设置为 true。 然而，最佳实践是不要用它，而是显示调用 execution.setVariable()， 因为一些当前版本的 JDK 对于一些脚本语言，无法实现自动保存变量。 参考[这里](http://www.jorambarrez.be/blog/2013/03/25/bug-on-jdk-1-7-0_17-when-using-scripttask-in-activiti/) 获得更多信息。
 
-```
+```java
 <scriptTask id="script" scriptFormat="JavaScript" activiti:autoStoreVariables="false"> 
 ```
 
@@ -1754,7 +1752,7 @@ scriptFormat 的值必须兼容 [JSR-223](http://jcp.org/en/jsr/detail?id=223)�
 
 如何在脚本中设置变量的例子：
 
-```
+```java
 <script>
     def scriptVar = "test123"
     execution.setVariable("myVar", scriptVar)
@@ -1767,7 +1765,7 @@ scriptFormat 的值必须兼容 [JSR-223](http://jcp.org/en/jsr/detail?id=223)�
 
 脚本任务的返回值可以通过制定流程变量的名称，分配给已存或一个新流程变量， 使用脚本任务定义的 'activiti:resultVariable' 属性。 任何已存的流程变量都会被脚本执行的结果覆盖。 如果没有指定返回变量名，脚本的返回值会被忽略。
 
-```
+```java
 <scriptTask id="theScriptTask" name="Execute script" scriptFormat="juel" activiti:resultVariable="myVar">
   <script>#{echo}</script>
 </scriptTask> 
@@ -1798,7 +1796,7 @@ Java 服务任务用来调用外部 Java 类
 
 执行一个在流程执行中调用的类， 需要在'activiti:class'属性中设置全类名。
 
-```
+```java
 <serviceTask id="javaService" 
              name="My Java Service Task" 
              activiti:class="org.activiti.MyJavaDelegate" /> 
@@ -1808,7 +1806,7 @@ Java 服务任务用来调用外部 Java 类
 
 也可以使用表达式调用一个对象。对象必须遵循一些规则， 并使用 activiti:class 属性进行创建。（了解更多）。
 
-```
+```java
 <serviceTask id="serviceTask" activiti:delegateExpression="${delegateExpressionBean}" /> 
 ```
 
@@ -1816,7 +1814,7 @@ Java 服务任务用来调用外部 Java 类
 
 要指定执行的 UEL 方法表达式， 需要使用 activiti:expression。
 
-```
+```java
 <serviceTask id="javaService" 
          name="My Java Service Task" 
          activiti:expression="#{printer.printMessage()}" /> 
@@ -1824,7 +1822,7 @@ Java 服务任务用来调用外部 Java 类
 
 方法 printMessage（无参数）会调用 名为 printer 对象的方法。 也可以为表达式中的方法传递参数。
 
-```
+```java
 <serviceTask id="javaService" 
          name="My Java Service Task" 
          activiti:expression="#{printer.printMessage(execution, myVar)}" /> 
@@ -1834,7 +1832,7 @@ Java 服务任务用来调用外部 Java 类
 
 要指定执行的 UEL 值表达式， 需要使用 activiti:expression 属性。
 
-```
+```java
 <serviceTask id="javaService" 
          name="My Java Service Task" 
          activiti:expression="#{split.ready}" /> 
@@ -1846,7 +1844,7 @@ ready 属性的 getter 方法，getReady（无参数）， 会作用于名为 sp
 
 要在流程执行中实现一个调用的类，这个类需要实现 org.activiti.engine.delegate.JavaDelegate 接口， 并在 execute 方法中提供对应的业务逻辑。 当流程执行到特定阶段，它会指定方法中定义好的业务逻辑， 并按照默认 BPMN 2.0 中的方式离开节点。 让我们创建一个 java 类的例子，它可以流程变量中字符串转换为大写。 这个类需要实现 org.activiti.engine.delegate.JavaDelegate 接口， 这要求我们实现 execute(DelegateExecution) 方法。 它包含的业务逻辑会被引擎调用。流程实例信息，如流程变量和其他信息， 可以通过 [DelegateExecution](http://activiti.org/javadocs/org/activiti/engine/delegate/DelegateExecution.html)接口访问和操作（点击对应操作的 javadoc 的链接，获得更多信息）。
 
-```
+```java
 public class ToUppercase implements JavaDelegate {
 
   public void execute(DelegateExecution execution) throws Exception {
@@ -1875,7 +1873,7 @@ public class ToUppercase implements JavaDelegate {
 
 下面代码演示了如何把一个常量注入到属性中。 属性注入可以使用 'class' 属性。 注意我们需要定义一个'extensionElements' XML 元素， 在声明实际的属性注入之前，这是 BPMN 2.0 XML 格式要求的。
 
-```
+```java
 <serviceTask id="javaService" 
     name="Java service invocation" 
     activiti:class="org.activiti.examples.bpmn.servicetask.ToUpperCaseFieldInjected">
@@ -1889,7 +1887,7 @@ ToUpperCaseFieldInjected 类有一个 text 属性， 类型是 org.activiti.engi
 
 也可以使用长文字（比如，内嵌的 email），可以使用 'activiti:string' 子元素：
 
-```
+```java
 <serviceTask id="javaService" 
     name="Java service invocation" 
     activiti:class="org.activiti.examples.bpmn.servicetask.ToUpperCaseFieldInjected">
@@ -1905,7 +1903,7 @@ ToUpperCaseFieldInjected 类有一个 text 属性， 类型是 org.activiti.engi
 
 可以使用表达式，实现在运行期动态解析注入的值。这些表达式可以使用流程变量或 spring 定义的 bean（如果使用了 spring ）。像服务任务实现里说的那样，服务任务中的 java 类实例会在所有流程实例中共享。 为了动态注入属性的值，我们可以在 org.activiti.engine.delegate.Expression 中使用值和方法表达式，它会使用传递给 execute 方法的 DelegateExecution 参数进行解析。
 
-```
+```java
 <serviceTask id="javaService" name="Java service invocation" 
   activiti:class="org.activiti.examples.bpmn.servicetask.ReverseStringsFieldInjected">
 
@@ -1922,7 +1920,7 @@ ToUpperCaseFieldInjected 类有一个 text 属性， 类型是 org.activiti.engi
 
 下面的例子中，注入了表达式，并使用在传入的当前 DelegateExecution 解析它们。 完整代码可以参考 org.activiti.examples.bpmn.servicetask.JavaServiceTaskTest.testExpressionFieldInjection。
 
-```
+```java
 public class ReverseStringsFieldInjected implements JavaDelegate {
 
   private Expression text1;
@@ -1940,7 +1938,7 @@ public class ReverseStringsFieldInjected implements JavaDelegate {
 
 另外，你也可以把表达式设置成一个属性，而不是字元素，让 XML 更简单一些。
 
-```
+```java
 <activiti:field name="text1" expression="${genderBean.getGenderString(gender)}" />
 <activiti:field name="text1" expression="Hello ${gender == 'male' ? 'Mr.' : 'Mrs.'} ${name}" /> 
 ```
@@ -1951,7 +1949,7 @@ public class ReverseStringsFieldInjected implements JavaDelegate {
 
 服务流程返回的结果（使用表达式的服务任务）可以分配给已经存在的或新的流程变量， 可以通过指定服务任务定义的 'activiti:resultVariable' 属性来实现。 指定的路程比那两的值会被服务流程的返回结果覆盖。如果没有指定返回变量名，就会忽略返回结果。
 
-```
+```java
 <serviceTask id="aMethodExpressionServiceTask"
     activiti:expression="#{myService.doSomething()}"
     activiti:resultVariable="myVar" /> 
@@ -1967,7 +1965,7 @@ public class ReverseStringsFieldInjected implements JavaDelegate {
 
 可以在服务任务或脚本任务的代码里抛出 BPMN error。 为了实现这个，要从 JavaDelegate，脚本，表达式和代理表达式中抛出名为 BpmnError 的特殊 ActivitiExeption。 引擎会捕获这个异常，把它转发到对应的错误处理中。比如，边界错误事件或错误事件子流程。
 
-```
+```java
 public class ThrowBpmnErrorDelegate implements JavaDelegate {
 
   public void execute(DelegateExecution execution) throws Exception {
@@ -1989,7 +1987,7 @@ public class ThrowBpmnErrorDelegate implements JavaDelegate {
 
 [内部，公开实现类] 另一种选择是在一些异常发生时，让路程进入其他路径。下面的代码演示了如何实现。
 
-```
+```java
 <serviceTask id="javaService" 
   name="Java service invocation" 
   activiti:class="org.activiti.ThrowsExceptionBehavior">            
@@ -2001,7 +1999,7 @@ public class ThrowBpmnErrorDelegate implements JavaDelegate {
 
 这里的服务任务有两个外出顺序流，分别叫 exception 和 no-exception 。异常出现时会使用顺序流的 id 来决定流向
 
-```
+```java
 public class ThrowsExceptionBehavior implements ActivityBehavior {
 
   public void execute(ActivityExecution execution) throws Exception {
@@ -2024,7 +2022,7 @@ public class ThrowsExceptionBehavior implements ActivityBehavior {
 
 一些场景下，需要在 java 服务任务中使用 activiti 服务 （比如，通过 RuntimeService 启动流 程实例，而 callActivity 不满足你的需求）。 org.activiti.engine.delegate.DelegateExecution 允许通过 org.activiti.engine.EngineServices 接口直接获得这些服务：
 
-```
+```java
 public class StartProcessInstanceTestDelegate implements JavaDelegate {
 
   public void execute(DelegateExecution execution) throws Exception {
@@ -2039,7 +2037,7 @@ public class StartProcessInstanceTestDelegate implements JavaDelegate {
 
 使用这些 API 调用出现的所有数据改变，都是在当前事务中的。在像 spring 和 CDI 这样的依赖注入环境也会起作用，无论是否启用了 JTA 数据源。 比如，下面的代码功能与上面的代码一致， 这是 RuntimeService 是通过依赖注入获得的，而不是通过 org.activiti.engine.EngineServices 接口。
 
-```
+```java
 @Component("startProcessInstanceDelegate")
 public class StartProcessInstanceTestDelegateWithInjection {
 
@@ -2073,7 +2071,7 @@ Web Service 任务与 Java 服务任务显示效果一样。
 
 要使用 Web Service 我们需要导入它的操作和类型。 可以自动使用 import 标签来指定 Web Service 的 WSDL：
 
-```
+```java
 <import importType="http://schemas.xmlsoap.org/wsdl/"
     location="http://localhost:63081/counter?wsdl"
     namespace="http://webservice.activiti.org/" /> 
@@ -2081,7 +2079,7 @@ Web Service 任务与 Java 服务任务显示效果一样。
 
 上面的声明告诉 activiti 导入 WSDL 定义，但没有创建 item 定义和消息。 假设我们想调用一个名为 'prettyPrint' 的方法， 我们必须创建为请求和响应信息对应的消息和 item 定义：
 
-```
+```java
 <message id="prettyPrintCountRequestMessage" itemRef="tns:prettyPrintCountRequestItem" />
 <message id="prettyPrintCountResponseMessage" itemRef="tns:prettyPrintCountResponseItem" />
 
@@ -2091,7 +2089,7 @@ Web Service 任务与 Java 服务任务显示效果一样。
 
 在申请服务任务之前，我们必须定义实际引用 Web Service 的 BPMN 接口和操作。 基本上，我们定义接口和必要的操作。对每个奥做我们都会重用上面定义的信息作为输入和输出。 比如，下面定义了 'counter' 接口和 'prettyPrintCountOperation' 操作：
 
-```
+```java
 <interface name="Counter Interface" implementationRef="counter:Counter">
         <operation id="prettyPrintCountOperation" name="prettyPrintCount Operation" 
                         implementationRef="counter:prettyPrintCount">
@@ -2103,7 +2101,7 @@ Web Service 任务与 Java 服务任务显示效果一样。
 
 然后我们可以定义 Web Service 任务使用 ##WebService 实现， 并引用 Web Service 操作。
 
-```
+```java
 <serviceTask id="webService" 
     name="Web service invocation"
     implementation="##WebService"
@@ -2114,7 +2112,7 @@ Web Service 任务与 Java 服务任务显示效果一样。
 
 除非我们使用简化方式处理数据输入和输出关联（如下所示），每个 Web Service 任务可以定义任务的输入输出 IO 规范。 配置方式与 BPMN 2.0 完全兼容，下面格式化后的例子，我们根据之前定义 item 定义，定义了输入和输出。
 
-```
+```java
 <ioSpecification>
         <dataInput itemSubjectRef="tns:prettyPrintCountRequestItem" id="dataInputOfServiceTask" />
         <dataOutput itemSubjectRef="tns:prettyPrintCountResponseItem" id="dataOutputOfServiceTask" />
@@ -2136,7 +2134,7 @@ Web Service 任务与 Java 服务任务显示效果一样。
 
 要使用表达式指定数据输入关联，我们需要定义来源和目的 item，并指定每个 item 属性之间的对应关系。 下面的例子中我们分配了这些 item 的前缀和后缀：
 
-```
+```java
 <dataInputAssociation>
         <sourceRef>dataInputOfProcess</sourceRef>
         <targetRef>dataInputOfServiceTask</targetRef>
@@ -2153,7 +2151,7 @@ Web Service 任务与 Java 服务任务显示效果一样。
 
 另外，我们可以使用更简单的简化方式。'sourceRef' 元素是 activiti 的变量名，'targetRef' 元素是 item 定义的一个属性。在下面的例子中，我们把 'PrefixVariable' 变量的值分配给 'field' 属性， 把 'SuffixVariable' 变量的值分配给 'suffix' 属性。
 
-```
+```java
 <dataInputAssociation>
         <sourceRef>PrefixVariable</sourceRef>
         <targetRef>prefix</targetRef>
@@ -2173,7 +2171,7 @@ Web Service 任务与 Java 服务任务显示效果一样。
 
 要使用表达式指定数据输出关联，我们需要定义目的变量和来源表达式。 方法和数据输入关联完全一样：
 
-```
+```java
 <dataOutputAssociation>
         <targetRef>dataOutputOfProcess</targetRef>
         <transformation>${dataOutputOfServiceTask.prettyPrint}</transformation>
@@ -2182,7 +2180,7 @@ Web Service 任务与 Java 服务任务显示效果一样。
 
 另外，我们可以使用更简单的简化方式。'sourceRef' 元素是 item 定义的一个属性，'targetRef' 元素是 activiti 的变量名。 方法和数据输入关联完全一样：
 
-```
+```java
 <dataOutputAssociation>
         <sourceRef>prettyPrint</sourceRef>
         <targetRef>OutputVariable</targetRef>
@@ -2209,7 +2207,7 @@ Web Service 任务与 Java 服务任务显示效果一样。
 
 下面的业务规则任务会执行和流程定义一起部署的素有业务规则：
 
-```
+```java
 <process id="simpleBusinessRuleProcess">
 
   <startEvent id="theStart" />
@@ -2227,7 +2225,7 @@ Web Service 任务与 Java 服务任务显示效果一样。
 
 业务规则任务也可以配置成只执行部署的 .drl 文件中的一些规则。 这时要设置逗号分隔的规则名。
 
-```
+```java
 <businessRuleTask id="businessRuleTask" activiti:ruleVariablesInput="${order}"
   activiti:rules="rule1, rule2" /> 
 ```
@@ -2236,7 +2234,7 @@ Web Service 任务与 Java 服务任务显示效果一样。
 
 你也可以定义哪些规则不用执行。
 
-```
+```java
 <businessRuleTask id="businessRuleTask" activiti:ruleVariablesInput="${order}"
   activiti:rules="rule1, rule2" exclude="true" /> 
 ```
@@ -2271,7 +2269,7 @@ Table 8.1\. Mail server configuration
 
 邮件任务是一个专用的服务任务， 这个服务任务的 type 设置为 'mail'。
 
-```
+```java
 <serviceTask id="sendMail" activiti:type="mail"> 
 ```
 
@@ -2298,7 +2296,7 @@ Table 8.2\. Mail task configuration
 
 下面的 XML 演示了使用邮件任务的例子
 
-```
+```java
 <serviceTask id="sendMail" activiti:type="mail">
   <extensionElements>
     <activiti:field name="from" stringValue="order-shipping@thecompany.com" />
@@ -2337,7 +2335,7 @@ mule 任务可以向 mule 发送消息，以强化 activiti 的集成能力。�
 
 mule 任务是一个专用的服务任务， 这个服务任务的 type 设置为 'mule'。
 
-```
+```java
 <serviceTask id="sendMule" activiti:type="mule"> 
 ```
 
@@ -2356,7 +2354,7 @@ Table 8.3\. Mule server configuration
 
 下面是一个使用 mule 任务的例子
 
-```
+```java
 <extensionElements>
 <activiti:field name="endpointUrl">
   <activiti:string>vm://in</activiti:string>
@@ -2381,13 +2379,13 @@ Camel 任务可以从 Camel 发送和介绍消息，由此强化了 activiti 的
 
 camel 任务是一个专用的服务任务，这个服务任务的 type 设置为 'camel'。
 
-```
+```java
 <serviceTask id="sendCamel" activiti:type="camel"> 
 ```
 
 流程定义只需要在服务任务中定义 camel 类型。 集成逻辑都会代理给 camel 容器。默认 activiti 引擎会在 spring 容器中查找 camelContext bean。 camelContext 定义了 camel 容器 加载的路由规则。下面的例子中路由规则是从指定的 java 包下加载的。 但是你也可以通过 spring 配置直接定义路由规则。
 
-```
+```java
 <camelContext id="camelContext" >
   <packageScan>
     <package>org.activiti.camel.route</package>
@@ -2399,7 +2397,7 @@ camel 任务是一个专用的服务任务，这个服务任务的 type 设置�
 
 如果想定义多个 Camel 环境 bean，并且（或者）想使用不同的 bean 名称，可以重载 CamelTask 的定义，如下所示：
 
-```
+```java
 <serviceTask id="serviceTask1" activiti:type="camel">
   <extensionElements>
     <activiti:field name="camelContext" stringValue="customCamelContext" />
@@ -2411,7 +2409,7 @@ camel 任务是一个专用的服务任务，这个服务任务的 type 设置�
 
 这个例子对应的文件都可以在 activiti camel 模块的 org.activiti.camel.examples.simpleCamelCall 包下找到。我们的目标是简单激活一个特定的 camel 路由。 首先，我们需要一个 Spring 环境，它要包含之前介绍的路由。这些文件的目的如下：
 
-```
+```java
 <camelContext id="camelContext" >
   <packageScan>
     <package>org.activiti.camel.examples.simpleCamelCall</package>
@@ -2421,7 +2419,7 @@ camel 任务是一个专用的服务任务，这个服务任务的 type 设置�
 
 包含名为 SimpleCamelCallRoute 的路由的类文件，放在 PackageScan 标签的扫描目录下。 下面就是路由的定义：
 
-```
+```java
 public class SimpleCamelCallRoute extends RouteBuilder {
 
   @Override
@@ -2443,7 +2441,7 @@ Table 8.4\. Endpoint URL parts:
 
 OK，我们的规则已经配置好，也可以让 Camel 使用了。 现在看工作流部分。工作流看起来像这样：
 
-```
+```java
 <process id="SimpleCamelCallProcess">
   <startEvent id="start"/>
   <sequenceFlow id="flow1" sourceRef="start" targetRef="simpleCall"/>
@@ -2461,7 +2459,7 @@ OK，我们的规则已经配置好，也可以让 Camel 使用了。 现在看�
 
 我们的例子成功执行了，但是 Camel 和 Activiti 之间没有任何交互，而且这样做也没有任何优势。在这个例子里，我们尝试向 Camel 发送和接收数据。 我们发送一个字符串，camel 进行一些处理，然后返回结果。 发送部分很简单，我们把变量里的消息发送给 camel。这里是我们的调用代码
 
-```
+```java
 @Deployment
 public void testPingPong() {
   Map<String, Object> variables = new HashMap<String, Object>();
@@ -2479,7 +2477,7 @@ public void testPingPong() {
 
 变量"input"是 Camel 规则的实际输入，outputMap 会记录 camel 返回的结果。流程应该像是这样：
 
-```
+```java
 <process id="PingPongProcess">
   <startEvent id="start"/>
   <sequenceFlow id="flow1" sourceRef="start" targetRef="ping"/>
@@ -2493,7 +2491,7 @@ public void testPingPong() {
 
 注意，SaveOuput 这个 serviceTask，会把"Output"变量的值从上下文保存到上面提到的 OutputMap 中。 现在，我们必须了解变量是如何发送给 Camel，再返回的。这里就要涉及到 camel 实际执行的行为了。 变量提交给 camel 的方法是由 CamelBehavior 控制的。这里我们使用默认的配置，其他的会在后面提及。 使用这些代码，我们就可以配置一个期望的 camel 行为：
 
-```
+```java
 <serviceTask id="serviceTask1" activiti:type="camel">
   <extensionElements>
     <activiti:field name="camelBehaviorClass" stringValue="org.activiti.camel.impl.CamelBehaviorCamelBodyImpl" />
@@ -2503,7 +2501,7 @@ public void testPingPong() {
 
 如果你没有特别指定一个行为，就会使用 org.activiti.camel.impl.CamelBehaviorDefaultImpl。 这个行为会把变量复制成名称相同的 Camel 属性。 在返回时，无论选择什么行为，如果 camel 消息体是一个 map，每个元素都会复制成一个变量， 否则整个对象会复制到指定名称为"camelBody"的变量中。 了解这些后， 就可以看看我们第二个例子的 camel 规则了：
 
-```
+```java
 @Override
 public void configure() throws Exception {
   from("activiti:PingPongProcess:ping").transform().simple("${property.input} World");
@@ -2514,7 +2512,7 @@ public void configure() throws Exception {
 
 Activiti 中可以使用三种不同的行为。这些行为可以通过在规则 URL 中指定对应的环节来实现覆盖。 这里有一个在 URL 中覆盖现存行为的例子：
 
-```
+```java
 from("activiti:asyncCamelProcess:serviceTaskAsync2?copyVariablesToProperties=true"). 
 ```
 
@@ -2545,19 +2543,19 @@ Table 8.6\. Existing camel behaviours:
 
 之前的例子都是同步的。流程会等到 camel 规则返回之后才会停止。 一些情况下，我们需要 activiti 工作流继续运行。这时 camelServiceTask 的异步功能就特别有用。 你可以通过设置 camelServiceTask 的 async 属性来启用这个功能。
 
-```
+```java
 <serviceTask id="serviceAsyncPing" activiti:type="camel" activiti:async="true"/> 
 ```
 
 通过设置这个功能，camel 规则会被 activiti 的 jobExecutor 异步执行。 当你在 camel 规则中定义了一个队列，activiti 流程会在 camelServiceTask 执行时继续运行。 camel 规则会以完全异步的方式执行。 如果你想在什么地方等待 camelServiceTask 的返回值，你可以使用一个 receiveTask。
 
-```
+```java
 <receiveTask id="receiveAsyncPing" name="Wait State" /> 
 ```
 
 流程实例会等到接收一个 signal，比如来自 camel。在 camel 中你可以发送一个 signal 给流程实例，通过对应的 activiti 终端发送消息
 
-```
+```java
 from("activiti:asyncPingProcess:serviceAsyncPing").to("activiti:asyncPingProcess:receiveAsyncPing"); 
 ```
 
@@ -2571,7 +2569,7 @@ from("activiti:asyncPingProcess:serviceAsyncPing").to("activiti:asyncPingProcess
 
 之前的所有例子中，activiti 工作流会先启动，然后在流程中启动 camel 规则。 也可以使用另外一种方法。在已经启动的 camel 规则中启动一个工作流。 这会触发一个 receiveTask 十分类似，除了最后的部分。这是一个实例规则：
 
-```
+```java
 from("direct:start").to("activiti:camelProcess"); 
 ```
 
@@ -2579,13 +2577,13 @@ from("direct:start").to("activiti:camelProcess");
 
 也可以设置流程发起人到 Camel 头提供的身份验证的用户 ID 。为了实现这个，发起人变量必须在流程定义中指定的：
 
-```
+```java
 <startEvent id="start" activiti:initiator="initiator" /> 
 ```
 
 接着 用户 Id 包含在 Camel 头 名字叫 CamelProcessInitiatorHeader ，定义如下
 
-```
+```java
 from("direct:startWithInitiatorHeader")
     .setHeader("CamelProcessInitiatorHeader", constant("kermit"))
     .to("activiti:InitiatorCamelCallProcess?processInitiatorHeaderName=CamelProcessInitiatorHeader"); 
@@ -2605,7 +2603,7 @@ from("direct:startWithInitiatorHeader")
 
 #### XML representation 内容
 
-```
+```java
 <manualTask id="myManualTask" name="Call client for more information" /> 
 ```
 
@@ -2623,13 +2621,13 @@ from("direct:startWithInitiatorHeader")
 
 #### XML representation 内容
 
-```
+```java
 <receiveTask id="waitState" name="wait" /> 
 ```
 
 要在接收任务等待的流程实例继续执行， 可以调用 runtimeService.signal(executionId)， 传递接收任务上流程的 id。 下面的代码演示了实际是如何工作的：
 
-```
+```java
 ProcessInstance pi = runtimeService.startProcessInstanceByKey("receiveTask");
 Execution execution = runtimeService.createExecutionQuery()
   .processInstanceId(pi.getId())
@@ -2650,7 +2648,7 @@ shell 任务可以执行 shell 脚本和命令。 注意 shell 任务不是 BPMN
 
 shell 任务是一个专用的服务任务， 这个服务任务的 type 设置为'shell'
 
-```
+```java
 <serviceTask id="shellEcho" activiti:type="shell"> 
 ```
 
@@ -2673,7 +2671,7 @@ Table 8.7\. Shell task parameter configuration
 
 下面的代码演示了使用 shell 任务的实例。它会执行 shell 脚本"cmd /c echo EchoTest"，等到它结束，再把输出结果保存到 resultVar 中。
 
-```
+```java
 <serviceTask id="shellEcho" activiti:type="shell" >
   <extensionElements>
     <activiti:field name="command" stringValue="cmd" />  
@@ -2701,7 +2699,7 @@ Table 8.7\. Shell task parameter configuration
 
 下面的流程定义包含了 3 个流程监听器：
 
-```
+```java
  <process id="executionListenersProcess">
 
     <extensionElements>
@@ -2735,7 +2733,7 @@ Table 8.7\. Shell task parameter configuration
 
 第一个流程监听器监听流程开始。监听器是一个外部 java 类（像 是 ExampleExecutionListenerOne）， 需要实现 org.activiti.engine.delegate.ExecutionListener 接口。 当事件发生时（这里是 end 事件）， 会调用 notify(ExecutionListenerExecution execution) 方法。
 
-```
+```java
 public class ExampleExecutionListenerOne implements ExecutionListener {
 
   public void notify(ExecutionListenerExecution execution) throws Exception {
@@ -2751,7 +2749,7 @@ public class ExampleExecutionListenerOne implements ExecutionListener {
 
 最后一个流程监听器在节点 secondTask 结束时调用。这里使用 expression 代替 class 来在事件触发时执行/调用。
 
-```
+```java
 <activiti:executionListener expression="${myPojo.myMethod(execution.eventName)}" event="end" /> 
 ```
 
@@ -2759,13 +2757,13 @@ public class ExampleExecutionListenerOne implements ExecutionListener {
 
 流程监听器也支持使用 delegateExpression, 和服务任务相同。
 
-```
+```java
 <activiti:executionListener event="start" delegateExpression="${myExecutionListenerBean}" /> 
 ```
 
 在 activiti 5.12 中，我们也介绍了新的流程监听器， org.activiti.engine.impl.bpmn.listener.ScriptExecutionListener。 这个脚本流程监听器可以为某个流程监听事件执行一段脚本。
 
-```
+```java
 <activiti:executionListener event="start" class="org.activiti.engine.impl.bpmn.listener.ScriptExecutionListener" >
   <activiti:field name="script">
     <activiti:string>
@@ -2786,7 +2784,7 @@ public class ExampleExecutionListenerOne implements ExecutionListener {
 
 下面的代码演示了使用了属性注入的流程监听器的流程的简单例子。
 
-```
+```java
  <process id="executionListenersProcess">
     <extensionElements>
       <activiti:executionListener class="org.activiti.examples.bpmn.executionListener.ExampleFieldInjectedExecutionListener" event="start">
@@ -2805,7 +2803,7 @@ public class ExampleExecutionListenerOne implements ExecutionListener {
   </process> 
 ```
 
-```
+```java
  public class ExampleFieldInjectedExecutionListener implements ExecutionListener {
 
       private Expression fixedValue;
@@ -2820,7 +2818,7 @@ public class ExampleExecutionListenerOne implements ExecutionListener {
 
 ExampleFieldInjectedExecutionListener 类串联了两个注入的属性。 （一个是固定的，一个是动态的），把他们保存到流程变量'var'中。
 
-```
+```java
 @Deployment(resources = {"org/activiti/examples/bpmn/executionListener/ExecutionListenersFieldInjectionProcess.bpmn20.xml"})
 public void testExecutionListenerFieldInjection() {
   Map<String, Object> variables = new HashMap<String, Object>();
@@ -2843,7 +2841,7 @@ public void testExecutionListenerFieldInjection() {
 
 任务监听器只能添加到流程定义中的用户任务中。 注意它必须定义在 BPMN 2.0 extensionElements 的子元素中， 并使用 activiti 命名空间，因为任务监听器是 activiti 独有的结构。
 
-```
+```java
 <userTask id="myTask" name="My Task" >
   <extensionElements>
     <activiti:taskListener event="create" class="org.activiti.MyTaskCreateListener" />
@@ -2862,7 +2860,7 @@ public void testExecutionListenerFieldInjection() {
 
     public class MyTaskCreateListener implements TaskListener {
 
-    ```
+    ```java
     public void notify(DelegateTask delegateTask) {
       // Custom logic goes here
     } 
@@ -2874,19 +2872,19 @@ public void testExecutionListenerFieldInjection() {
 
 *   expression：（无法同时与 class 属性一起使用）： 指定事件发生时执行的表达式。 可以把 DelegateTask 对象和事件名称（使用 task.eventName ） 作为参数传递给调用的对象。
 
-```
+```java
  <activiti:taskListener event="create" expression="${myObject.callMethod(task, task.eventName)}" /> 
 ```
 
 *   delegateExpression 可以指定一个表达式，解析一个实现了 TaskListener 接口的对象， 这与服务任务一致。
 
-```
+```java
  <activiti:taskListener event="create" delegateExpression="${myTaskListenerBean}" /> 
 ```
 
 *   在 activiti 5.12 中，我们也介绍了新的任务监听 器，org.activiti.engine.impl.bpmn.listener.ScriptTaskListener。 脚本任务监听器可以为任务监听器事件执行脚本。
 
-```
+```java
  <activiti:taskListener event="complete" class="org.activiti.engine.impl.bpmn.listener.ScriptTaskListener" >
       <activiti:field name="script">
         <activiti:string>
@@ -2941,7 +2939,7 @@ public void testExecutionListenerFieldInjection() {
 
 要把一个节点设置为多实例，节点 xml 元素必须设置一个 multiInstanceLoopCharacteristics 子元素
 
-```
+```java
 <multiInstanceLoopCharacteristics isSequential="false|true">
  ...
 </multiInstanceLoopCharacteristics> 
@@ -2949,7 +2947,7 @@ public void testExecutionListenerFieldInjection() {
 
 isSequential 属性表示节点是进行 顺序执行还是并行执行。实例的数量会在进入节点时计算一次。 有一些方法配置它。一种方法是使用 loopCardinality 子元素直接指定一个数字。
 
-```
+```java
 <multiInstanceLoopCharacteristics isSequential="false|true">
   <loopCardinality>5</loopCardinality>
 </multiInstanceLoopCharacteristics> 
@@ -2957,7 +2955,7 @@ isSequential 属性表示节点是进行 顺序执行还是并行执行。实例
 
 也可以使用结果为整数的表达式：
 
-```
+```java
 <multiInstanceLoopCharacteristics isSequential="false|true">
   <loopCardinality>${nrOfOrders-nrOfCancellations}</loopCardinality>
 </multiInstanceLoopCharacteristics> 
@@ -2965,7 +2963,7 @@ isSequential 属性表示节点是进行 顺序执行还是并行执行。实例
 
 另一个定义实例数目的方法是，通过 loopDataInputRef 子元素，设置一个类型为集合的流程变量名。 对于集合中的每个元素，都会创建一个实例。 也可以通过 inputDataItem 子元素指定集合。 下面的代码演示了这些配置：
 
-```
+```java
 <userTask id="miTasks" name="My Task ${loopCounter}" activiti:assignee="${assignee}">
   <multiInstanceLoopCharacteristics isSequential="false">
     <loopDataInputRef>assigneeList</loopDataInputRef>
@@ -2978,7 +2976,7 @@ isSequential 属性表示节点是进行 顺序执行还是并行执行。实例
 
 loopDataInputRef 和 inputDataItem 的缺点是 1）名字不好记， 2）根据 BPMN 2.0 格式定义，它们不能包含表达式。activiti 通过在 multiInstanceCharacteristics 中设置 collection 和 elementVariable 属性解决了这个问题：
 
-```
+```java
 <userTask id="miTasks" name="My Task" activiti:assignee="${assignee}">
   <multiInstanceLoopCharacteristics isSequential="true" 
      activiti:collection="${myService.resolveUsersForTask()}" activiti:elementVariable="assignee" >
@@ -2988,7 +2986,7 @@ loopDataInputRef 和 inputDataItem 的缺点是 1）名字不好记， 2）根�
 
 多实例节点在所有实例都完成时才会结束。也可以指定一个表达式在每个实例结束时执行。如果表达式返回 true，所有其他的实例都会销毁，多实例节点也会结束，流程会继续执行。这个表达式必须定义在 completionCondition 子元素中。
 
-```
+```java
 <userTask id="miTasks" name="My Task" activiti:assignee="${assignee}">
   <multiInstanceLoopCharacteristics isSequential="false" 
      activiti:collection="assigneeList" activiti:elementVariable="assignee" >
@@ -3029,7 +3027,7 @@ loopDataInputRef 和 inputDataItem 的缺点是 1）名字不好记， 2）根�
 
 为了声明作为补偿处理器的节点，我们需要把 isForCompensation 设置为 true：
 
-```
+```java
 <serviceTask id="undoBookHotel" isForCompensation="true" activiti:class="...">
 </serviceTask> 
 ```
@@ -3072,7 +3070,7 @@ loopDataInputRef 和 inputDataItem 的缺点是 1）名字不好记， 2）根�
 
 子流程定义为 subprocess 元素。 所有节点，网关，事件，等等。它是子流程的一部分，需要放在这个元素里。
 
-```
+```java
 <subProcess id="subProcess">
 
   <startEvent id="subProcessStart" />
@@ -3109,7 +3107,7 @@ loopDataInputRef 和 inputDataItem 的缺点是 1）名字不好记， 2）根�
 
 事件子流程的 XML 内容与内嵌子流程是一样的。 另外，要把 triggeredByEvent 属性设置为 true：
 
-```
+```java
 <subProcess id="eventSubProcess" triggeredByEvent="true">
         ...
 </subProcess> 
@@ -3123,7 +3121,7 @@ loopDataInputRef 和 inputDataItem 的缺点是 1）名字不好记， 2）根�
 
 事件子流程的 XML 如下所示：
 
-```
+```java
 <subProcess id="eventSubProcess" triggeredByEvent="true">
         <startEvent id="catchError">
                 <errorEventDefinition errorRef="error" /> 
@@ -3194,7 +3192,7 @@ loopDataInputRef 和 inputDataItem 的缺点是 1）名字不好记， 2）根�
 
 事务子流程使用 transaction 标签：
 
-```
+```java
 <transaction id="myTransaction" >
         ...
 </transaction> 
@@ -3226,7 +3224,7 @@ BPMN 2.0 区分了普通子流程， 也叫做内嵌子流程，和调用节点�
 
 有种调用节点是经常性的节点，需要 calledElement 引用被 key 定义的流程。在实践中，这意味着流程的 ID 用于 calledElement。
 
-```
+```java
 <callActivity id="callCheckCreditProcess" name="Check credit" calledElement="checkCreditProcess" /> 
 ```
 
@@ -3236,7 +3234,7 @@ BPMN 2.0 区分了普通子流程， 也叫做内嵌子流程，和调用节点�
 
 可以把流程变量传递给子流程，反之亦然。数据会复制给子流程，当它启动的时候， 并在它结束的时候复制回主流程。
 
-```
+```java
 <callActivity id="callSubProcess" calledElement="checkCreditProcess" >
   <extensionElements>
           <activiti:in source="someVariableInMainProcess" target="nameOfVariableInSubProcess" />
@@ -3249,7 +3247,7 @@ BPMN 2.0 区分了普通子流程， 也叫做内嵌子流程，和调用节点�
 
 这里也可以使用表达式：
 
-```
+```java
 <callActivity id="callSubProcess" calledElement="checkCreditProcess" >
         <extensionElements>
           <activiti:in sourceExpression="${x+5}"" target="y" />
@@ -3268,7 +3266,7 @@ BPMN 2.0 区分了普通子流程， 也叫做内嵌子流程，和调用节点�
 
 流程看起来像这样的：
 
-```
+```java
 <startEvent id="theStart" />
 <sequenceFlow id="flow1" sourceRef="theStart" targetRef="receiveOrder" />
 
@@ -3308,7 +3306,7 @@ Activiti 通过事务方式执行流程，可以根据你的需求定制。现�
 
 要想使用这个特性，我们要使用 activiti:async="true" 扩展。例子中，服务任务看起来就是这样：
 
-```
+```java
 <serviceTask id="service1" name="Generate Invoice" activiti:class="my.custom.Delegate" activiti:async="true" /> 
 ```
 
@@ -3325,7 +3323,7 @@ Activiti 在其默认配置，重试 3 次工作，当在一个作业执行遇�
 
 这些参数可以通过配置 activiti:failedJobRetryTimeCycle。这里是一个简单的使用示例：
 
-```
+```java
 <serviceTask id="failingServiceTask" activiti:async="true" activiti:class="org.activiti.engine.test.jobexecutor.RetryFailingDelegate">
         <extensionElements>
                 <activiti:failedJobRetryTimeCycle>R5/PT7M</activiti:failedJobRetryTimeCycle>
@@ -3362,7 +3360,7 @@ Activiti 是如何解决这个问题的？ Activiti 使用了乐观锁。当我�
 
 如何启用这个特性？从 Activiti 5.9 开始，排他任务已经是默认配置了。所以异步执行和定时器事件默认都是排他任务。 另外，如果你想把 job 设置为非排他，可以使用 activiti:exclusive="false" 进行配置。 比如，下面的服务任务就是异步但是非排他的。
 
-```
+```java
 <serviceTask id="service" activiti:expression="${myService.performBooking(hotel, dates)}" activiti:async="true" activiti:exclusive="false" /> 
 ```
 
@@ -3377,7 +3375,7 @@ Activiti 是如何解决这个问题的？ Activiti 使用了乐观锁。当我�
 
 默认所有人在部署的流程定义上启动一个新流程实例。通过流程初始化授权功能定义的用户和组，web 客户端可以限制哪些用户可以启动一个新流程实例。 注意：Activiti 引擎不会校验授权定义。 这个功能只是为减轻 web 客户端开发者实现校验规则的难度。 设置方法与用户任务用户分配类似。 用户或组可以使用 <activitiu0003apotentialstarter class="calibre27">标签分配为流程的默 认启动者。下面是一个例子：</activitiu0003apotentialstarter>
 
-```
+```java
 <process id="potentialStarter">
      <extensionElements>
        <activiti:potentialStarter>
@@ -3392,7 +3390,7 @@ Activiti 是如何解决这个问题的？ Activiti 使用了乐观锁。当我�
 
 上面的 XML 中，user(user3) 是直接引用了用户 user3，group(group3) 是引用了组 group3。如果没显示设置，默认认为是群组。 也可以使用 <process class="calibre27">标签的属性， <activitiu0003acandidatestarterusers class="calibre27">和<activitiu0003acandidatestartergroups class="calibre27">。 下面是一个例子：</activitiu0003acandidatestartergroups></activitiu0003acandidatestarterusers></process>
 
-```
+```java
 <process id="potentialStarter" activiti:candidateStarterUsers="user1, user2"  
                                         activiti:candidateStarterGroups="group1">
       ... 
@@ -3402,25 +3400,25 @@ Activiti 是如何解决这个问题的？ Activiti 使用了乐观锁。当我�
 
 定义流程初始化授权后，开发者可以使用如下方法获得授权定义。 这些代码可以获得给定的用户可以启动哪些流程定义：
 
-```
+```java
 processDefinitions = repositoryService.createProcessDefinitionQuery().startableByUser("userxxx").list(); 
 ```
 
 也可以获得指定流程定义设置的潜在启动者对应的 identity link。
 
-```
+```java
 identityLinks = repositoryService.getIdentityLinksForProcessDefinition("processDefinitionId"); 
 ```
 
 下面例子演示了如何获得可以启动给定流程的用户列表：
 
-```
+```java
 List<User> authorizedUsers =  identityService().createUserQuery().potentialStarter("processDefinitionId").list(); 
 ```
 
 相同的方式，获得可以启动给定流程配置的群组：
 
-```
+```java
 List<Group> authorizedGroups =  identityService().createGroupQuery().potentialStarter("processDefinitionId").list(); 
 ```
 
@@ -3432,33 +3430,33 @@ List<Group> authorizedGroups =  identityService().createGroupQuery().potentialSt
 
 BPMN 提供了一种功能，可以在流程定义或子流程中定义数据对象。根据 BPMN 规范，流程定义可以包含复杂 XML 结构， 可以导入 XSD 定义。对于 Activiti 来说，作为 Activiti 首次支持的数据对象，可以支持如下的 XSD 类型：
 
-```
+```java
  <dataObject id="dObj1" name="StringTest" itemSubjectRef="xsd:string"/> 
 ```
 
-```
+```java
  <dataObject id="dObj2" name="BooleanTest" itemSubjectRef="xsd:boolean"/> 
 ```
 
-```
+```java
  <dataObject id="dObj3" name="DateTest" itemSubjectRef="xsd:datetime"/> 
 ```
 
-```
+```java
  <dataObject id="dObj4" name="DoubleTest" itemSubjectRef="xsd:double"/> 
 ```
 
-```
+```java
  <dataObject id="dObj5" name="IntegerTest" itemSubjectRef="xsd:int"/> 
 ```
 
-```
+```java
  <dataObject id="dObj6" name="LongTest" itemSubjectRef="xsd:long"/> 
 ```
 
 数据对象定义会自动转换为流程变量，名称与 'name' 属性对应。 除了数据对象的定义之外，Activiti 也支持使用扩展元素来为这个变量赋予默认值。下面的 BPMN 片段就是对应的例子：
 
-```
+```java
 <process id="dataObjectScope" name="Data Object Scope" isExecutable="true">
           <dataObject id="dObj123" name="StringTest123" itemSubjectRef="xsd:string">
             <extensionElements>

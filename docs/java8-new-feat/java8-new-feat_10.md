@@ -1,7 +1,5 @@
 # 十、StampedLock 将是解决同步问题的新宠
 
-# 十、StampedLock 将是解决同步问题的新宠
-
 > 来源：[Java 8 新特性探究（十）StampedLock 将是解决同步问题的新宠](http://my.oschina.net/benhaile/blog/264383)
 
 Java8 就像一个宝藏，一个小的 API 改进，也足与写一篇文章，比如同步，一直是多线程并发编程的一个老话题，相信没有人喜欢同步的代码，这会降低应用的吞吐量等性能指标，最坏的时候会挂起死机，但是即使这样你也没得选择，因为要保证信息的正确性。所以本文决定将从 synchronized、Lock 到 Java8 新增的 StampedLock 进行对比分析，相信 StampedLock 不会让大家失望。
@@ -19,7 +17,7 @@ Java8 就像一个宝藏，一个小的 API 改进，也足与写一篇文章，
 
 大家对此应该不陌生，所以不多讲了，以下是代码示例
 
-```
+```java
 synchronized(this)
 // do operation
 } 
@@ -29,7 +27,7 @@ synchronized(this)
 
 ### **Lock**
 
-```
+```java
 rwlock.writeLock().lock();
 try {
 // do operation
@@ -48,7 +46,7 @@ ReentrantReadWriteLock, ReentrantLock 和 synchronized 锁都有相同的内存�
 
 下面是 Lock 的一个代码示例
 
-```
+```java
 class Point {
    private double x, y;
    private final StampedLock sl = new StampedLock();
@@ -117,7 +115,7 @@ StampedLock 控制锁有三种模式（写，读，乐观读），一个 Stamped
 
 下面是 java doc 提供的 StampedLock 一个例子
 
-```
+```java
 class Point {
    private double x, y;
    private final StampedLock sl = new StampedLock();

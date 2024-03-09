@@ -37,7 +37,7 @@
 
 这个视图的 XML 布局文件为 activity_self_edit.xml，如下：
 
-```
+```java
 <RelativeLayout 
 
     android:layout_width="match_parent"
@@ -100,7 +100,7 @@
 
 SharedPreferences 以键值对(key-value pair)的方式存储数据。在写入时，我们需要说明数据对应的键。在读取时，我们将根据键，来获得对应的数据值。数据可以在整个应用范围内调用。特定权限下，SharedPrefereces 可以跨应用使用。SharedPreferences 简单易用，适合存储少量的、结构松散的信息。
 
-```
+```java
 package me.vamei.vamei;
 
 import android.app.Activity;
@@ -161,7 +161,7 @@ Context 对象的 getSharedPreferences()获得 SharedPrerences。第一个参数
 
 我现在要把 MainActivity 和新的 SelfEditActivity 用 Intent 串联起来。MainActivity 对应的布局为 activity_main.xml，如下：
 
-```
+```java
 <LinearLayout 
 
     android:orientation="vertical"
@@ -185,7 +185,7 @@ TextView 用于显示用户信息。Button 用于启动上面定义的 SelfEditA
 
 修改 MainActivity。相对于上一讲，这里主要增加了两个功能。一个功能是监听按钮，在按钮点击后启动 SelfEditActivity。另一个功能是从 SharedPreferences 中获得存储的键值，即用户名，再将用户名信息更新到界面上。
 
-```
+```java
 package me.vamei.vamei;
 
 import android.app.Activity;

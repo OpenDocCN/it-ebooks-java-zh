@@ -10,8 +10,6 @@
 
 # 微软响应式扩展
 
-# 微软响应式扩展
-
 函数响应式编程是一个来自 90 年代后期受微软的一名计算机科学家 Erik Meijer 启发的思想，用来设计和开发微软的 Rx 库。
 
 Rx 是微软.NET 的一个响应式扩展。Rx 借助可观测的序列提供一种简单的方式来创建异步的，基于事件驱动的程序。开发者可以使用 Observables 模拟异步数据流，使用 LINQ 语法查询 Observables，并且很容易管理调度器的并发。
@@ -38,8 +36,6 @@ push 方法把这个问题逆转了：取而代之的是不再等待结果，开
 
 # 来到 Java 世界 - Netflix RxJava
 
-# 来到 Java 世界 - Netflix RxJava
-
 Netflix 在 2012 年开始意识到他们的架构要满足他们庞大的用户群体已经变得步履维艰。因此他们决定重新设计架构来减少 REST 调用的次数。取代几十次的 REST 调用，而是让客户端自己处理需要的数据，他们决定基于客户端需求创建一个专门优化过的 REST 调用。
 
 为了实现这一目标，他们决定尝试响应式，开始将.NET Rx 迁移到 JVM 上面。他们不想只基于 Java 语言；而是整个 JVM，从而有可能为市场上的每一种基于 JVM 的语言：如 Java、Clojure、Groovy、Scala 等等提供一种新的工具。
@@ -59,8 +55,6 @@ push 方法作用于订阅和响应：消费者订阅新值的发射，当它们
 
 # RxJava 的与众不同之处
 
-# RxJava 的与众不同之处
-
 从纯 Java 的观点看，RxJava Observable 类源自于经典的 Gang Of Four 的观察者模式。
 
 它添加了三个缺少的功能：
@@ -77,8 +71,6 @@ Observables 和 Iterables 共用一个相似的 API：我们在 Iterable 可以�
 | Asynchronous | `Future<T> getData()` | `Observable<T> getData()` |
 
 从语义的角度来看，RxJava 就是.NET Rx。从语法的角度来看，Netflix 考虑到了对应每个 Rx 方法,保留了 Java 代码规范和基本的模式。
-
-# 总结
 
 # 总结
 

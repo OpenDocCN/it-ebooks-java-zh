@@ -4,7 +4,7 @@
 
 `defn` 宏用来定义一个函数。它的参数包括一个函数名字，一个可选的注释字符串，参数列表，然后一个方法体。而函数的返回值则是方法体里面最后一个表达式的值。所有的函数都会返回一个值， 只是有的返回的值是 nil。看例子:
 
-```
+```java
 (defn parting
   "returns a String parting"
   [name]
@@ -15,7 +15,7 @@
 
 函数必须先定义再使用。有时候可能做不到， 比如两个方法项目调用，clojure 采用了和 C 语言里面类似的做法： declare, 看例子:
 
-```
+```java
 (declare <em>function-names</em>) 
 ```
 
@@ -23,7 +23,7 @@
 
 函数的参数个数可以是不定的。可选的那些参数必须放在最后面(这一点跟其它语言是一样的), 你可以通过加个&符号把它们收集到一个 list 里面去 Functions can take a variable number of parameters. Optional parameters must appear at the end. They are gathered into a list by adding an ampersand and a name for the list at the end of the parameter list.
 
-```
+```java
 (defn power [base & exponents]
   ; Using java.lang.Math static method pow.
   (reduce #(Math/pow %1 %2) base exponents))
@@ -32,7 +32,7 @@
 
 函数定义可以包含多个参数列表以及对应的方法体。每个参数列表必须包含不同个数的参数。这通常用来给一些参数指定默认值。看例子：
 
-```
+```java
 (defn parting
   "returns a String parting in a given language"
   ([] (parting "World"))
@@ -57,7 +57,7 @@
 
 匿名函数是没有名字的。他们通常被当作参数传递给其他有名函数(相对于匿名函数)。匿名函数对于那些只在一个地方使用的函数比较有用。下面是定义匿名函数的两种方法：
 
-```
+```java
 (def years [1940 1944 1961 1985 1987])
 (filter (fn [year] (even? year)) years) ; long way w/ named arguments -> (1940 1944)
 (filter #(even? %) years) ; short way where % refers to the argument 
@@ -65,7 +65,7 @@
 
 通过 `fn` 定义的匿名函数可以包含任意个数的表达式； 而通过 `#(...)` , 定义的匿名函数则只能包含一个表达式，如果你想包含多个表达式，那么把它用 `do` 包起来。如果只有一个参数， 那么你可以通过 `%` 来引用它； 如果有多个参数， 那么可以通过 `%1` , `%2` 等等来引用。 看例子:
 
-```
+```java
 (defn pair-test [test-fn n1 n2]
   (if (test-fn n1 n2) "pass" "fail"))
 
@@ -80,7 +80,7 @@ Java 里面的方法可以根据参数的类型来进行重载。而 Clojure 里
 
 下面是一个用 multimethod 来实现基于参数的类型来进行重载的例子：
 
-```
+```java
 (defmulti what-am-i class) ; class is the dispatch function
 (defmethod what-am-i Number [arg] (println arg "is a Number"))
 (defmethod what-am-i String [arg] (println arg "is a String"))
@@ -94,7 +94,7 @@ Java 里面的方法可以根据参数的类型来进行重载。而 Clojure 里
 
 下划线可以用来作为参数占位符 ?– 如果你不要使用这个参数的话。这个特性在回调函数里面比较有用， 因为回调函数的设计者通常想把尽可能多的信息给你， 而你通常可能只需要其中的一部分。看例子：
 
-```
+```java
 (defn callback1 [n1 n2 n3] (+ n1 n2 n3)) ; uses all three arguments
 (defn callback2 [n1 _ n3] (+ n1 n3)) ; only uses 1st & 3rd arguments
 (defn caller [callback value]
@@ -105,7 +105,7 @@ Java 里面的方法可以根据参数的类型来进行重载。而 Clojure 里
 
 `complement` 函数接受一个函数作为参数，如果这个参数返回值是 true， 那么它就返回 false, 相当于一个取反的操作。看例子:
 
-```
+```java
 (defn teenager? [age] (and (>= age 13) (< age 20)))
 (def non-teen? (complement teenager?))
 (println (non-teen? 47)) ; -> true 
@@ -113,7 +113,7 @@ Java 里面的方法可以根据参数的类型来进行重载。而 Clojure 里
 
 `comp` 把任意多个函数组合成一个，前面一个函数的返回值作为后面一个函数的参数。 **调用的顺序是从右到左（注意不是从左到右）** 看例子：
 
-```
+```java
 (defn times2 [n] (* n 2))
 (defn minus3 [n] (- n 3))
 ; Note the use of def instead of defn because comp returns
@@ -124,7 +124,7 @@ Java 里面的方法可以根据参数的类型来进行重载。而 Clojure 里
 
 `partial` 函数创建一个新的函数 — 通过给旧的函数制定一个初始值， 然后再调用原来的函数。比如 `*` 是一个可以接受多个参数的函数，它的作用就是计算它们的乘积，如果我们想要一个新的函数，使的返回结果始终是乘积的 2 倍，我们可以这样做：
 
-```
+```java
 ; Note the use of def instead of defn because partial returns
 ; a function that is then bound to "times2".
 (def times2 (partial * 2))
@@ -133,7 +133,7 @@ Java 里面的方法可以根据参数的类型来进行重载。而 Clojure 里
 
 下面是一个使用 `map` 和 `partial` 的有趣的例子.
 
-```
+```java
 (defn- polynomial
   "computes the value of a polynomial
    with the given coefficients for a given value x"
@@ -169,7 +169,7 @@ Java 里面的方法可以根据参数的类型来进行重载。而 Clojure 里
 
 %1 = ax + b, %2 = c, result is (ax + b)x + c = ax² + bx + c
 
-```
+```java
 (defn- polynomial
   "computes the value of a polynomial
    with the given coefficients for a given value x"
@@ -183,7 +183,7 @@ Java 里面的方法可以根据参数的类型来进行重载。而 Clojure 里
 
 下面的例子演示在多项式的的计算里面使用 memoize:
 
-```
+```java
 ; Note the use of def instead of defn because memoize returns
 ; a function that is then bound to "memo-f".
 (def memo-f (memoize f))
@@ -201,7 +201,7 @@ Java 里面的方法可以根据参数的类型来进行重载。而 Clojure 里
 
 上面代码的输出是这样的：
 
-```
+```java
 priming call
 "Elapsed time: 4.128 msecs"
 without memoization

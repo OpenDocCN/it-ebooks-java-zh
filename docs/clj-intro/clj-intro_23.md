@@ -25,7 +25,7 @@
 
 下面的语法创建一个 Var 并且给它一个 root binding:
 
-```
+```java
 (def <em>name</em> <em>value</em>) 
 ```
 
@@ -33,14 +33,14 @@
 
 有两种方法可以创建一个已经存在的 Var 的线程本地 binding(thread-local-binding):
 
-```
+```java
 (binding [<em>name</em> <em>expression</em>] <em>body</em>)
 (set! <em>name</em> <em>expression</em>) ; inside a binding that bound the same name 
 ```
 
 关于 binding 宏的用法我们前面已经介绍过了. 下面的例子演示把它和 `set!` 一起使用. 用 set!来修改一个由 binding bind 的 Var 的线程本地的值。
 
-```
+```java
 (def v 1)
 
 (defn change-it []
@@ -88,13 +88,13 @@ STM 在某些方面跟数据库的事务很像。在一个 STM 事务里面做�
 
 `ref` 函数可以创建一个 Ref 对象。下面的例子代码创建一个 Ref 并且得到它的引用。
 
-```
+```java
 (def <em>name</em> (ref <em>value</em>)) 
 ```
 
 `dosync` 宏用来包裹一个事务 -- 从它对应的左括号开始，到它对应的右括号结束。在事务里面我们用 `ref-set` 来改变一个 Ref 的值并且返回这个值。你不能在事务之外调用这个函数，否则会抛出 `IllegalStateException` 异常。 看例子：
 
-```
+```java
 (dosync
   ...
   (ref-set <em>name</em> <em>new-value</em>)
@@ -111,7 +111,7 @@ STM 在某些方面跟数据库的事务很像。在一个 STM 事务里面做�
 
 比如，我们想给一个 Ref: `counter` 加一， 我们可以用 `inc` 函数来实现：
 
-```
+```java
 (dosync
   ...
   (alter counter inc)
@@ -124,7 +124,7 @@ STM 在某些方面跟数据库的事务很像。在一个 STM 事务里面做�
 
 如果一个事务提交了， 那么对于 `commute` 函数还会有一些额外的事情发生。对于每一个 `commute` 调用, Ref 的值会被下面的调用结果重置:
 
-```
+```java
 (apply <em>update-function</em> <em>last-committed-value-of-ref</em> <em>args</em>) 
 ```
 
@@ -134,7 +134,7 @@ STM 在某些方面跟数据库的事务很像。在一个 STM 事务里面做�
 
 然后看一个使用了 Refs 和 Atoms (后面会介绍)的例子。这个例子涉及到银行账户以及账户之间的交易。首先我们定义一下数据模型。
 
-```
+```java
 (ns com.ociweb.bank)
 
 ; Assume the only account data that can change is its balance.
@@ -149,7 +149,7 @@ STM 在某些方面跟数据库的事务很像。在一个 STM 事务里面做�
 
 下面的函数建立一个新的帐户，并且把它存入帐户的 map, ? 然后返回它。
 
-```
+```java
 (defn open-account
   "creates a new account, stores it in the account map and returns it"
   [owner]
@@ -168,7 +168,7 @@ STM 在某些方面跟数据库的事务很像。在一个 STM 事务里面做�
 
 下面的函数支持从一个账户里面存/取钱。
 
-```
+```java
 (defn deposit [account amount]
   "adds money to an account; can be a negative amount"
   (dosync ; required because a Ref is being changed
@@ -195,7 +195,7 @@ STM 在某些方面跟数据库的事务很像。在一个 STM 事务里面做�
 
 下面是函数支持把钱从一个账户转到另外一个账户。由 `dosync` 所开始的事务保证转账要么成功要么失败，而不会出现中间状态。
 
-```
+```java
 (defn transfer [from-account to-account amount]
   (dosync
     (println "transferring" amount
@@ -207,7 +207,7 @@ STM 在某些方面跟数据库的事务很像。在一个 STM 事务里面做�
 
 下面的函数支持查询账户的状态。由 `dosync` 所开始的事务保证事务之间的一致性。比如把不会报告一个转账了一半的金额。
 
-```
+```java
 (defn- report-1 ; a private function
   "prints information about a single account"
   [account]
@@ -224,7 +224,7 @@ STM 在某些方面跟数据库的事务很像。在一个 STM 事务里面做�
 
 上面的代码没有去处理线程启动时候可能抛出的异常。相反，我们在当前线程给他们定义了一个异常处理器。
 
-```
+```java
 ; Set a default uncaught exception handler
 ; to handle exceptions not caught in other threads.
 (Thread/setDefaultUncaughtExceptionHandler
@@ -236,7 +236,7 @@ STM 在某些方面跟数据库的事务很像。在一个 STM 事务里面做�
 
 现在我们可以调用上面的函数了。
 
-```
+```java
 (let [a1 (open-account "Mark")
    a2 (open-account "Tami")
    thread (Thread. #(transfer a1 a2 50))]
@@ -263,7 +263,7 @@ STM 在某些方面跟数据库的事务很像。在一个 STM 事务里面做�
 
 上面代码的输出是这样的：
 
-```
+```java
 depositing 100 to Mark
 depositing 200 to Tami
 transferring 50 from Mark to Tami
@@ -280,7 +280,7 @@ balance for Tami is 200
 
 在继续介绍下一个引用类型之前，下面是一个 validation 函数的例子，他验证所有赋给 Ref 的值是数字。
 
-```
+```java
 ; Note the use of the :validator directive when creating the Ref
 ; to assign a validation function which is integer? in this case.
 (def my-ref (ref 0 :validator integer?))
@@ -309,7 +309,7 @@ Atoms 提供了一种比使用 Refs&STM 更简单的更新当个值的方法。�
 
 `reset!` 函数接受两个参数：要设值的 Atom 以及新值。它设置新的值，而不管你旧的值是什么。看例子：
 
-```
+```java
 (def my-atom (atom 1))
 (reset! my-atom 2)
 (println @my-atom) ; -> 2 
@@ -317,7 +317,7 @@ Atoms 提供了一种比使用 Refs&STM 更简单的更新当个值的方法。�
 
 `compare-and-set!` 函数接受三个参数：要被修改的 Atom, 上次读取时候的值，新的值。 这个函数在设置新值之前会去读 Atom 现在的值。如果与上次读的时候的值相等， 那么设置新值并返回 true, 否则不设置新值， 返回 false。看例子：
 
-```
+```java
 (def my-atom (atom 1))
 
 (defn update-atom []
@@ -340,7 +340,7 @@ Atoms 提供了一种比使用 Refs&STM 更简单的更新当个值的方法。�
 
 `swap!` 函数接受一个要修改的 Atom, 一个计算 Atom 新值的函数以及一些额外的参数(如果需要的话)。这个计算 Atom 新的值的函数会以这个 Atom 以及一些额外的参数做为输入。swap！函数实际上是对 compare-and-set!函数的一个封装，但是有一个显著的不同。 它首先把 Atom 的当前值存入一个变量，然后调用计算新值的函数来计算新值， 然后再调用 compare-and-set!函数来赋值。如果赋值成功的话，那就结束了。如果赋值不成功的话， 那么它会重复这个过程，一直到赋值成功为止。这就是它们的区别：所以上面的代码可以用 swap!改写成这样：
 
-```
+```java
 (def my-atom (atom 1))
 
 (defn update-atom [curr-val]
@@ -367,7 +367,7 @@ Agents 是用把一些事情放到另外一个线程来做 -- 一般来说不需
 
 `agent` 函数可以建立一个新的 Agent. 比如:
 
-```
+```java
 (def my-agent (agent <em>initial-value</em>)) 
 ```
 
@@ -397,7 +397,7 @@ Agents 可以用作其它几种引用类型的监视器。当一个被监视的�
 
 下面的例子给一个 Var，一个 Ref, 一个 Atom 注册了一个 Agent 监视者。Agent 里面维护了它所监视的每个引用被修改的次数(一个 map)。这个 map 的 key 就是引用对象，而值则是被修改的次数。
 
-```
+```java
 (def my-watcher (agent {}))
 
 (defn my-watcher-action [current-value reference]

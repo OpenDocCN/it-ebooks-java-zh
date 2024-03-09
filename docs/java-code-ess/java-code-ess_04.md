@@ -1,16 +1,12 @@
 # 语言基础
 
-# 语言基础
-
 本章介绍 Java 的语言基础。
-
-# 变量
 
 # 变量（Variable）
 
 前文也介绍了，对象的状态是存储在字段里面
 
-```
+```java
 int cadence = 0;
 int speed = 0;
 int gear = 1; 
@@ -49,7 +45,7 @@ byte 由 1 个字节 8 位表示，是最小的整数类型。主要用于节省
 
 这里涉及到一个叫字面值（literal）的问题，字面值就是表面上的值，例如整型字面值在源代码中就是诸如 5 ， 0， -200 这样的。如果整型子面子后面加上 L 或者 l，则这个字面值就是 long 类型，比如：1000L 代表一个 long 类型的值。如果不加 L 或者 l，则为 int 类型。基本类型当中的 byte short int long 都可以通过不加 L 的整型字面值（我们就称作 int 字面值吧）来创建，例如 byte b = 100； short s = 5；对于 long 类型，如果大小超出 int 所能表示的范围（32 bits），则必须使用 L 结尾来表示。整型字面值可以有不同的表示方式：16 进制【0X or 0x】、10 进制【nothing】、八进制【0】、2 进制【0B or 0b】等，二进制字面值是 JDK 7 以后才有的功能。在赋值操作中，int 字面值可以赋给 byte short int long，Java 语言会自动处理好这个过程。如果方法调用时不一样，调用 test（0）的时候，它能匹配的方法是 test（int），当然不能匹配 test（byte）方法，至于为什么 Java 没有像支持赋值操作那样支持方法调用，不得而知。注意区别包装器与原始类型的自动转换（anto-boxing，auto-unboxing）。`byte d = 'A'；`也是合法的，字符字面值可以自动转换成 16 位的整数。 对 byte 类型进行数学运算时，会自动提升为 int 类型，如果表达式中有 double 或者 float 等类型，也是自动提升。所以下面的代码是错误的：
 
-```
+```java
 byte t s1 = 100;
 byte s2 = 'a';
 byte sum = s1 + s2;//should cast by (byte) 
@@ -71,7 +67,7 @@ byte sum = s1 + s2;//should cast by (byte)
 
 16 bits, [0, 65535], [0, 2¹⁶ -1],从'\u0000'到'\uffff'。无符号，默认值为'\u0000'。Java 使用 Unicode 字符集表示字符，Unicode 是完全国际化的字符集，可以表示全部人类语言中的字符。Unicode 需要 16 位宽，所以 Java 中的 char 类型也使用 16 bit 表示。 赋值可能是这样的：
 
-```
+```java
 char ch1 = 88;
 char ch2 = 'A'; 
 ```
@@ -82,7 +78,7 @@ ASCII 字符集占用了 Unicode 的前 127 个值。之所以把 char 归入整
 
 使用 32 bit 表示，对应单精度浮点数，遵循 IEEE 754 规范。运行速度相比 double 更快，占内存更小，但是当数值非常大或者非常小的时候会变得不精确。精度要求不高的时候可以使用 float 类型，声明赋值示例：
 
-```
+```java
 float f1 =10;  
 f1 = 10L;  
 f1 = 10.0f;  //f1 = 10.0;默认为 double 
@@ -136,7 +132,7 @@ boolean 类型只有两个值 true 和 false，默认为 false。boolean 与是�
 
 下面是使用的语法：
 
-```
+```java
 // The number 26, in decimal
 int decVal = 26;
 //  The number 26, in hexadecimal
@@ -149,7 +145,7 @@ int binVal = 0b11010;
 
 浮点字面值简单的理解可以理解为小数。分为 float 字面值和 double 字面值，如果在小数后面加上 F 或者 f，则表示这是个 float 字面值，如 11.8F。如果小数后面不加 F（f），如 10.4。或者小数后面加上 D（d），则表示这是个 double 字面值。另外，浮点字面值支持科学技术法( E 或 e )表示。下面是一些例子：
 
-```
+```java
 double d1 = 123.4;
 // same value as d1, but in scientific notation
 double d2 = 1.234e2;
@@ -170,7 +166,7 @@ Java SE 7 开始，可以在数值型字面值中使用下划线。但是下划�
 
 正确的用法：
 
-```
+```java
 long creditCardNumber = 1234_5678_9012_3456L;
 long socialSecurityNumber = 999_99_9999L;
 float pi =  3.14_15F;
@@ -183,7 +179,7 @@ long bytes = 0b11010010_01101001_10010100_10010010;
 
 非法的用法：
 
-```
+```java
 // Invalid: cannot put underscores
 // adjacent to a decimal point
 float pi1 = 3_.1415F;
@@ -213,7 +209,7 @@ int x7 = 0x52_;
 
 我们看到，将一种类型的值赋给另一种类型是很常见的。在 Java 中，boolean 类型与所有其他 7 种类型都不能进行转换，这一点很明确。对于其他 7 中数值类型，它们之间都可以进行转换，但是可能会存在精度损失或者其他一些变化。转换分为自动转换和强制转换。对于自动转换（隐式），无需任何操作，而强制类型转换需要显式转换，即使用转换操作符（type）。首先将 7 种类型按下面顺序排列一下：
 
-```
+```java
 byte <（short=char）< int < long < float < double 
 ```
 
@@ -236,7 +232,7 @@ byte <（short=char）< int < long < float < double
 
 如果要把大的转成小的，或者在 short 与 char 之间进行转换，就必须强制转换，也被称作缩小转换（narrowing conversion）,因为必须显式地使数值更小以适应目标类型。强制转换采用转换操作符（）。严格地说，将 byte 转为 char 不属于 （narrowing conversion），因为从 byte 到 char 的过程其实是 byte-->int-->char，所以 widening 和 narrowing 都有。强制转换除了可能的精度损失外，还可能使模（overall magnitude）发生变化。强制转换格式如下： （target-type） value
 
-```
+```java
 int a=257;   
 byte b;   
 b = (byte)a;//1 
@@ -271,7 +267,7 @@ b = (byte)a;//1
 
 ArrayDemo 的示例：
 
-```
+```java
 class ArrayDemo {
     /**
      * @param args
@@ -313,7 +309,7 @@ class ArrayDemo {
 
 输出为：
 
-```
+```java
 Element at index 0: 100
 Element at index 1: 200
 Element at index 2: 300
@@ -330,7 +326,7 @@ Element at index 9: 1000
 
 声明数组的类型，如下：
 
-```
+```java
 byte[] anArrayOfBytes;
 short[] anArrayOfShorts;
 long[] anArrayOfLongs;
@@ -343,7 +339,7 @@ String[] anArrayOfStrings;
 
 也可以将中括号放数组名称后面（但不推荐）
 
-```
+```java
 // this form is discouraged
 float anArrayOfFloats[]; 
 ```
@@ -352,7 +348,7 @@ float anArrayOfFloats[];
 
 ArrayDemo 的示例说明了创建、初始化和访问数组的过程。可以用下面的方式，简化 创建、初始化数组
 
-```
+```java
 int[] anArray = { 
     100, 200, 300,
     400, 500, 600, 
@@ -362,7 +358,7 @@ int[] anArray = {
 
 数组里面可以声明数组，即，多维数组 （multidimensional array）。如 MultiDimArrayDemo 例子：
 
-```
+```java
 class MultiDimArrayDemo {
     /**
      * @param args
@@ -379,14 +375,14 @@ class MultiDimArrayDemo {
 
 输出为：
 
-```
+```java
 Mr. Smith
 Ms. Jones 
 ```
 
 最后，可以通过内建的 length 属性来确认数组的大小
 
-```
+```java
 System.out.println(anArray.length); 
 ```
 
@@ -394,14 +390,14 @@ System.out.println(anArray.length);
 
 System 类有一个 arraycopy 方法用于数组的有效复制：
 
-```
+```java
 public static void arraycopy(Object src, int srcPos,
                              Object dest, int destPos, int length) 
 ```
 
 下面是一个例子 ArrayCopyDemo，
 
-```
+```java
 class ArrayCopyDemo {
 
     /**
@@ -419,7 +415,7 @@ class ArrayCopyDemo {
 
 程序输出为：
 
-```
+```java
 caffein 
 ```
 
@@ -427,7 +423,7 @@ caffein
 
 Java SE 提供了一些数组有用的操作。 ArrayCopyOfDemo 例子：
 
-```
+```java
 class ArrayCopyOfDemo {
 
     /**
@@ -458,8 +454,6 @@ class ArrayCopyOfDemo {
 
 # 运算符
 
-# 运算符
-
 靠近表顶部的运算符，其优先级最高。具有较高优先级的运算符在相对较低的优先级的运算符之前被评估。在同一行上的运算符具有相同的优先级。当在相同的表达式中出现相同优先级的运算符时，必须首先对该规则进行评估。除了赋值运算符外，所有二进制运算符进行评估从左到右，赋值操作符是从右到左。
 
 运算符优先级表：
@@ -485,7 +479,7 @@ class ArrayCopyOfDemo {
 
 赋值运算符是最常用和最简单的运算符就是`=`，如下：
 
-```
+```java
 int cadence = 0;
 int speed = 0;
 int gear = 1; 
@@ -507,7 +501,7 @@ int gear = 1;
 
 ArithmeticDemo 的例子
 
-```
+```java
 class ArithmeticDemo {
 
     /**
@@ -549,7 +543,7 @@ class ArithmeticDemo {
 
 输出为：
 
-```
+```java
 1 + 2 = 3
 3 - 1 = 2
 2 * 2 = 4
@@ -560,7 +554,7 @@ class ArithmeticDemo {
 
 `+` 用于字符串连接的例子 ConcatDemo ：
 
-```
+```java
 class ConcatDemo {
 
     /**
@@ -589,7 +583,7 @@ class ConcatDemo {
 
 下面是 UnaryDemo 的示例：
 
-```
+```java
 class UnaryDemo {
 
     /**
@@ -624,7 +618,7 @@ class UnaryDemo {
 
 递增/递减运算符可以之前（前缀）或（后缀）操作数后应用。该代码`result++;` 和 `++result;` 两个的 result 都被加一。唯一的区别是，该前缀版本`++result;`增递增了，而后缀版本`result++;`的计算结果为原始值。下面是 PrePostDemo 的示例，说明了两者的区别：
 
-```
+```java
 class PrePostDemo {
 
     /**
@@ -663,7 +657,7 @@ class PrePostDemo {
 
 ComparisonDemo 对比的例子：
 
-```
+```java
 class ComparisonDemo {
 
     /**
@@ -688,7 +682,7 @@ class ComparisonDemo {
 
 输出为：
 
-```
+```java
 value1 != value2
 value1 < value2
 value1 <= value2 
@@ -706,7 +700,7 @@ value1 <= value2
 
 条件与、条件或的运算符例子 ConditionalDemo1：
 
-```
+```java
 class ConditionalDemo1 {
 
     /**
@@ -729,7 +723,7 @@ value1 is 1 AND value2 is 2 value1 is 1 OR value2 is 1
 
 下面是一个三元运算符的例子,类似与 if-then-else 语句，见 ConditionalDemo2 ：
 
-```
+```java
 class ConditionalDemo2 {
 
     /**
@@ -751,7 +745,7 @@ class ConditionalDemo2 {
 
 instanceof 用于匹配判断对象的类型。可以用它来测试对象是否是类的一个实例，子类的实例，或者是实现了一个特定接口的类的实例。见例子 InstanceofDemo,父类是 Parent ，接口是 MyInterface ，子类是 Child 继承了父类并实现了接口。
 
-```
+```java
 class InstanceofDemo {
 
     /**
@@ -785,7 +779,7 @@ class InstanceofDemo {
 
 输出为：
 
-```
+```java
 obj1 instanceof Parent: true
 obj1 instanceof Child: false
 obj1 instanceof MyInterface: false
@@ -811,7 +805,7 @@ obj2 instanceof MyInterface: true
 
 BitDemo 例子：
 
-```
+```java
 class BitDemo {
 
     /**
@@ -854,15 +848,13 @@ class BitDemo {
 
 # 表达式、语句和块
 
-# 表达式、语句和块
-
 运算符用于计算构建成了表达式(expressions)，而表达式是语句(statements)的核心组成，而语句是组织形式为块(blocks)。
 
 ## 表达式
 
 表达式是由变量、运算符以及方法调用所构成的结构，如下：
 
-```
+```java
 int cadence = 0;
 anArray[0] = 100;
 System.out.println("Element 1 at index 0: " + anArray[0]);
@@ -876,13 +868,13 @@ if (value1 == value2)
 
 下面是一个复合表达式：
 
-```
+```java
 1 * 2 * 3 
 ```
 
 表达式应该尽量避免歧义，比如：
 
-```
+```java
 x + y / 100 
 ```
 
@@ -899,7 +891,7 @@ x + y / 100
 
 下面是表达式语句的例子
 
-```
+```java
 // assignment statement
 aValue = 8933.234;
 // increment statement
@@ -912,14 +904,14 @@ Bicycle myBike = new Bicycle();
 
 除了表达式语句，其他的还有声明语句（declaration statements）:
 
-```
+```java
 // declaration statement
 double aValue = 8933.234; 
 ```
 
 以及控制流程语句（control flow statements）:
 
-```
+```java
 if (isMoving)
         currentSpeed--; 
 ```
@@ -928,7 +920,7 @@ if (isMoving)
 
 块是一组零个或多个成对大括号之间的语句，并可以在任何地方允许使用一个单独的语句。下面的 BlockDemo 例子：
 
-```
+```java
 class BlockDemo {
 
     /**
@@ -952,15 +944,13 @@ class BlockDemo {
 
 # 控制流程语句
 
-# 控制流程语句
-
 控制流程语句用于控制程序按照一定流程来执行。
 
 ## if-then
 
 它告诉你要只有 if 后面是 true 时才执行特定的代码。
 
-```
+```java
 void applyBrakes() {
     // the "if" clause: bicycle must be moving
     if (isMoving){ 
@@ -972,7 +962,7 @@ void applyBrakes() {
 
 如果 if 后面是 false, 则跳到 if-then 语句后面。语句可以省略中括号，但在编码规范里面不推荐使用，如：
 
-```
+```java
 void applyBrakes() {
     // same as above, but without braces 
     if (isMoving)
@@ -984,7 +974,7 @@ void applyBrakes() {
 
 该语句是在 if 后面是 false 时，提供了第二个执行路径。
 
-```
+```java
 void applyBrakes() {
     if (isMoving) {
         currentSpeed--;
@@ -996,7 +986,7 @@ void applyBrakes() {
 
 下面是一个完整的例子：
 
-```
+```java
 class IfElseDemo {
 
     /**
@@ -1030,7 +1020,7 @@ switch 语句可以有许多可能的执行路径。可以使用 byte, short, ch
 
 下面是一个 SwitchDemo 例子：
 
-```
+```java
 class SwitchDemo {
 
     /**
@@ -1087,7 +1077,7 @@ class SwitchDemo {
 
 break 语句是为了防止 fall through。
 
-```
+```java
 class SwitchDemoFallThrough {
 
     /**
@@ -1142,7 +1132,7 @@ class SwitchDemoFallThrough {
 
 输出为：
 
-```
+```java
 August
 September
 October
@@ -1154,7 +1144,7 @@ December
 
 下面例子展示了一个局域多个 case 的情况，
 
-```
+```java
 class SwitchDemo2 {
 
     /**
@@ -1202,7 +1192,7 @@ class SwitchDemo2 {
 
 Java SE 7 开始，可以在 switch 语句里面使用 String,下面是一个例子
 
-```
+```java
 class StringSwitchDemo {
 
     public static int getMonthNumber(String month) {
@@ -1281,7 +1271,7 @@ class StringSwitchDemo {
 
 while 语句在判断条件是 true 时执行语句块。语法如下：
 
-```
+```java
 while (expression) {
      statement(s)
 } 
@@ -1289,7 +1279,7 @@ while (expression) {
 
 while 语句计算的表达式，必须返回 boolean 值。如果表达式计算为 true，while 语句执行 while 块的所有语句。while 语句继续测试表达式，然后执行它的块，直到表达式计算为 false。完整的例子：
 
-```
+```java
 class WhileDemo {
 
     /**
@@ -1307,7 +1297,7 @@ class WhileDemo {
 
 用 while 语句实现一个无限循环：
 
-```
+```java
 while (true){
     // your code goes here
 } 
@@ -1317,7 +1307,7 @@ while (true){
 
 语法如下：
 
-```
+```java
 do {
      statement(s)
 } while (expression); 
@@ -1325,7 +1315,7 @@ do {
 
 do-while 语句和 while 语句的区别是，do-while 计算它的表达式是在循环的底部，而不是顶部。所以，do 块的语句，至少会执行一次，如 DoWhileDemo 程序所示：
 
-```
+```java
 class DoWhileDemo {
 
     /**
@@ -1343,7 +1333,7 @@ class DoWhileDemo {
 
 输出为：
 
-```
+```java
 Count is: 1
 Count is: 2
 Count is: 3
@@ -1360,7 +1350,7 @@ Count is: 10
 
 for 语句提供了一个紧凑的方式来遍历一个范围值。程序经常引用为"for 循环"，因为它反复循环，直到满足特定的条件。for 语句的通常形式，表述如下：
 
-```
+```java
 for (initialization; termination;
      increment) {
     statement(s)
@@ -1373,7 +1363,7 @@ for (initialization; termination;
 *   当 termination 计算为 false，循环结束。
 *   increment 会在循环的每次迭代执行；该表达式可以接受递增或者递减的值
 
-```
+```java
 class ForDemo {
 
     /**
@@ -1390,7 +1380,7 @@ class ForDemo {
 
 输出为：
 
-```
+```java
 Count is: 1
 Count is: 2
 Count is: 3
@@ -1407,7 +1397,7 @@ Count is: 10
 
 for 循环的三个表达式都是可选的，一个无限循环，可以这么写：
 
-```
+```java
 // infinite loop
 for ( ; ; ) {
 
@@ -1417,13 +1407,13 @@ for ( ; ; ) {
 
 for 语句还可以用来迭代 集合（Collections） 和 数组（arrays），这个形式有时被称为增强的 for 语句（ enhanced for ），可以用来让你的循环更加紧凑，易于阅读。为了说明这一点，考虑下面的数组：
 
-```
+```java
 int[] numbers = {1,2,3,4,5,6,7,8,9,10}; 
 ```
 
 使用 增强的 for 语句来循环数组
 
-```
+```java
 class EnhancedForDemo {
 
     /**
@@ -1442,7 +1432,7 @@ class EnhancedForDemo {
 
 输出：
 
-```
+```java
 Count is: 1
 Count is: 2
 Count is: 3
@@ -1461,7 +1451,7 @@ Count is: 10
 
 break 语句有两种形式：标签和非标签。在前面的 switch 语句，看到的 break 语句就是非标签形式。可以使用非标签 break 用来结束 for，while，do-while 循环，如下面的 BreakDemo 程序：
 
-```
+```java
 class BreakDemo {
 
     /**
@@ -1493,13 +1483,13 @@ class BreakDemo {
 
 这个程序在数组终查找数字 12。break 语句，当找到值时，结束 for 循环。控制流就跳转到 for 循环后面的语句。程序输出是：
 
-```
+```java
 Found 12 at index 4 
 ```
 
 无标签 break 语句结束最里面的 switch，for，while，do-while 语句。而标签 break 结束最外面的语句。接下来的程序，BreakWithLabelDemo，类似前面的程序，但使用嵌套循环在二维数组里寻找一个值。但值找到后，标签 break 语句结束最外面的 for 循环(标签为"search"):
 
-```
+```java
 class BreakWithLabelDemo {
 
     /**
@@ -1533,7 +1523,7 @@ class BreakWithLabelDemo {
 
 程序输出是：
 
-```
+```java
 Found 12 at 1, 0 
 ```
 
@@ -1545,7 +1535,7 @@ break 语句结束标签语句，它不是传送控制流到标签处。控制�
 
 continue 语句忽略 for，while，do-while 的当前迭代。非标签模式，忽略最里面的循环体，然后计算循环控制的 boolean 表达式。接下来的程序，ContinueDemo，通过一个字符串的步骤，计算字母“p”出现的次数。如果当前字符不是 p，continue 语句跳过循环的其他代码，然后处理下一个字符。如果当前字符是 p，程序自增字符数。
 
-```
+```java
 class ContinueDemo {
 
     /**
@@ -1572,7 +1562,7 @@ class ContinueDemo {
 
 程序输出：
 
-```
+```java
 Found 9 p's in the string 
 ```
 
@@ -1580,7 +1570,7 @@ Found 9 p's in the string
 
 带标签的 continue 语句忽略标签标记的外层循环的当前迭代。下面的程序例子，ContinueWithLabelDemo，使用嵌套循环在字符传的字串中搜索字串。需要两个嵌套循环：一个迭代字串，一个迭代正在被搜索的字串。下面的程序 ContinueWithLabelDemo，使用 continue 的标签形式，忽略最外层的循环。
 
-```
+```java
 class ContinueWithLabelDemo {
 
     /**
@@ -1613,7 +1603,7 @@ class ContinueWithLabelDemo {
 
 这里是程序输出：
 
-```
+```java
 Found it 
 ```
 
@@ -1621,13 +1611,13 @@ Found it
 
 最后的分支语句是 return 语句。return 语句从当前方法退出，控制流返回到方法调用处。return 语句有两种形式：一个是返回值，一个是不返回值。为了返回一个值，简单在 return 关键字后面把值放进去(或者放一个表达式计算)
 
-```
+```java
 return ++count; 
 ```
 
 return 的值的数据类型，必须和方法声明的返回值的类型符合。当方法声明为 void，使用下面形式的 return 不需要返回值。
 
-```
+```java
 return; 
 ```
 

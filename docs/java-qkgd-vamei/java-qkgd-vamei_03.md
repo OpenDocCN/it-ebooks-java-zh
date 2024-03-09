@@ -12,7 +12,7 @@
 
 方法可以调用该对象的数据成员。比如下面我们给 Human 类增加一个 getHeight()的方法。该方法返回 height 数据成员的值:
 
-```
+```java
 public class Test
 {
     public static void main(String[] args)
@@ -46,7 +46,7 @@ this 是隐性参数(implicit argument)。方法调用的时候，尽管方法�
 
 this 并不是必需的，上述方法可以写成:
 
-```
+```java
     /**
      * accessor
      */
@@ -64,7 +64,7 @@ Java 会自己去判断 height 是类中的数据成员。但使用 this 会更�
 
 Java 中的方法定义与 C 语言中的函数类似。Java 的方法也可以接收参数列表(argument list)，放在方法名后面的括号中。下面我们定义一个 growHeight()的方法，该方法的功能是让人的 height 增高:
 
-```
+```java
 public class Test
 {
     public static void main(String[] args)
@@ -111,7 +111,7 @@ class Human
 
 比如下面的 repeatBreath()函数:
 
-```
+```java
 public class Test
 {
     public static void main(String[] args)
@@ -159,7 +159,7 @@ class Human
 
 我们可以在声明数据成员同时，提供数据成员的初始值。这叫做显式初始化(explicit initialization)。显示初始化的数值要硬性的写在程序中：
 
-```
+```java
 public class Test
 {
     public static void main(String[] args)

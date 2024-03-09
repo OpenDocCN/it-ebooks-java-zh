@@ -1,7 +1,5 @@
 # 实战 Groovy: 用 Groovy 进行 JDBC 编程
 
-# 实战 Groovy: 用 Groovy 进行 JDBC 编程
-
 *用 GroovySql 构建下一个报告应用程序*
 
 这个月，随着 Andrew Glover 向您演示如何用 GroovySql 构建简单的数据报告应用程序，您对 Groovy 的实用知识会更进一步。GroovySql 结合利用闭包（closure）和迭代器（iterator），把资源管理的负担转移到 Groovy 框架本身，从而简化了 Java 数据库连通性（Java Database Connectivity，JDBC）的编程。
@@ -18,7 +16,7 @@
 
 ##### 清单 1\. 普通 Java 代码中的迭代器
 
-```
+```java
  import java.util.ArrayList;
  import java.util.Collection;
  import java.util.Iterator;
@@ -39,7 +37,7 @@
 
 ##### 清单 2\. Groovy 中的迭代器
 
-```
+```java
  class IteratorExample1{
    static void main(args) {
      coll = ["JMS", "EJB", "JMX"]
@@ -64,7 +62,7 @@ Groovy 的 SQL 魔力在于一个叫做 GroovySql 的精致的 API。使用闭�
 
 ##### 清单 3\. 普通 Java 的 JDBC 编程
 
-```
+```java
  import java.sql.Connection;
  import java.sql.DriverManager;
  import java.sql.ResultSet;
@@ -103,7 +101,7 @@ Groovy 的 SQL 魔力在于一个叫做 GroovySql 的精致的 API。使用闭�
 
 ##### 清单 4\. 欢迎使用 GroovySql ！
 
-```
+```java
  import groovy.sql.Sql
  class GroovySqlExample1{
   static void main(args) {
@@ -130,7 +128,7 @@ Groovy 的 SQL 魔力在于一个叫做 GroovySql 的精致的 API。使用闭�
 
 ##### 清单 5\. GroovySql 中的 `it`变量
 
-```
+```java
  import groovy.sql.Sql
  class GroovySqlExample1{
   static void main(args) {
@@ -153,7 +151,7 @@ Groovy 的 SQL 魔力在于一个叫做 GroovySql 的精致的 API。使用闭�
 
 ##### 清单 6\. 用 GroovySql 进行插入
 
-```
+```java
  wid = 999
  spelling = "Nefarious"
  pospeech = "Adjective"
@@ -165,7 +163,7 @@ Groovy 还提供 `execute`方法的一个重载版本，它接收一列值，这
 
 ##### 清单 7\. 用 GroovySql 创建 PreparedStatement 的实例
 
-```
+```java
  val = sql.execute("select * from word where word_id = ?", [5]) 
 ```
 
@@ -173,7 +171,7 @@ Groovy 还提供 `execute`方法的一个重载版本，它接收一列值，这
 
 ##### 清单 8\. 用 GroovySql 进行更新
 
-```
+```java
  nid = 5
  spelling = "Nefarious"
  sql.executeUpdate("update word set word_id = ? where spelling = ?", [nid, spelling]) 
@@ -183,7 +181,7 @@ Groovy 还提供 `execute`方法的一个重载版本，它接收一列值，这
 
 ##### 清单 9\. 用 GroovySql 进行删除
 
-```
+```java
  sql.execute("delete from word where word_id = ?" , [5]) 
 ```
 
@@ -201,7 +199,7 @@ Groovy 还提供 `execute`方法的一个重载版本，它接收一列值，这
 
 ##### 清单 10\. 用 GroovySql 创建数据集
 
-```
+```java
  import groovy.sql.Sql
  class GroovyDatasetsExample1{
   static void main(args) {
@@ -224,7 +222,7 @@ Groovy 还提供 `execute`方法的一个重载版本，它接收一列值，这
 
 ##### 清单 11\. 用 GroovySql 进行负索引
 
-```
+```java
  sql.eachRow("select * from word"){ grs |
    println "-1  = " + grs.getAt(-1) //prints spelling
    println "2  = " + grs.getAt(2) //prints spelling
@@ -273,7 +271,7 @@ Groovy 还提供 `execute`方法的一个重载版本，它接收一列值，这
 
 ##### 清单 12\. 用 GroovySql 进行数据库状态报告
 
-```
+```java
 import groovy.sql.Sql
 class DBStatusReport{
   static void main(args) {

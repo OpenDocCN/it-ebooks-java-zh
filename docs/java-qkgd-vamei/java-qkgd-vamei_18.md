@@ -12,7 +12,7 @@ Class 类是"类的类"(class of classes)。如果说类是对象的抽象和集
 
 每一个 Class 类的对象代表一个其他的类。比如下面的程序中，Class 类的对象 c1 代表了 Human 类，c2 代表了 Woman 类。
 
-```
+```java
 public class Test
 {
     public static void main(String[] args)
@@ -22,7 +22,7 @@ public class Test
         System.out.println(c1.getName());
 ```
 
-```
+```java
 
 ```
         Human anotherPerson = new Woman();
@@ -63,7 +63,7 @@ class Woman extends Human
     }
 
 }
-```
+```java
 
 当我们调用对象的 getClass()方法时，就得到对应 Class 对象的引用。
 在 c2 中，即使我们将 Women 对象的引用向上转换为 Human 对象的引用，对象所指向的 Class 类对象依然是 Woman。
@@ -86,7 +86,7 @@ public class Test
         System.out.println(c2.getName());  
     }
 }
-```
+```java
 
 上面显示了两种方式:
 
@@ -102,7 +102,7 @@ getPackage()      返回类所在的包
 
 ```
 Human newPerson = c1.newInstance();  
-```
+```java
 
 newInstance()调用默认的不含参数的构建方法。
 

@@ -1,7 +1,5 @@
 # 十一：Base64 详解
 
-# 十一：Base64 详解
-
 > 来源：[Java 8 新特性探究（十一）Base64 详解](http://my.oschina.net/benhaile/blog/267738)
 
 BASE64 编码是一种常用的字符编码，在很多地方都会用到。但 base64 不是安全领域下的加密解密算法。能起到安全作用的效果很差，而且很容易破解，他核心作用应该是传输数据的正确性，有些网关或系统只能使用 ASCII 字符。Base64 就是用来将非 ASCII 字符的数据转换成 ASCII 字符的一种方法，而且 base64 特别适合在 http，mime 协议下快速传输数据。
@@ -20,7 +18,7 @@ JDK1.6 中添加了另一个 Base64 的实现，javax.xml.bind.DatatypeConverter
 
 1）Basic 编码：是标准的 BASE64 编码，用于处理常规的需求
 
-```
+```java
 // 编码
 String asB64 = Base64.getEncoder().encodeToString("some string".getBytes("utf-8"));
 System.out.println(asB64); // 输出为: c29tZSBzdHJpbmc=
@@ -31,7 +29,7 @@ System.out.println(new String(asBytes, "utf-8")); // 输出为: some string
 
 2）URL 编码：使用下划线替换 URL 里面的反斜线“/”
 
-```
+```java
 String urlEncoded = Base64.getUrlEncoder().encodeToString("subjects?abcd".getBytes("utf-8"));
 System.out.println("Using URL Alphabet: " + urlEncoded);
 // 输出为:
@@ -40,7 +38,7 @@ Using URL Alphabet: c3ViamVjdHM_YWJjZA==
 
 3）MIME 编码：使用基本的字母数字产生 BASE64 输出，而且对 MIME 格式友好：每一行输出不超过 76 个字符，而且每行以“\r\n”符结束。
 
-```
+```java
 StringBuilder sb = new StringBuilder();
 for (int t = 0; t < 10; ++t) {
   sb.append(UUID.randomUUID().toString());
@@ -66,7 +64,7 @@ System.out.println(mimeEncoded);
 
 首先来定义两个接口
 
-```
+```java
 private static interface Base64Codec
     {
         public String encode(final byte[] data);
@@ -81,7 +79,7 @@ private static interface Base64Codec
 
 两个接口区别就是其中一个接口方法参数接收 byte 数组，返回 byte 数组，因为 byte->byte 相比 String->byte 或者 byte->String 性能上会快一点，所以区分两组来测试
 
-```
+```java
 private static final Base64Codec[] m_codecs = { new GuavaImpl(), new JavaXmlImpl(),
         new Java8Impl(), new SunImpl(), new ApacheImpl(),new MiGBase64Impl(),new IHarderImpl() };
 private static final Base64ByteCodec[] m_byteCodecs = {
@@ -92,7 +90,7 @@ private static final Base64ByteCodec[] m_byteCodecs = {
 
 7 个 Base64 的实现类
 
-```
+```java
 private static class Java8Impl implements Base64Codec, Base64ByteCodec
     {
         private final Base64.Decoder m_decoder = Base64.getDecoder();
@@ -128,7 +126,7 @@ private static class Java8Impl implements Base64Codec, Base64ByteCodec
 
 主要测试手段是，生成 100M 的随机数，分成 100byte 或者 1000byte 的块，然后将他们分别编码和解码，记录时间，如下方法
 
-```
+```java
 private static TestResult testByteCodec( final Base64ByteCodec codec, final List<byte[]> buffers ) throws IOException {
         final List<byte[]> encoded = new ArrayList<byte[]>( buffers.size() );
         final long start = System.currentTimeMillis();

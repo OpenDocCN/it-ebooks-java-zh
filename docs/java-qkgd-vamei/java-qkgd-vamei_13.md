@@ -14,7 +14,7 @@ Java 的任意变量和引用经过类型声明(type declaration)，才能使用
 
 比如在下面的 Test 类中，我们将一个 Cup 类对象赋予给 aPerson 类引用:
 
-```
+```java
 public class Test
 {
     public static void main(String[] args)
@@ -81,7 +81,7 @@ required: Human
 
 Java 可以对基本类型的变量进行类型转换。不同的基本类型有不同的长度和存储范围。如果我们从一个高精度类型转换到低精度类型，比如从 float 转换到 int，那么我们有可能会损失信息。这样的转换叫做收缩变换(narrowing conversion)。这种情况下，我们需要显示的声明类型转换，比如:
 
-```
+```java
 public class Test
 {
     public static void main(String[] args)
@@ -95,7 +95,7 @@ public class Test
 
 如果我们从低精度类型转换成高精度类型，则不存在信息损失的顾虑。这样的变换叫做宽松变换(widening conversion)。我们不需要显示的要求类型转换，Java 可以自动进行:
 
-```
+```java
 public class Test
 {
     public static void main(String[] args)
@@ -120,7 +120,7 @@ public class Test
 
 我们可以将一个衍生类引用转换为其基类引用，这叫做向上转换(upcast)或者宽松转换。下面的 BrokenCup 类继承自 Cup 类，并覆盖了 Cup 类中原有的 addWater()和 drinkWater()方法:
 
-```
+```java
 public class Test
 {
     public static void main(String[] args)
@@ -179,7 +179,7 @@ shit, broken cup
 
 看一个更加有意义的例子，我们给 Human 类增加一个 drink()方法，这个方法接收一个杯子对象和一个整数作为参数。整数表示喝水的水量:
 
-```
+```java
 public class Test
 {
     public static void main(String[] args)

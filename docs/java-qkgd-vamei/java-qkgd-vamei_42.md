@@ -20,7 +20,7 @@
 
 我将修改 MainActivity，增加一个按钮，通向新的页面。新的页面中将包含条目视图。在 activity_main.xml 中增加按钮元素：
 
-```
+```java
 <LinearLayout 
 
     android:orientation="vertical"
@@ -50,7 +50,7 @@
 
 在 MainActivity 中监听新的按钮。之前的事件监听方式，是将新建的 OnClickListener 对象传递给视图元素。实际上，OnClickListener 只是一个接口(interface)。我让 MainActivity 实施 OnClickListener 接口，并让 MainActivity 对象负责监听：
 
-```
+```java
 package me.vamei.vamei;
 
 import android.app.Activity;
@@ -131,7 +131,7 @@ CategoryActivity 将以条目的方式来显示数据库中存储的所有 Categ
 
 我们创建 CategoryActivity 将要使用的布局文件 activity_category.xml：
 
-```
+```java
 <ListView 
     android:id="@+id/categoryList"
     android:layout_width="wrap_content"
@@ -150,7 +150,7 @@ CategoryActivity 将以条目的方式来显示数据库中存储的所有 Categ
 
 我在 CategoryActivity.java 中使用 ArrayAdapter：
 
-```
+```java
 package me.vamei.vamei;
 
 import java.util.ArrayList;
@@ -162,7 +162,7 @@ import android.os.Bundle;
 import android.app.Activity;
 ```
 
-```
+```java
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -211,7 +211,7 @@ public class CategoryActivity extends Activity {
 
 我在 me.vamei.vamei 中新增 CategoryActivity.java。它包含了类 CategoryAdapter：
 
-```
+```java
 package me.vamei.vamei;
 
 import java.util.List;
@@ -272,7 +272,7 @@ public class CategoryAdapter extends ArrayAdapter<Category> {
 
 我将要赋予给条目的视图布局保存在 list_category.xml 中。它在位于一行中包含了两个 TextView：
 
-```
+```java
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout 
     android:layout_width="match_parent"
@@ -291,7 +291,7 @@ public class CategoryAdapter extends ArrayAdapter<Category> {
 
 我们在 CategoryActivity.java，来利用新建的 CategoryAdapter 类。在创建对象时，我把上面的条目布局，即 R.layout.list_category 作为参数传给构造器：
 
-```
+```java
 package me.vamei.vamei;
 
 import java.util.ArrayList;
@@ -352,7 +352,7 @@ setTag()用于把对象“粘附”在某个视图元素上。由于 ListView �
 
 为了实践上面的想法，我修改 CategoryAdapter.java 如下：
 
-```
+```java
 package me.vamei.vamei;
 
 import java.util.List;

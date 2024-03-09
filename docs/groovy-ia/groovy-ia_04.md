@@ -1,7 +1,5 @@
 # 实战 Groovy: 使用闭包、ExpandoMetaClass 和类别进行元编程
 
-# 实战 Groovy: 使用闭包、ExpandoMetaClass 和类别进行元编程
-
 *随心所欲添加方法*
 
 进入到 Groovy 风格的元编程世界。在运行时向类动态添加方法的能力 — 甚至 Java™ 类以及 `final` Java 类 — 强大到令人难以置信。不管是用于生产代码、单元测试或介于两者之间的任何内容，即使是最缺乏热情的 Java 开发人员也会对 Groovy 的元编程能力产生兴趣。
@@ -14,7 +12,7 @@
 
 ##### 清单 1\. 使用 Groovy 对动物进行建模
 
-```
+```java
 class ScalyOrFeatheryAnimal{
   ScalyOrFeatheryAnimal layEgg(){
     return new ScalyOrFeatheryAnimal()
@@ -42,7 +40,7 @@ Groovy 是在 Java 平台上运行的一种现代编程语言。它能够与现�
 
 ##### 清单 2\. 动态添加 `layEgg()` 方法
 
-```
+```java
 Platypus.metaClass.layEgg = {->
   return new FurryAnimal()
 }
@@ -60,7 +58,7 @@ def baby = new Platypus().layEgg()
 
 ##### 清单 3\. Groovy 添加到 `String` 的方法
 
-```
+```java
 println "Introduction".padRight(15, ".")
 println "Introduction".reverse()
 
@@ -73,7 +71,7 @@ noitcudortnI
 
 ##### 清单 4\. 发出 HTTP GET 请求
 
-```
+```java
 println "http://thirstyhead.com".toURL().text
 
 //output
@@ -87,7 +85,7 @@ println "http://thirstyhead.com".toURL().text
 
 ##### 清单 5\. 在 Groovy 中发出一个 shell 命令
 
-```
+```java
 println "ifconfig en0".execute().text
 
 //output
@@ -101,7 +99,7 @@ en0: flags=8863<UP,BROADCAST,SMART,RUNNING,SIMPLEX,MULTICAST> mtu 1500
 
 ##### 清单 6\. 使用 Java 语言发出 shell 命令
 
-```
+```java
 Process p = new ProcessBuilder("ifconfig", "en0").start();
 BufferedReader br = new BufferedReader(new InputStreamReader(p.getInputStream()));
 String line = br.readLine();
@@ -125,7 +123,7 @@ Groovy 提供了一种无害的但功能强大的语言特性 — 闭包 — 如
 
 ##### 清单 7\. 一个简单闭包
 
-```
+```java
 def shout = {src->
   return src.toUpperCase()
 }
@@ -140,7 +138,7 @@ HELLO WORLD
 
 ##### 清单 8\. 将 `shout` 方法添加到 `String`
 
-```
+```java
 String.metaClass.shout = {->
   return delegate.toUpperCase()
 }
@@ -159,7 +157,7 @@ HELLO METAPROGRAMMING
 
 ##### 清单 9\. 重新定义 `toUpperCase()` 方法
 
-```
+```java
 String.metaClass.shout = {->
   return delegate.toUpperCase()
 }
@@ -178,7 +176,7 @@ hello metaprogramming
 
 ##### 清单 10\. 重写 `Math.random()` 方法
 
-```
+```java
 println "Before metaprogramming"
 3.times{
   println Math.random()
@@ -216,7 +214,7 @@ Groovy 元编程是一种运行时行为 — 这个行为从程序启动一直�
 
 ##### 清单 11\. 使用单元测试分析元编程
 
-```
+```java
 class MetaTest extends GroovyTestCase{
 
   void testExpandoMetaClass(){
@@ -247,7 +245,7 @@ class MetaTest extends GroovyTestCase{
 
 ##### 清单 12\. 对单个实例进行元编程
 
-```
+```java
 void testInstance(){
   String message = "Hola"
   message.metaClass.shout = {->
@@ -265,7 +263,7 @@ void testInstance(){
 
 ##### 清单 13\. 一次性对多个方法进行元编程
 
-```
+```java
 void testFile(){
   File f = new File("nonexistent.file")
   f.metaClass{
@@ -294,7 +292,7 @@ void testFile(){
 
 ##### 清单 14\. 使用一个 `Category` 进行元编程
 
-```
+```java
 class MetaTest extends GroovyTestCase{
   void testCategory(){
     String message = "Hello"
@@ -327,7 +325,7 @@ class StringHelper{
 
 ##### 清单 15\. 在 `use` 块中使用多个类别
 
-```
+```java
 class MetaTest extends GroovyTestCase{
   void testFileWithCategory(){
     File f = new File("iDoNotExist.txt")
@@ -378,7 +376,7 @@ class FileHelper{
 
 ##### 清单 16\. 使用 Java 类进行元编程
 
-```
+```java
 import org.apache.commons.lang.StringUtils
 
 class CommonsTest extends GroovyTestCase{
@@ -419,7 +417,7 @@ class StringHelper{
 
 ##### 清单 17\. 添加一个 `weather` 方法
 
-```
+```java
 String.metaClass.weather={->
   if(!delegate.isInteger()){
     return "The weather() method only works with zip codes like '90201'"

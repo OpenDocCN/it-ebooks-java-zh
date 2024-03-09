@@ -12,14 +12,14 @@ Play 的安装相当简单。在[Play 官网下载](http://www.playframework.com
 
 把下载的.zip 文件解压缩，并将解压缩后的文件夹放到某个位置。比如/home/vamei/Util。
 
-```
+```java
 unzip play-2.2.1.zip
 mv play-2.2.1 /home/vamei/Util/
 ```
 
 文件夹里重要的是可执行文件 play。我一般是在/home/vamei/Util/下创建一个 bin 文件夹，并在该文件夹中创建 play 的软链接。
 
-```
+```java
 mkdir -p /home/vamei/Util/bin
 cd /home/vamei/Util/bin
 ln -s /home/vamei/Util/play-2.2.1/play .
@@ -27,14 +27,14 @@ ln -s /home/vamei/Util/play-2.2.1/play .
 
 最后，将新建的 bin 文件夹放入系统路径。
 
-```
+```java
 echo "export PATH=/home/vamei/Util/bin:$PATH" >> /home/vamei/.bashrc
 source /home/vamei/.bashrc
 ```
 
 在命令行输入 play，将显示：
 
-```
+```java
        _
  _ __ | | __ _ _  _
 | '_ \| |/ _' | || |
@@ -63,7 +63,7 @@ You can also browse the complete documentation at http://www.playframework.com.
 
 切换到/home/vamei，创建一个网络应用 test，
 
-```
+```java
 play new test
 ```
 
@@ -71,7 +71,7 @@ play new test
 
 将有一个新的文件夹/home/vamei/test 出现在当前路径。它包含该项目的所有文件。
 
-```
+```java
 test
 ├── README
 ├── app
@@ -107,7 +107,7 @@ routes 记录了 url 请求和控制器的对应关系。当有 http 请求进�
 
 现在，切换到/home/vamei/test，并运行项目。输入命令：
 
-```
+```java
 play run
 ```
 
@@ -137,7 +137,7 @@ routes 负责将 url 导向正确的行动(action)。action 是生成 http 响�
 
 Play 自带的服务器可以持续运行。将 Play 安装在目标服务器，比如云上后，在 Play 项目的根目录下，用：
 
-```
+```java
 play start
 ```
 
@@ -145,13 +145,13 @@ play start
 
 使用其它端口运行：
 
-```
+```java
 play "start -Dhttp.port=8080"
 ```
 
 停止运行。切换到项目的根目录下，使用命令：
 
-```
+```java
 play stop
 ```
 

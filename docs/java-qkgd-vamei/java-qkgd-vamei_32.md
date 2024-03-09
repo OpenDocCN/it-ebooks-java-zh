@@ -8,7 +8,7 @@ Play 框架的主要功能是提供动态响应的内容。但一个网络项目
 
 Play 项目的静态文件一般存储在根目录下的 public 文件夹。新建 Play 项目时，routes 文件会有下面的默认记录：
 
-```
+```java
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)
 ```
@@ -25,7 +25,7 @@ GET     /assets/*file               controllers.Assets.at(path="/public", file)
 
 客户有时需要自行上传文件。我可以通过一个表单来让客户上传。表单的模板 app/views/upload.scala.html 为：
 
-```
+```java
 @helper.form(action = routes.Application.upload, 'enctype -> "multipart/form-data") {
     <input type="file" name="picture">
     <p>
@@ -36,7 +36,7 @@ GET     /assets/*file               controllers.Assets.at(path="/public", file)
 
 增加动作 uploadForm()，用于显示该模板：
 
-```
+```java
     public static Result uploadForm() {
         return ok(views.html.upload.render());
     }
@@ -48,7 +48,7 @@ GET     /assets/*file               controllers.Assets.at(path="/public", file)
 
 对于表单提交，我用动作 upload()来处理：
 
-```
+```java
     public static Result upload() {
           MultipartFormData body = request().body().asMultipartFormData();
           FilePart picture = body.getFile("picture");

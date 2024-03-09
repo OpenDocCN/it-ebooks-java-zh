@@ -1,7 +1,5 @@
 # 七、深入解析日期和时间：JSR310
 
-# 七、深入解析日期和时间：JSR310
-
 > 来源：[Java 8 新特性探究（七）深入解析日期和时间 JSR310](http://my.oschina.net/benhaile/blog/193956)
 
 众所周知，日期是商业逻辑计算一个关键的部分，任何企业应用程序都需要处理时间问题。应用程序需要知道当前的时间点和下一个时间点，有时它们还必须计算这两个时间点之间的路径。但 java 之前的日期做法太令人恶心了，我们先来吐槽一下。
@@ -26,7 +24,7 @@ Tiago Fernandez 做过一次投票，选举最烂的 JAVA API，排第一的 EJB
 
 坑爹的 year 和 month
 
-```
+```java
 Date date = new Date(2012,1,1);
 System.out.println(date);
 输出 Thu Feb 01 00:00:00 CST 3912 
@@ -36,14 +34,14 @@ System.out.println(date);
 
 应该曾有人告诉你，如果你要设置日期，应该使用 java.util.Calendar，像这样…
 
-```
+```java
 Calendar calendar = Calendar.getInstance();
 calendar.set(2013, 8, 2); 
 ```
 
 这样写又不对了，calendar 的 month 也是从 0 开始的，表达 8 月份应该用 7 这个数字，要么就干脆用枚举
 
-```
+```java
 calendar.set(2013, Calendar.AUGUST, 2); 
 ```
 
@@ -57,7 +55,7 @@ java.util.Date 与 java.util.Calendar 中的所有属性都是可变的
 
 下面的代码，计算两个日期之间的天数….
 
-```
+```java
 public static void main(String[] args) {
     Calendar birth = Calendar.getInstance();
     birth.set(1975, Calendar.MAY, 26);
@@ -78,7 +76,7 @@ public static long daysBetween(Calendar begin, Calendar end) {
 
 daysBetween 有点问题，如果连续计算两个 Date 实例的话，第二次会取得 0，因为 Calendar 状态是可变的，考虑到重复计算的场合，最好复制一个新的 Calendar
 
-```
+```java
 public static long daysBetween(Calendar begin, Calendar end) {
     Calendar calendar = (Calendar) begin.clone(); // 复制
     long daysBetween = 0;
@@ -132,7 +130,7 @@ at：把这个对象与另一个对象组合起来，例如： date.atTime(time)
 
 参考[`jinnianshilongnian.iteye.com/blog/1994164`](http://jinnianshilongnian.iteye.com/blog/1994164) 被我揉在一起，可读性很差，相应的代码都有注释了，我就不过多解释了。
 
-```
+```java
 public class TimeIntroduction {
     public static void testClock() throws InterruptedException {
         //时钟提供给我们用于访问某个特定 时区的 瞬时时间、日期 和 时间的。  

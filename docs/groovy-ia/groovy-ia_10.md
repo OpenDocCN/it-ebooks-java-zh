@@ -1,7 +1,5 @@
 # 实战 Groovy: Groovy 的腾飞
 
-# 实战 Groovy: Groovy 的腾飞
-
 *熟悉 Groovy 新的、遵循 JSR 的语法*
 
 随着 Groovy JSR-1（及其后续发行版本）的发布，Groovy 语法的变化已经规范化 —— 这意味着如果以前没有对此加以注意，那么现在是开始注意它的时候了。这个月，Groovy 的常驻实践者 Andrew Glover 将介绍 Groovy 语法最重要的变化，以及在经典 Groovy 中找不到的一个方便特性。
@@ -44,7 +42,7 @@ Groovy 的变量规则对新的符合 JSR 的语法的打击可能最大。经�
 
 ##### 清单 1\. LavaLamp 的返回结果
 
-```
+```java
  package com.vanward.groovy 
  class LavaLamp{ 
   @Property model 
@@ -69,7 +67,7 @@ Groovy 的变量规则对新的符合 JSR 的语法的打击可能最大。经�
 
 ##### 清单 2\. 不要忘记 def 关键字！
 
-```
+```java
  class Person { 
   @Property fname 
   @Property lname 
@@ -98,7 +96,7 @@ Groovy 的变量规则对新的符合 JSR 的语法的打击可能最大。经�
 
 ##### 清单 3\. 错误消息
 
-```
+```java
  c:\dev\projects>groovy BusinessObjects.groovy 
 
  BusinessObjects.groovy: 13: The variable numstr is undefined in the current scope 
@@ -112,7 +110,7 @@ Groovy 的变量规则对新的符合 JSR 的语法的打击可能最大。经�
 
 ##### 清单 4\. 用 def 重新处理
 
-```
+```java
  String toString(){ 
 
    def numstr = new StringBuffer() 
@@ -142,7 +140,7 @@ Groovy 的变量规则对新的符合 JSR 的语法的打击可能最大。经�
 
 ##### 清单 5\. 新的 Groovy 闭包语法
 
-```
+```java
  [2, 4, 6, 8, 3].find { x -> 
   if (x == 3){ 
     println "found ${x}"
@@ -156,7 +154,7 @@ Groovy 的变量规则对新的符合 JSR 的语法的打击可能最大。经�
 
 ##### 清单 6\. Groovy 的 JDK 依旧功能强大！
 
-```
+```java
  import java.io.File 
  new File("maven.xml").eachLine{ line -> 
   println "read the following line -> " + line 
@@ -169,7 +167,7 @@ Groovy 的变量规则对新的符合 JSR 的语法的打击可能最大。经�
 
 ##### 清单 7\. 过滤改编！
 
-```
+```java
  package com.vanward.groovy 
  class Filter{ 
  @Property strategy 
@@ -214,7 +212,7 @@ Groovy 的范围语法的变化非常小。在经典的 Groovy 中，您可以�
 
 ##### 清单 8\. 新的范围语法
 
-```
+```java
  myRange = 29..<32 
  myInclusiveRange = 2..5 
  println myRange.size() // still prints 3 
@@ -235,7 +233,7 @@ Groovy 的范围语法的变化非常小。在经典的 Groovy 中，您可以�
 
 ##### 清单 9\. 迪米特在行动（同情啊，同情！）
 
-```
+```java
  package com.vanward.groovy 
  import java.math.BigDecimal 
  class Customer { 
@@ -265,7 +263,7 @@ Groovy 的范围语法的变化非常小。在经典的 Groovy 中，您可以�
 
 ##### 清单 10\. 添加坏报童 ...
 
-```
+```java
 iwallet = new Wallet(value:new BigDecimal(32)) 
 victim = new Customer(firstName:"Lane", lastName:"Meyer", wallet:iwallet) 
 //Didn't *ask* for a dime. Two Dollars.
@@ -290,7 +288,7 @@ mymoney(new BigDecimal(25)) // "late fees!"
 
 ##### 清单 11\. Groovy 中的新语法
 
-```
+```java
  def nfile = ["c:/dev", "newfile.txt"] as File 
  def val = ["http", "www.vanwardtechnologies.com", "/"] as URL 
  def ival = ["89.90"] as BigDecimal 

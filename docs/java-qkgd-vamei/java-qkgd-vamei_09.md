@@ -8,7 +8,7 @@
 
 我们之前定义类的时候，都是从头开始，详细的定义该类的每一个成员。比如下面的 Human 类:
 
-```
+```java
 class Human
 {   
    /**
@@ -51,7 +51,7 @@ Human & Woman
 
 我们可以像以前一样，从头开始，完整的定义 Woman 类:
 
-```
+```java
 class Woman
 {
     /**
@@ -72,7 +72,7 @@ class Woman
 
 ```
 
-```
+```java
     /**
      * breath
      */
@@ -100,7 +100,7 @@ class Woman
 
 我们用 extends 关键字表示继承:
 
-```
+```java
 class Woman extends Human
 {
     /**
@@ -122,7 +122,7 @@ class Woman extends Human
 
 可以用以下 Test 类测试:
 
-```
+```java
 public class Test
 {
     public static void main(String[] args)
@@ -188,7 +188,7 @@ super 和 this 类似，也是隐式参数。我们在类定义的不同层次�
 
 这种机制叫做方法覆盖(method overriding)。方法覆盖可以被很好的利用，用于修改基类成员的方法。比如，在衍生层，也就是定义 Woman 时，可以修改基类提供的 breath()方法:
 
-```
+```java
 class Woman extends Human
 {/**
      * new method
@@ -225,13 +225,13 @@ class Woman extends Human
 
 比如下面的程序中，Human 类有一个构造方法:
 
-```
+```java
 class Human
 {   
 
 ```
 
-```
+```java
     /**
      * constructor
      */
@@ -270,7 +270,7 @@ class Human
 
 衍生类 Woman 类的定义及其构造方法:
 
-```
+```java
 class Woman extends Human
 {
     /**

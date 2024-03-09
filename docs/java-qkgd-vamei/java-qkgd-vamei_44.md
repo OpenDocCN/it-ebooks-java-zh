@@ -24,7 +24,7 @@
 
 我在布局文件 res/menu/main.xml 中定义 ActionBar 的菜单：
 
-```
+```java
 <menu 
 
      >
@@ -44,7 +44,7 @@
 
 现在，修改之前的 MainActivity.java。MainActivity 将继承 ActionBarActivity。这样，MainActivity 页面的顶端将增加一条 ActionBar。接下来，我要覆盖 ActionBarActivity 的两个方法。一个是 onCreateOptionsMenu()方法。在这个方法中，我绑定上面的视图文件到 ActionBar 上。另一个方法 onOptionsItemSelected()，主要用于说明菜单各个选项被点击后的动作。代码如下：
 
-```
+```java
 package me.vamei.vamei;import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -133,7 +133,7 @@ import android.widget.TextView;public class MainActivity extends ActionBarActivi
 
 下一步，我将增加"Download"按钮点击后的功能。按钮点击后，应用将访问互联网，并获得 URL 指向的.js 文件。获得.js 文件后，我从该文件中提取 JSON 对象，这个对象中包含一些新的 Category 名字。最后，我在数据库中增加 Category 条目:
 
-```
+```java
 @Override
 public boolean onOptionsItemSelected(MenuItem item) {
     // Handle action bar item clicks here. The action bar will
@@ -199,7 +199,7 @@ AsyncTask 有三个类型<X, Y, Z>。它们分别是 doInBackground(X), onProgre
 
 当工作完成，AsyncTask 会通知主线程。AsyncTask 与 Thread 的目的相同，但它异步的调用方式更方便编写，也更容易实现主线程和背景线程之间的信息传递。我下面会实现 Upload 的对应功能，即把 Category 表转成 JSON，再把该 JSON 字符串发送到特定的 URL。
 
-```
+```java
 @Override
 public boolean onOptionsItemSelected(MenuItem item) {
     // Handle action bar item clicks here. The action bar will

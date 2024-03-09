@@ -20,7 +20,7 @@ Human 类的人口为 8
 
 在类定义中，我们利用 static 关键字，来声明类数据成员，比如:
 
-```
+```java
 class Human
 {   
     /**
@@ -83,7 +83,7 @@ class Human
 
 下面我们增加一个 static 方法 getPopulation()，该方法返回 static 数据 population:
 
-```
+```java
 class Human
 {   
     /**
@@ -136,7 +136,7 @@ class Human
 
 调用类方法时，我们可以通过 class.method()的方式调用，也可以通过 object.method()的方式调用。比如使用下面的 Test 类测试:
 
-```
+```java
 public class Test
 {
     public static void main(String[] args)
@@ -154,7 +154,7 @@ public class Test
 
 我们看到，对象方法可以访问类数据。这是非常有用的概念。类的状态有可能随着对象而发生变化。比如“人口”，它应该随着一个对象的产生而增加 1。我们可以在对象的方法中修改类的“人口”数据。我们下面在构造方法中访问类数据成员。这里的构造方法是非 static 的方法，即对象的方法:
 
-```
+```java
 class Human
 {   
     /**

@@ -6,7 +6,7 @@ REPL 是 read-eval-print loop 的缩写. 这是 Lisp 的方言提供给用户的
 
 为了启动 REPL， 运行我们上面写好的 clj 脚本。成功的话会显示一个” `user=&gt;` “. “ `=&gt;` ” 前面的字符串表示当前的默认名字空间。“=>”后面的则是你输入的 form 以及它的输出结果。 下面是个简单的例子：
 
-```
+```java
 user=> (def n 2)
 #'user/n
 user=> (* n 3)
@@ -17,7 +17,7 @@ user=> (* n 3)
 
 要查看一个函数，宏或者名字空间的文档输入 `(doc _name_)。看下面的例子：`
 
-```
+```java
 (require 'clojure.contrib.str-utils)
 (doc clojure.contrib.str-utils/str-join) ; ->
 ; -------------------------

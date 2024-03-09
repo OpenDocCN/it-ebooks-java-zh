@@ -1,7 +1,5 @@
 # 实战 Groovy: 用 curry 过的闭包进行函数式编程
 
-# 实战 Groovy: 用 curry 过的闭包进行函数式编程
-
 *Groovy 日常的编码构造到达了闭包以前没有到过的地方*
 
 在 Groovy 中处处都是闭包，Groovy 闭包惟一的问题是：当每天都使用它们的时候，看起来就有点平淡了。在本文中，客座作者 Ken Barclay 和 John Savage 介绍了如何对标准的闭包（例如闭包复合和 Visitor 设计模式）进行 curry 处理。`curry()` 方法是由 Haskell Curry 发明的，在 JSR 标准发布之前就已经在 Groovy 语言中了。
@@ -24,7 +22,7 @@ Barclay 和 Savage 的 curry 过的闭包不仅会重新激起您对熟悉的操
 
 ##### 清单 1\. 简单的闭包
 
-```
+```java
 def multiply = { x, y -> return x * y } // closure
 def p = multiply.call(3, 4)             // explicit call
 def q = multiply(4, 5)                  // implicit call
@@ -38,7 +36,7 @@ println "q: ${q}"                       // q is 20
 
 ##### 清单 2\. curry 过的闭包
 
-```
+```java
 def multiply = { x, y -> return x * y }  // closure
 def triple = multiply.curry(3)           // triple = { y -> return 3 * y }
 def quadruple = multiply.curry(4) 
@@ -57,7 +55,7 @@ println "q: ${q}"                        // q is 20
 
 ##### 清单 3\. 右和右操作数
 
-```
+```java
 def lSubtract = { x, y -> return x - y }
 def rSubtract = { y, x -> return x - y }
 def dec = rSubtract.curry(1)            
@@ -78,7 +76,7 @@ println "q: ${q}"                        // q is 75
 
 ##### 清单 4\. 闭包和集合
 
-```
+```java
 def ages = [20, 30, 40]
 def accounts = ['ABC123' : 200, 'DEF456' : 300, 'GHI789' : 400]
 def ages1 = ages.collect({ element -> return element + 1 })
@@ -105,7 +103,7 @@ println "ages2: ${ages2}"
 
 ##### 清单 5\. 超级闭包复合
 
-```
+```java
 def multiply = { x, y -> return x * y }    
 // closure
 def triple = multiply.curry(3)            
@@ -129,7 +127,7 @@ println "threeDozen: ${threeDozen}"
 
 ##### 清单 6\. Functor 封装了一个计算模式
 
-```
+```java
 package fp
 abstract class Functor {
  //  arithmetic (binary, left commute and right commute)
@@ -165,7 +163,7 @@ abstract class Functor {
 
 ##### 清单 7\. 添加一些 curry，并乘以 12
 
-```
+```java
 import fp.*
 def twelveTimes = { x -> return 12 * x }
 def twelveTimesAll = Functor.map.curry(twelveTimes)
@@ -188,7 +186,7 @@ println "table: ${table}"
 
 ##### 清单 8\. 图书业务对象
 
-```
+```java
 import fp.*
 class Book {
     @Property name
@@ -225,7 +223,7 @@ println "netPrice: ${netPrice}"        // netPrice: 26.325
 
 ##### 清单 9\. 图书馆应用程序
 
-```
+```java
 class Book {    
     @Property title
     @Property author
@@ -281,7 +279,7 @@ lib.displayBooksAvailableForLoan()    // Title: UML; author: Ken and John
 
 ##### 清单 10\. 修订后的图书馆访问者
 
-```
+```java
 import fp.*
 class Book {
     @Property title
@@ -358,7 +356,7 @@ lib.displayBooksAvailableForLoan() // Title: UML; author: Ken and John
 
 ##### 清单 11\. 用于测试架构完整性的闭包
 
-```
+```java
 import fp.*
 /**
  *  A company with any number of employees. 

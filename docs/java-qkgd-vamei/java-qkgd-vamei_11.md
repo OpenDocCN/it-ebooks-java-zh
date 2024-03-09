@@ -10,7 +10,7 @@
 
 接口继承(inheritance)与类继承很类似，就是以被继承的 interface 为基础，增添新增的接口方法原型。比如，我们以 Cup 作为原 interface:
 
-```
+```java
 interface Cup {
     void addWater(int w);
     void drinkWater(int w);
@@ -23,7 +23,7 @@ interface Cup {
 
 接口如下:
 
-```
+```java
 interface MetricCup extends Cup
 {
     int WaterContent();
@@ -38,7 +38,7 @@ interface MetricCup extends Cup
 
 比如我们有下面一个 Player 接口:
 
-```
+```java
 interface Player
 {
     void play();
@@ -47,7 +47,7 @@ interface Player
 
 我们新增一个 MusicCup 的接口。它既有 Cup 接口，又有 Player 接口，并增加一个 display()方法原型。
 
-```
+```java
 interface MusicCup extends Cup, Player 
 {
     void display();
@@ -82,7 +82,7 @@ interface MusicCup extends Cup, Player
 
 Java 中提供了抽象类(abstract class)的语法，用于说明类及其方法的抽象性。比如:
 
-```
+```java
 abstract class Food {
     public abstract void eat();
     public void happyFood();

@@ -16,7 +16,7 @@
 
 如果它确实是不需要在 catch 块中做任何响应，需要做注释加以说明(如下面的例子)。
 
-```
+```java
 try {
   int i = Integer.parseInt(response);
   return handleNumericResponse(i);
@@ -28,7 +28,7 @@ return handleTextResponse(response);
 
 **例外**：在测试中，如果一个捕获的异常被命名为`expected`，则它可以被不加注释地忽略。下面是一种非常常见的情形，用以确保所测试的方法会抛出一个期望中的异常， 因此在这里就没有必要加注释。
 
-```
+```java
 try {
   emptyStack.pop();
   fail();
@@ -42,7 +42,7 @@ try {
 
 使用类名调用静态的类成员，而不是具体某个对象或表达式。
 
-```
+```java
 Foo aFoo = ...;
 Foo.aStaticMethod(); // good
 aFoo.aStaticMethod(); // bad

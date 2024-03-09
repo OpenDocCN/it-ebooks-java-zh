@@ -19,7 +19,7 @@
 
 我将增加一个条目页面，用于显示某个类别下的所有联系人。在数据层面上，我需要从数据库中取出某个类别下的所有联系人。在上一讲中，我创建了 ContactsManager 类，用于和数据库交互。但之前的 CRUD 方法无法满足我的需求。我将为该类增加新的方法，以便从数据库中取出某个类别下的所有联系人。这个方法如下：
 
-```
+```java
     // Getting all contacts of a category
     public List<Contact> getContactsByCategoryId(int categoryId) {
         List<Contact> contacts = new LinkedList<Contact>();
@@ -60,7 +60,7 @@
 
 我希望点击类别后，能够进入显示该类别所有联系人，即启动一个新的联系人条目页面。由于类别的数目是动态变化的，我不可能为每个类别创建一个下游页面（而且这样也太麻烦了）。然而，我可以把类别信息传递给同一个下游页面，让该下游页面根据类别，进行不同的处理。这个数据传递的任务，将由 Intent 完成。从[概念漫游（上）](http://www.cnblogs.com/vamei/p/3657249.html)中，我们已经知道，Intent 就像传令兵。现在，我要让传令兵夹带一点“私货”了。
 
-```
+```java
 package me.vamei.vamei;
 
 import java.util.List;
@@ -112,7 +112,7 @@ putExtra()方法会先创建一个 Bundle 对象，再传递这个 Bundle 对象
 
 我可以用下面的语句，等效的代替上面的 putExtra()：
 
-```
+```java
 Bundle extra = new Bundle();
 extra.putString("CATEGORY_ID",  categories.get(position).getId());
 intent.putExtra(extra);
@@ -124,7 +124,7 @@ intent.putExtra(extra);
 
 在下游的 Activity 中，我可以通过 Context 的 getIntent()方法来获取 Intent 对象。下游 Activity 是新建的 ContactListActivity。它将以条目的方式，显示类别下所有联系人：
 
-```
+```java
 package me.vamei.vamei;
 
 import java.util.List;
@@ -188,7 +188,7 @@ public class ContactListActivity extends Activity {
 
 下面我要添加 BlogActivity。它使用了 WebView 视图元素来显示 Web 页面。我将增加一个布局文件 activity_blog.xml，这个文件包含一个简单的 WebView 视图元素：
 
-```
+```java
 <WebView  
 
         android:id="@+id/web"
@@ -201,7 +201,7 @@ public class ContactListActivity extends Activity {
 
 下面，我将创建对应的 BlogActivity。它将从 Intent 中提取 URL 地址。WebView 的 loadUrl()方法，用于加载 URL 所指向的网页：
 
-```
+```java
 package me.vamei.vamei;
 
 import android.annotation.SuppressLint;
@@ -236,7 +236,7 @@ public class BlogActivity extends Activity {
 
 为了 WebView 正常运行，我需要赋予应用访问互联网的权限，在 AndroidManifest.xml 中增加 uses-permission 标签：
 
-```
+```java
 <manifest ...>
     ... 
     <uses-permission android:name="android.permission.INTERNET" />

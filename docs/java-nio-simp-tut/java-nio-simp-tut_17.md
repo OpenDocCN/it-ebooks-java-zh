@@ -8,7 +8,7 @@ Java7 中新增了 AsynchronousFileChannel 作为 nio 的一部分。Asynchronou
 
 AsynchronousFileChannel 的创建可以通过 open()静态方法：
 
-```
+```java
 Path path = Paths.get("data/test.xml");
 
 AsynchronousFileChannel fileChannel =
@@ -25,7 +25,7 @@ open()的第一个参数是一个 Path 实体，指向我们需要操作的文�
 
 第一种方式是调用返回值为 Future 的 read()方法：
 
-```
+```java
 Future<Integer> operation = fileChannel.read(buffer, 0);
 ```
 
@@ -35,7 +35,7 @@ read()方法会立刻返回，即使读操作没有完成。我们可以通过 i
 
 下面是一个略长的示例：
 
-``` AsynchronousFileChannel fileChannel = AsynchronousFileChannel.open(path, StandardOpenOption.READ);
+```java AsynchronousFileChannel fileChannel = AsynchronousFileChannel.open(path, StandardOpenOption.READ);
 
 ByteBuffer buffer = ByteBuffer.allocate(1024); long position = 0;
 
@@ -54,7 +54,7 @@ buffer.flip(); byte[] data = new byte[buffer.limit()]; buffer.get(data); System.
 ### 通过 CompletionHandler 读取数据（Reading Data Via a CompletionHandler）
 
 另一种方式是调用接收 CompletionHandler 作为参数的 read()方法。下面是具体的使用：
-```
+```java
 
 fileChannel.read(buffer, position, buffer, new CompletionHandler<Integer, ByteBuffer>() { @Override public void completed(Integer result, ByteBuffer attachment) { System.out.println("result = " + result);
 
@@ -70,7 +70,7 @@ fileChannel.read(buffer, position, buffer, new CompletionHandler<Integer, ByteBu
 public void failed(Throwable exc, ByteBuffer attachment) {
 
 } 
-```
+```java
 
 });
 
@@ -86,7 +86,7 @@ public void failed(Throwable exc, ByteBuffer attachment) {
 ### 通过 Future 写数据（Writing Data Via a Future）
 
 通过 AsynchronousFileChannel 我们可以一步写数据
-```
+```java
 
 Path path = Paths.get("data/test-write.txt"); AsynchronousFileChannel fileChannel = AsynchronousFileChannel.open(path, StandardOpenOption.WRITE);
 
@@ -106,7 +106,7 @@ System.out.println("Write done");
 需要注意的是，这里的文件必须是已经存在的，否者在尝试 write 数据是会抛出一个 java.nio.file.NoSuchFileException.
 
 检查一个文件是否存在可以通过下面的方法：
-```
+```java
 
 if(!Files.exists(path)){ Files.createFile(path); }
 
@@ -115,7 +115,7 @@ if(!Files.exists(path)){ Files.createFile(path); }
 ### 通过 CompletionHandler 写数据（Writing Data Via a CompletionHandler）
 
 我们也可以通过 CompletionHandler 来写数据：
-```
+```java
 
 Path path = Paths.get("data/test-write.txt"); if(!Files.exists(path)){ Files.createFile(path); } AsynchronousFileChannel fileChannel = AsynchronousFileChannel.open(path, StandardOpenOption.WRITE);
 
@@ -136,7 +136,7 @@ public void failed(Throwable exc, ByteBuffer attachment) {
     System.out.println("Write failed");
     exc.printStackTrace();
 } 
-```
+```java
 
 }); ```
 

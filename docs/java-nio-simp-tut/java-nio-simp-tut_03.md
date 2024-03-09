@@ -31,7 +31,7 @@ FileChannel 用于文件的数据读写。 DatagramChannel 用于 UDP 的数据�
 
 这有一个利用 FileChannel 读取数据到 Buffer 的例子：
 
-```
+```java
     RandomAccessFile aFile = new RandomAccessFile("data/nio-data.txt", "rw");
     FileChannel inChannel = aFile.getChannel();
 

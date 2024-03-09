@@ -10,7 +10,7 @@ Play 2.*版本的默认操作数据库的方式是通过[Ebean](http://www.avaje
 
 在 mysql 中增加数据库 testing。增加用户"player"，密码为"player"。为用户 player 增加适当的权限。
 
-```
+```java
 CREATE DATABASE testing DEFAULT CHARACTER SET utf8;
 CREATE USER 'player'@'localhost' IDENTIFIED BY 'player';
 GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX, ALTER, CREATE TEMPORARY TABLES, LOCK TABLES ON testing.* TO 'player'@'localhost';
@@ -18,7 +18,7 @@ GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX, ALTER, CREATE TEMPORA
 
 为了在 Play 中使用 mysql 数据库，需要在 conf/application.conf 中增加设置：
 
-```
+```java
 # Database configuration
 
 db.default.driver=com.mysql.jdbc.Driver
@@ -28,14 +28,14 @@ db.default.password="player"
 
 ```
 
-```
+```java
 # Ebean configuration
 ebean.default="models.*"
 ```
 
 还需要修改 build.sbt 为：
 
-```
+```java
 name := "test"
 
 version := "1.0-SNAPSHOT"
@@ -56,7 +56,7 @@ play.Project.playJavaSettings
 
 下面，我在模型中增加一个实体(entity)，即一个 Person 类。放入 models/Person.java
 
-```
+```java
 package models;
 
 import java.util.List;
@@ -101,7 +101,7 @@ Play 有 evolution 模块，管理数据库的表。写好 Person.java 后，访
 
 增加一个动作。这个动作向数据库增加条目：
 
-```
+```java
 public static Result addPerson() {
     Person p1 = new Person();
     Person p2 = new Person();
@@ -125,7 +125,7 @@ public static Result addPerson() {
 
 我可以在动作中调用刚才定义的查询方法 findAll()和 findByName()，比如增加 allPerson()动作：
 
-```
+```java
 public static Result allPerson() {
     List<Person> persons = Person.findAll();
     return ok(views.html.personList.render(persons));
@@ -134,7 +134,7 @@ public static Result allPerson() {
 
 上面查询得到的 Person 类型的表，传递给模板 views/personList.scala.html:
 
-```
+```java
 @(personList: List[models.Person])
 
 <!DOCTYPE html>
@@ -155,7 +155,7 @@ public static Result allPerson() {
 
 事实上，我也可以在动作中直接调用 Person.find，来组成查询语句。这将让动作内部有更大的查询自由度。比如上面的动作可以改写成：
 
-```
+```java
 public static Result allPerson() {
     List<Person> persons = Person.find.all();
     return ok(views.html.personList.render(persons));

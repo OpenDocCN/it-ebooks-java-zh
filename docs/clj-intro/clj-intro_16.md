@@ -8,7 +8,7 @@
 
 LazySeq 是刚接触 Clojure 的人比较容易弄不清楚的一个东西。比如你们觉得下面这个代码的输出是什么？
 
-```
+```java
 (map #(println %) [1 2 3]) 
 ```
 
@@ -31,7 +31,7 @@ LazySeq 是刚接触 Clojure 的人比较容易弄不清楚的一个东西。比
 
 一般来说我们比较推荐使用 `doseq` 而不是 `dorun` 函数， 因为这样代码更加易懂。 同时代码效率也更高， 因为 dorun 内部使用 map 又创建了另外一个序列。比如下面的两会的结果是一样的。
 
-```
+```java
 (dorun (map #(println %) [1 2 3]))
 (doseq [i [1 2 3]] (println i)) 
 ```
@@ -40,7 +40,7 @@ LazySeq 是刚接触 Clojure 的人比较容易弄不清楚的一个东西。比
 
 下面的几个表达式都会在不同的行输出 1, 2, 3, 但是它们的返回值是不一样的。 `do` special form 是用来实现一个匿名函数，这个函数先打印这个值， 然后再把这个值返回。
 
-```
+```java
 (doseq [item [1 2 3]] (println item)) ; -> nil
 (dorun (map #(println %) [1 2 3])) ; -> nil
 (doall (map #(do (println %) %) [1 2 3])) ; -> (1 2 3) 
@@ -48,7 +48,7 @@ LazySeq 是刚接触 Clojure 的人比较容易弄不清楚的一个东西。比
 
 LazySeq 使得创建无限序列成为可能。因为只有需要使用的数据才会在用到的时候被调用创建。比如
 
-```
+```java
 (defn f
   "square the argument and divide by 2"
   [x]
@@ -74,7 +74,7 @@ LazySeq 使得创建无限序列成为可能。因为只有需要使用的数据
 
 下面的代码和上面的代码不一样的地方是， 在下面的代码里面 LazySeq 的头没有被保持在一个 binding 里面， 所以被调用过的方法的返回值不会被缓存。所以它所需要的内存比较少， 但是如果同一个元素被请求多次， 那么它的效率会低一点。
 
-```
+```java
 (defn f-seq [] (map f (iterate inc 0)))
 (println (first (f-seq))) ; evaluates (f 0), but doesn't cache result
 (println (nth (f-seq) 2)) ; evaluates (f 0), (f 1) and (f 2) 
@@ -82,7 +82,7 @@ LazySeq 使得创建无限序列成为可能。因为只有需要使用的数据
 
 另外一种避免保持 LazySeq 的头的办法是把这个 LazySeq 直接传给函数：
 
-```
+```java
 (defn consumer [seq]
   ; Since seq is a local binding, the evaluated items in it
   ; are cached while in this function and then garbage collected.

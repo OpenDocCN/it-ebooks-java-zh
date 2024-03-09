@@ -1,7 +1,5 @@
 # 实战 Groovy: 在 Java 应用程序中加一些 Groovy 进来
 
-# 实战 Groovy: 在 Java 应用程序中加一些 Groovy 进来
-
 *嵌入简单的、易于编写的脚本，从而利用 Groovy 的简单性*
 
 您有没有想过在自己相对复杂的 Java 程序中嵌入 Groovy 简单的、易于编写的脚本呢？在这一期 *实战 Groovy* 系列文章中，Andrew Glover 将介绍把 Groovy 集成到 Java 代码中的多种方法，并解释在什么地方、什么时候适合这么做。
@@ -26,7 +24,7 @@
 
 ##### 清单 1\. Groovy 中的类声明和编译
 
-```
+```java
 package com.vanward.groovy
 class Person {
   fname
@@ -79,7 +77,7 @@ println pers.toString()
 
 ##### 清单 2\. groovyc 命令生成的类
 
-```
+```java
 aglover@12d21 /cygdrive/c/dev/project/target/classes/com/vanward/groovy
 $ ls -ls  
 total 15
@@ -117,7 +115,7 @@ total 15
 
 ##### 清单 3\. 一个非常有用的 Groovy 脚本
 
-```
+```java
 package com.vanward.groovy
 import org.farng.mp3.MP3File
 import groovy.util.AntBuilder
@@ -185,7 +183,7 @@ songs.each{
 
 ##### 清单 4\. 通过 Java 命令行调用 Groovy
 
-```
+```java
 c:\dev\projects>java -cp  ./target/classes/;c:/dev/tools/groovy/
   groovy-all-1.0-beta-10.jar;C:/dev/tools/groovy/ant-1.6.2.jar;
   C:/dev/projects-2.0/jid3lib-0.5.jar  
@@ -212,7 +210,7 @@ Artist: Paul Simon Album: Graceland Song: That Was Your Mother
 
 ##### 清单 5\. 嵌入的 Groovy 代码
 
-```
+```java
 package com.vanward.gembed;
 import com.vanward.groovy.Song;
 import java.util.Collection;
@@ -238,7 +236,7 @@ public class SongEmbedGroovy{
 
 ##### 清单 6\. GroovyClassLoader 动态地加载并执行 Groovy 脚本
 
-```
+```java
 package com.vanward.gembed;
 import groovy.lang.GroovyClassLoader;
 import groovy.lang.GroovyObject;
@@ -285,7 +283,7 @@ public class CLEmbedGroovy{
 
 ##### 清单 7\. 嵌入 GroovyShell
 
-```
+```java
 package com.vanward.gembed;
 import java.io.File;
 import groovy.lang.GroovyShell;
@@ -307,7 +305,7 @@ public class ShellRunEmbedGroovy{
 
 ##### 清单 8\. 有趣的 GroovyShell
 
-```
+```java
 package com.vanward.gembed;
 import java.io.File;
 import groovy.lang.Binding;
@@ -338,7 +336,7 @@ public class ShellParseEmbedGroovy{
 
 ##### 清单 9\. GroovyScriptEngine 的作用
 
-```
+```java
 package com.vanward.gembed;
 import java.io.File;
 import groovy.lang.Binding;
@@ -371,7 +369,7 @@ public class ScriptEngineEmbedGroovy{
 
 ##### 清单 10\. BSF 开始工作了
 
-```
+```java
 package com.vanward.gembed;
 import org.apache.bsf.BSFManager;
 import org.codehaus.groovy.runtime.DefaultGroovyMethods;

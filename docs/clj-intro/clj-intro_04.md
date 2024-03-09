@@ -10,7 +10,7 @@ Clojure 是一个相对来说很新的语言。在经过一些年的努力之后
 
 要从最小的源代码来编译 clojure, 我们假设你已经安装了 [Git](http://git-scm.com/) 和 [Ant](http://ant.apache.org/) , 运行下面的命令来下载并且编译打包 Clojure Proper 和 Clojure Contrib:
 
-```
+```java
 git clone git://github.com/richhickey/clojure.git
 cd clojure
 ant clean jar
@@ -22,7 +22,7 @@ ant -Dclojure.jar=../clojure/clojure.jar clean jar
 
 下一步，写一个脚本来运行 Read/Eval/Print Loop (REPL) 以及运行 Clojure 程序. 这个脚本通常被命名为”clj”. 怎么使用 REPL 我们等会再介绍. Windows 下面，最简单的 clj 脚本是这样的(UNIX, Linux 以及 Mac OS X 下面把 %1 改成 $1):
 
-```
+```java
 java -jar /path/clojure.jar %1 
 ```
 
@@ -34,7 +34,7 @@ java -jar /path/clojure.jar %1
 
 使用这个脚本来启动 REPL 我们会等会介绍. 用下面这个命令来运行一个 clojure 脚本（通常以 clj 为后缀名）:
 
-```
+```java
 clj source-file-path 
 ```
 

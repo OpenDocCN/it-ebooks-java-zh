@@ -42,7 +42,7 @@ Gradle 完全兼容 Ant、Maven，你可以很容易的从 Ant 或 Maven 迁移�
 
 Gradle 能够解析现有的 Maven POM，从而得到传递性依赖的信息，并且引入到当前项目中，在此基础上，它也支持排除传递性依赖或者干脆关闭传递性依赖，这一点是 Maven 所不具备的特性。 Gradle 项目使用 Maven 项目生成的资源已经不是个问题了，接着需要反过来考虑，Maven 用户是否能够使用 Gradle 生成的资源呢？或者更简单点问，Gradle 项目生成的构件是否可以发布到 Maven 仓库中供人使用呢？这一点非常重要，因为如果做不到这一点，你可能就会丢失大量的用户。幸运的是 Gradle 再次给出了令人满意的答案。使用 Gradle 的 Maven Plugin，用户就可以轻松地将项目构件上传到 Maven 仓库中：
 
-```
+```java
     apply plugin: 'maven'
     ...
     uploadArchives {
@@ -80,7 +80,7 @@ Gradle 能够解析现有的 Maven POM，从而得到传递性依赖的信息，
 
 Gradle 的安装非常方便，下载 ZIP 包，解压到本地目录，设置 GRADLE_HOME 环境变量并将 GRADLE_HOME/bin 加到 PATH 环境变量中，安装就完成了。用户可以运行 gradle -v 命令验证安装，这些初始的步骤和 Maven 没什么两样。我这里安装的 Gradle 版本是 1.10，详细信息见下：
 
-```
+```java
     ᐅ gradle -v
 
     ------------------------------------------------------------
@@ -102,7 +102,7 @@ Gradle 目前的版本是 2.4，根据[其 Wiki 上的 Roadmap](http://wiki.grad
 
 类似于 Maven 的`pom.xml`文件，每个 Gradle 项目都需要有一个对应的`build.gradle`文件，该文件定义一些任务（task）来完成构建工作，当然，每个任务是可配置的，任务之间也可以依赖，用户亦能配置缺省任务，就像这样：
 
-```
+```java
 defaultTasks 'taskB'
 
 task taskA &lt;&lt; {
@@ -118,7 +118,7 @@ taskB.dependsOn taskA
 
 运行命令**$ gradle -q**之后（参数 q 让 Gradle 不要打印错误之外的日志），就能看到如下的预期输出：
 
-```
+```java
 i'm task A
 i'm task B, and I depend on taskA
 ```
@@ -131,7 +131,7 @@ i'm task B, and I depend on taskA
 
 先看依赖管理，我有一个简单的项目依赖于一些第三方类库包括 SpringFramework、JUnit、Kaptcha 等等。原来的 Maven POM 配置大概是这样的（篇幅关系，省略了部分父 POM 配置）：
 
-```
+```java
     &lt;properties&gt;
         &lt;kaptcha.version&gt;2.3&lt;/kaptcha.version&gt;
     &lt;/properties&gt;
@@ -164,7 +164,7 @@ i'm task B, and I depend on taskA
 
 然后我将其转换成 Gradle 脚本，结果是惊人的：
 
-```
+```java
 dependencies {
     compile('org.springframework:spring-core:2.5.6')
     compile('org.springframework:spring-beans:2.5.6')
@@ -182,7 +182,7 @@ p>关于 Gradle 的依赖管理起初我有一点担心，就是它是否有传�
 
 自动化依赖管理的基石是仓库，Maven 中央仓库已经成为了 Java 开发者不可或缺的资源，Gradle 既然有依赖管理，那必然也得用到仓库，这当然也包括了 Maven 中央仓库，就像这样：
 
-```
+```java
 repositories {
     mavenLocal()
     mavenCentral()
@@ -194,7 +194,7 @@ repositories {
 
 Gradle 项目使用 Maven 项目生成的资源已经不是个问题了，接着需要反过来考虑，Maven 用户是否能够使用 Gradle 生成的资源呢？或者更简单点问，Gradle 项目生成的构件是否可以发布到 Maven 仓库中供人使用呢？这一点非常重要，因为如果做不到这一点，你可能就会丢失大量的用户。幸运的是 Gradle 再次给出了令人满意的答案。使用 Gradle 的 Maven Plugin，用户就可以轻松地将项目构件上传到 Maven 仓库中：
 
-```
+```java
 apply plugin: 'maven'
 ...
 uploadArchives {
@@ -224,7 +224,7 @@ uploadArchives {
 
 区别在于，使用 Groovy 自定义项目布局更加的方便：
 
-```
+```java
 sourceSets {
     main {
         java {
@@ -247,7 +247,7 @@ Gradle Java Plugin 也定义了构建生命周期，包括编译主代码、处�
 
 相对于 Maven 完全线性的生命周期，Gradle 的构建生命周期略微复杂，不过也更为灵活，例如 jar 这个任务是用来打包的，它不像 Maven 那样依赖于执行测试的 test 任务，类似的，从图中可以看到，一个最终的 build 任务也没有依赖于 uploadArchives 任务。这个生命周期并没有将用户限制得很死，举个例子，我希望每次 build 都发布 SNAPSHOT 版本到 Maven 仓库中，而且我只想使用最简单的**$ gradle clean build**命令，那只需要添加一行任务依赖配置即可：
 
-```
+```java
 build.dependsOn 'uploadArchives'
 ```
 
@@ -265,13 +265,13 @@ build.dependsOn 'uploadArchives'
 
 我们可以用 Gradle 命令来执行特定的任务，运行一个任务需要你知道该任务的名称，如果 Gradle 能够告诉你有哪些任务可以执行那岂不是很棒？Gradle 提供了一个辅助的任务 tasks 来检查你的构建脚本，然后显示所有的任务，包含一个描述性的消息。
 
-```
+```java
     $ gradle -q tasks
 ```
 
 输出如下：
 
-```
+```java
     All tasks runnable from root project
 
     Build Setup tasks
@@ -307,7 +307,7 @@ Gradle 提供任务组的概念，简而言之就是将一些任务归为一组�
 
 Gradle 提高效率的一个办法就是能够在命令行输入任务名的驼峰简写，当你的任务名称非常长的时候这很有用，当时你要确保你的简写必须是唯一确定那个任务，比如下面的情况：
 
-```
+```java
     task groupTherapy << {
     ...
     }
@@ -318,7 +318,7 @@ Gradle 提高效率的一个办法就是能够在命令行输入任务名的驼�
 
 这时候你使用 gradle gT 的时候 Gradle 就会报错，因为有多个任务匹配到 gT
 
-```
+```java
     $ gradle yG0 gT
     FAILURE: Could not determine which tasks to execute.
     * What went wrong:
@@ -334,7 +334,7 @@ Gradle 提高效率的一个办法就是能够在命令行输入任务名的驼�
 
 比如运行的时候你要排除 yayGradle0,你可以使用-x 命令来完成
 
-```
+```java
     $ gradle groupTherapy -x yayGradle0
     :yayGradle1
     Gradle rocks

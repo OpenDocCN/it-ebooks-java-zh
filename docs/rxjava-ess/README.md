@@ -66,7 +66,7 @@
 
 如下面的一块代码：
 
-```
+```java
 public Observable<List<User>> getMostPopularSOusers(int howmany){
         return mStackExchangeService
                 .getMostPopularSOusers(howmany)
@@ -78,7 +78,7 @@ public Observable<List<User>> getMostPopularSOusers(int howmany){
 
 当我们想对代码块的某一部分引起你的注意时，会在对应的那一行或列设置为粗体
 
-```
+```java
 public Observable<List<User>> getMostPopularSOusers(int howmany){
         return mStackExchangeService
                 .getMostPopularSOusers(howmany)

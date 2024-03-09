@@ -1,7 +1,5 @@
 # Chapter 5\. Spring integration 集成 Spring
 
-# Chapter 5\. Spring integration 集成 Spring
-
 虽然没有 Spring 你也可以使用 Activiti，但是我们提供了一些非常不错的集成特性。这一章我们将介绍这些特性。
 
 # ProcessEngineFactoryBean
@@ -10,7 +8,7 @@
 
 可以把 ProcessEngine 作为一个普通的 Spring bean 进行配置。 类 org.activiti.spring.ProcessEngineFactoryBean 是集成的切入点。 这个 bean 需要一个流程引擎配置来创建流程引擎。这也意味着在文档的配置这一章的介绍属性的创建和配置对于 Spring 来说也是一样的。对于 Spring 集成的配置和流程引擎 bean 看起来像这样：
 
-```
+```java
 <bean id="processEngineConfiguration" class="org.activiti.spring.SpringProcessEngineConfiguration">
     ...
 </bean>
@@ -32,7 +30,7 @@
 
 **为了确保在你的 Spring 配置中申明的一个 TransactionAwareDataSourceProxy，你不能把使用它的应用交给 Spring 事物控制的资源。（例如 DataSourceTransactionManager 和 JPATransactionManager 需要非代理的数据源 ）**
 
-```
+```java
 <beans  
 
        xsi:schemaLocation="http://www.springframework.org/schema/beans   http://www.springframework.org/schema/beans/spring-beans.xsd
@@ -72,7 +70,7 @@
 
 Spring 配置文件的其余部分包含 beans 和我们将要在这个特有的例子中的配置：
 
-```
+```java
 <beans>  
   ...
   <tx:annotation-driven transaction-manager="transactionManager"/>
@@ -88,20 +86,20 @@ Spring 配置文件的其余部分包含 beans 和我们将要在这个特有的
 
 首先使用任意的一种 Spring 创建应用上下文的方式创建其 Spring 应用上下文。在这个例子中你可以使用类路径下面的 XML 资源来配置我们的 Spring 应用上下文：
 
-```
+```java
 ClassPathXmlApplicationContext applicationContext = 
     new ClassPathXmlApplicationContext("org/activiti/examples/spring/SpringTransactionIntegrationTest-context.xml"); 
 ```
 
 或者, 如果它是一个测试的话:
 
-```
+```java
 @ContextConfiguration("classpath:org/activiti/spring/test/transaction/SpringTransactionIntegrationTest-context.xml") 
 ```
 
 然后我们就可以得到 Activiti 的服务 beans 并且调用该服务上面的方 法。ProcessEngineFactoryBean 将会对该服务添加一些额外的拦截器，在 Activiti 服务上面的方法使用的是 Propagation.REQUIRED 事物语义。所以，我们可以使用 repositoryService 去部署一个流程，如下所示：
 
-```
+```java
 RepositoryService repositoryService = (RepositoryService) applicationContext.getBean("repositoryService");
 String deploymentId = repositoryService
   .createDeployment()
@@ -112,14 +110,14 @@ String deploymentId = repositoryService
 
 其他相同的服务也是同样可以这么使用。在这个例子中，Spring 的事物将会围绕在 userBean.hello() 上 ，并且调用 Activiti 服务的方法也会加入到这个事物中。
 
-```
+```java
 UserBean userBean = (UserBean) applicationContext.getBean("userBean");
 userBean.hello(); 
 ```
 
 这个 UserBean 看起来像这样。记得在上面 Spring bean 的配置中我们把 repositoryService 注入到 userBean 中。
 
-```
+```java
 public class UserBean {
 
   /** injected by Spring */
@@ -145,7 +143,7 @@ public class UserBean {
 
 当使用 ProcessEngineFactoryBean 时候，默认情况下，在 BPMN 流程中的所有[表达式](http://www.activiti.org/userguide/index.html#apiExpressions)都将会'看见'所有的 Spring beans。 它可以限制你在表达式中暴露出的 beans 或者甚至可以在你的配置中使用一个 Map 不暴露任何 beans。下面的例子暴露了一个单例 bean（printer），可以把 "printer" 当作关键字使用。**想要不暴露任何 beans，仅仅只需要在 SpringProcessEngineConfiguration 中传递一个空的 list 作为'beans'的属性。当不设置'beans'的属性时，在应用上下文中 Spring beans 都是可以使用的。**
 
-```
+```java
 <bean id="processEngineConfiguration" class="org.activiti.spring.SpringProcessEngineConfiguration">
   ...
   <property name="beans">
@@ -160,7 +158,7 @@ public class UserBean {
 
 现在暴露出来的 beans 就可以在表达式中使用：例如，在 SpringTransactionIntegrationTest 中的 hello.bpmn20.xml 展示的是如何使用 UEL 方法表达式去调用 Spring bean 的方法：
 
-```
+```java
 <definitions id="definitions" ...>
 
   <process id="helloProcess">
@@ -180,7 +178,7 @@ public class UserBean {
 
 这里的 Printer 看起来像这样：
 
-```
+```java
 public class Printer {
 
   public void printMessage() {
@@ -191,7 +189,7 @@ public class Printer {
 
 并且 Spring bean 的配置（如上文所示）看起来像这样：
 
-```
+```java
 <beans ...>
   ...
 
@@ -208,7 +206,7 @@ Spring 的集成也有一个专门用于对资源部署的特性。在流程引�
 
 这里有一个例子：
 
-```
+```java
 <bean id="processEngineConfiguration" class="org.activiti.spring.SpringProcessEngineConfiguration">
   ...
   <property name="deploymentResources" value="classpath*:/org/activiti/spring/test/autodeployment/autodeploy.*.bpmn20.xml" />
@@ -229,7 +227,7 @@ Spring 的集成也有一个专门用于对资源部署的特性。在流程引�
 
 这儿有一个例子来演示将 deploymentMode 参数配置为 single-resource 的情况：
 
-```
+```java
 <bean id="processEngineConfiguration" class="org.activiti.spring.SpringProcessEngineConfiguration">
   ...
   <property name="deploymentResources" value="classpath*:/activiti/*.bpmn" />
@@ -245,7 +243,7 @@ Spring 的集成也有一个专门用于对资源部署的特性。在流程引�
 
 当集成 Spring 时，使用标准的 Activiti 测试工具类是非常容易的对业务流程进行测试。 下面的例子展示了如何在一个典型的基于 Spring 单元测试测试业务流程：
 
-```
+```java
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration("classpath:org/activiti/spring/test/junit4/springTypicalUsageTest-context.xml")
 public class MyBusinessProcessTest {
@@ -276,7 +274,7 @@ public class MyBusinessProcessTest {
 
 注意对于这种方式，你需要在 Spring 配置中（在上文的例子中它是自动注入的）定义一个 org.activiti.engine.test.ActivitiRulebean
 
-```
+```java
 <bean id="activitiRule" class="org.activiti.engine.test.ActivitiRule">
   <property name="processEngine" ref="processEngine" />
 </bean> 
@@ -292,7 +290,7 @@ public class MyBusinessProcessTest {
 
 首先介绍（需要 Spring 3.0+ ）的是 @EnableActiviti 注解。 最简单的用法如下所示：
 
-```
+```java
 @Configuration
   @EnableActiviti
   public static class SimplestConfiguration {
@@ -309,7 +307,7 @@ public class MyBusinessProcessTest {
 
 在这样一个环境里，可以直接通过注入操作 Activiti 引擎：
 
-```
+```java
  @Autowired
   private ProcessEngine processEngine;
 
@@ -334,7 +332,7 @@ public class MyBusinessProcessTest {
 
 当然，默认值都可以自定义。比如，如果配置了 DataSource，它就会代替默认创建的数据库配置。 事务管理器，job 执行器和其他组件都与之相同。 比如如下配置：
 
-```
+```java
  @Configuration
   @EnableActiviti
   public static class Config {
@@ -355,7 +353,7 @@ public class MyBusinessProcessTest {
 
 其他数据库会代替默认的。下面介绍了更加复杂的配置。注意 AbstractActivitiConfigurer 用法， 它暴露了流程引擎的 配置，可以用来对它的细节进行详细的配置。
 
-```
+```java
 @Configuration
 @EnableActiviti
 @EnableTransactionManagement(proxyTargetClass = true)
@@ -428,7 +426,7 @@ class JPAConfiguration {
 
 在 Activiti 引擎的 serviceTask 或 listener 中使用 Hibernate 4.2.x JPA 时，需要添加 Spring ORM 这个额外的依赖。 Hibernate 4.1.x 及以下版本是不需要的。应该添加如下依赖：
 
-```
+```java
 <dependency>
   <groupId>org.springframework</groupId>
   <artifactId>spring-orm</artifactId>
@@ -452,7 +450,7 @@ class JPAConfiguration {
 
 通过一个压缩文件部署业务归档，它看起来像这样：
 
-```
+```java
 String barFileName = "path/to/process-one.bar";
 ZipInputStream inputStream = new ZipInputStream(new FileInputStream(barFileName));
 
@@ -511,7 +509,7 @@ BPMN 中并没有版本的概念，没有版本也是不错的，因为可执行
 
 看下面示例
 
-```
+```java
 <definitions id="myDefinitions" >
   <process id="myProcess" name="My important process" >
     ... 
@@ -538,7 +536,7 @@ Table 6.2\.
 
 我们应该创建第二个流程，在 Activiti 中，如下,定义并且部署它，该流程定义会添加到流程定义表中
 
-```
+```java
 <definitions id="myNewDefinitions" >
   <process id="myNewProcess" name="My important process" >
     ... 
@@ -567,7 +565,7 @@ Table 6.3\.
 
 当使用编程式的部署方式：
 
-```
+```java
 repositoryService.createDeployment()
   .name("expense-process.bar")
   .addClasspathResource("org/activiti/expenseProcess.bpmn20.xml")
@@ -577,7 +575,7 @@ repositoryService.createDeployment()
 
 接下来，可以通过 API 来获取流程定义图片资源：
 
-```
+```java
 ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery()
                                                          .processDefinitionKey("expense")
                                                          .singleResult();
@@ -598,7 +596,7 @@ ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQ
 
 如果，因为某种原因，在部署的时候，并不需要或者不必要生成流程定义图片，那么就需要在流程引擎配置的属性中使用 isCreateDiagramOnDeploy：
 
-```
+```java
 <property name="createDiagramOnDeploy" value="false" /> 
 ```
 
@@ -610,7 +608,7 @@ ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQ
 
 部署和流程定义都是用户定义的类别。流程定义类别在 BPMN 文件中属性的初始化的值 <definitions ... targetNamespace="yourCategory" ... 部署类别是可以直接使用 API 进行指定的看起来想这样：
 
-```
+```java
 repositoryService
     .createDeployment()
     .category("yourCategory")
@@ -638,7 +636,7 @@ repositoryService
 
 BPMN 2.0 根节点是 definitions 节点。 这个元素中，可以定义多个流程定义（不过我们建议每个文件只包含一个流程定义， 可以简化开发过程中的维护难度）。 一个空的流程定义看起来像下面这样。注意，definitions 元素 最少也要包含 xmlns 和 targetNamespace 的声明。targetNamespace 可以是任意值，它用来对流程实例进行分类。
 
-```
+```java
 <definitions 
 
   targetNamespace="Examples">
@@ -652,7 +650,7 @@ BPMN 2.0 根节点是 definitions 节点。 这个元素中，可以定义多个
 
 你也可以选择添加线上的 BPMN 2.0 格式位置， 下面是 ecilpse 中的 xml 配置。
 
-```
+```java
  xsi:schemaLocation="http://www.omg.org/spec/BPMN/20100524/MODEL 
                     http://www.omg.org/spec/BPMN/2.0/20100501/BPMN20.xsd 
 ```
@@ -715,14 +713,14 @@ process 元素有两个属性：
 
     Deployment deployment = repositoryService.createDeployment()
 
-    ```
+    ```java
     .addClasspathResource("FinancialReportProcess.bpmn20.xml")
     .deploy(); 
     ```
 
 现在我们可以启动一个新流程实例， 使用我们定义在流程定义里的 id（对应 XML 文件中的 process 元素）。 注意这里的 id 对于 Activiti 来说， 应该叫做 key（译者注：一般在流程模型中使用的 ID，在 Activiti 中都是 Key，比如任务 ID 等...）。
 
-```
+```java
 ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("financialReport"); 
 ```
 
@@ -734,7 +732,7 @@ ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("fina
 
 你可以在[这里](http://activiti.org/userguide/images/FinancialReportProcess.bpmn20.xml)下载流程定义 XML。 这个文件包含了上面介绍的 XML，也包含了必须的 BPMN 图像交换信息 以便在 Activiti 工具中能编辑流程。
 
-```
+```java
 public static void main(String[] args) {
 
   // Create Activiti process engine
@@ -760,13 +758,13 @@ public static void main(String[] args) {
 
 我们现在可以通过 TaskService 来获得任务了，添加以下逻辑：
 
-```
+```java
 List<Task> tasks = taskService.createTaskQuery().taskCandidateUser("kermit").list(); 
 ```
 
 注意我们传入的用户必须是 accountancy 组的一个成员， 要和流程定义中向对应：
 
-```
+```java
 <potentialOwner>
     <resourceAssignmentExpression>
         <formalExpression>accountancy</formalExpression>
@@ -776,7 +774,7 @@ List<Task> tasks = taskService.createTaskQuery().taskCandidateUser("kermit").lis
 
 我们也可以使用群组名称，通过任务查询 API 来获得相关的结果。 现在可以在代码中添加如下逻辑：
 
-```
+```java
 TaskService taskService = processEngine.getTaskService();
 List<Task> tasks = taskService.createTaskQuery().taskCandidateGroup("accountancy").list(); 
 ```
@@ -793,13 +791,13 @@ List<Task> tasks = taskService.createTaskQuery().taskCandidateGroup("accountancy
 
 现在一个会计要认领这个任务。 认领以后，这个用户就会成为任务的执行人 ， 任务会从 accountancy 组的其他成员的任务列表中消失。 认领任务的代码如下所示：
 
-```
+```java
 taskService.claim(task.getId(), "fozzie"); 
 ```
 
 任务会进入认领任务人的个人任务列表中。
 
-```
+```java
 List<Task> tasks = taskService.createTaskQuery().taskAssignee("fozzie").list(); 
 ```
 
@@ -811,7 +809,7 @@ List<Task> tasks = taskService.createTaskQuery().taskAssignee("fozzie").list();
 
 现在会计可以开始进行财报的工作了。报告完成后，他可以完成任务，意味着任务所需的所有工作都完成了
 
-```
+```java
 taskService.complete(task.getId()); 
 ```
 
@@ -829,7 +827,7 @@ taskService.complete(task.getId());
 
 通过程序，你也可以使用 historyService 判断流程已经结束了。
 
-```
+```java
 HistoryService historyService = processEngine.getHistoryService();
 HistoricProcessInstance historicProcessInstance = 
 historyService.createHistoricProcessInstanceQuery().processInstanceId(procId).singleResult();
@@ -840,7 +838,7 @@ System.out.println("Process instance end time: " + historicProcessInstance.getEn
 
 把上述代码组合在一起，获得的代码如下所示 （这些代码考虑到你可能会在 Activiti Explorer UI 中启动一些流程实例。 这样，它会获得多个任务，而不是一个， 所以代码可以一直正常运行）：
 
-```
+```java
 public class TenMinuteTutorial {
 
   public static void main(String[] args) {

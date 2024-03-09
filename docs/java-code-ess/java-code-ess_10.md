@@ -1,7 +1,5 @@
 # 并发
 
-# 并发
-
 计算机用户想当然地认为他们的系统在一个时间可以做多件事。他们认为，他们可以工作在一个字处理器，而其他应用程序在下载文件，管理打印队列和音频流。即使是单一的应用程序通常也是被期望在一个时间来做多件事。例如，音频流应用程序必须同时读取数字音频，解压，管理播放，并更新显示。即使字处理器应该随时准备响应键盘和鼠标事件，不管多么繁忙，它总是能格式化文本或更新显示。可以做这样的事情的软件称为并发软件（concurrent software）。
 
 在 Java 平台是完全支持并发编程。自从 5.0 版本以来，这个平台还包括高级并发 API, 主要集中在 java.util.concurrent 包。
@@ -49,7 +47,7 @@
 
 *   提供 Runnable 对象。Runnable 接口定义了一个方法 run ,用来包含线程要执行的代码。如 HelloRunnable 所示：
 
-```
+```java
 public class HelloRunnable implements Runnable {
     /* (non-Javadoc)
      * @see java.lang.Runnable#run()
@@ -70,7 +68,7 @@ public class HelloRunnable implements Runnable {
 
 *   继承 Thread。Thread 类本身是实现 Runnable，虽然它的 run 方法啥都没干。HelloThread 示例如下：
 
-```
+```java
 public class HelloThread extends Thread {
 
     public void run() {
@@ -99,7 +97,7 @@ sleep 有两种重载形式：一个是指定睡眠时间到毫秒，另外一�
 
 SleepMessages 示例使用 sleep 每隔 4 秒打印一次消息：
 
-```
+```java
 public class SleepMessages {
 
     /**
@@ -129,7 +127,7 @@ public class SleepMessages {
 
 如何实现线程支持自己的中断？这要看是什么它目前正在做。如果线程频繁调用抛出 InterruptedException 的方法，它只要在 run 方法捕获了异常之后返回即可。例如 ：
 
-```
+```java
 for (int i = 0; i < importantInfo.length; i++) {
     // Pause for 4 seconds
     try {
@@ -147,7 +145,7 @@ for (int i = 0; i < importantInfo.length; i++) {
 
 若线程长时间没有调用方法抛出 InterruptedException 的话，那么它必须定期调用 Thread.interrupted ，在接收到中断后返回 true。
 
-```
+```java
 for (int i = 0; i < inputs.length; i++) {
     heavyCrunch(inputs[i]);
     if (Thread.interrupted()) {
@@ -159,7 +157,7 @@ for (int i = 0; i < inputs.length; i++) {
 
 在这个简单的例子中，代码简单地测试该中断，如果已接收到中断线程就退出。在更复杂的应用程序，它可能会更有意义抛出一个 InterruptedException：
 
-```
+```java
 if (Thread.interrupted()) {
     throw new InterruptedException();
 } 
@@ -175,7 +173,7 @@ if (Thread.interrupted()) {
 
 join 方法允许一个线程等待另一个完成。假设 t 是一个 Thread 对象，
 
-```
+```java
 t.join(); 
 ```
 
@@ -189,7 +187,7 @@ SimpleThreads 示例，有两个线程，第一个线程是每个 Java 应用程
 
 该 MessageLoop 线程打印出一系列消息。如果中断之前就已经打印了所有消息，则 MessageLoop 线程打印一条消息并退出。
 
-```
+```java
 public class SimpleThreads {
       // Display a message, preceded by
     // the name of the current thread
@@ -287,7 +285,7 @@ public class SimpleThreads {
 
 考虑下面的一个简单的类 Counter：
 
-```
+```java
 public class Counter {
     private int c = 0;
 
@@ -336,19 +334,19 @@ Counter 类对象的操作貌似不可能出现这种“交错(interleave)”，
 
 避免出现内存一致性错误的关键在于理解 happens-before 关系。这种关系是一种简单的方法，能够确保一条语句对内存的写操作对于其它特定的语句都是可见的。为了理解这点，我们可以考虑如下的示例。假定定义了一个简单的 int 类型的字段并对其进行了初始化：
 
-```
+```java
 int counter = 0; 
 ```
 
 该字段由两个线程共享：A 和 B。假定线程 A 对 counter 进行了自增操作：
 
-```
+```java
 counter++; 
 ```
 
 然后，线程 B 打印 counter 的值：
 
-```
+```java
 System.out.println(counter); 
 ```
 
@@ -371,7 +369,7 @@ Java 编程语言中提供了两种基本的同步用语：同步方法（synchr
 
 我们只需要在声明方法的时候增加关键字 synchronized 即可：
 
-```
+```java
 public class SynchronizedCounter {
     private int c = 0;
 
@@ -398,7 +396,7 @@ public class SynchronizedCounter {
 
 警告：在创建多个线程共享的对象时，要特别小心对该对象的引用不能过早地“泄露”。例如，假定我们想要维护一个保存类的所有实例的列表 instances。我们可能会在构造函数中这样写到：
 
-```
+```java
 instances.add(this); 
 ```
 
@@ -426,7 +424,7 @@ instances.add(this);
 
 另外一种创建同步代码的方式就是使用同步语句。和同步方法不同，使用同步语句是必须指明是要使用哪个对象的内部锁：
 
-```
+```java
 public void addName(String name) {
     synchronized(this) {
         lastName = name;
@@ -440,7 +438,7 @@ public void addName(String name) {
 
 在改善并发性时，巧妙地使用同步语句能起到很大的帮助作用。例如，我们假定类 MsLunch 有两个实例字段，c1 和 c2，这两个变量绝不会一起使用。所有对这两个变量的更新都需要进行同步。但是没有理由阻止对 c1 的更新和对 c2 的更新出现交错——这样做会创建不必要的阻塞，进而降低并发性。此时，我们没有使用同步方法或者使用和 this 相关的锁，而是创建了两个单独的对象来提供锁。
 
-```
+```java
 public class MsLunch {
     private long c1 = 0;
     private long c2 = 0;
@@ -496,7 +494,7 @@ public class MsLunch {
 
 Alphonse 和 Gaston 是朋友,都很有礼貌。礼貌的一个严格的规则是,当你给一个朋友鞠躬时,你必须保持鞠躬,直到你的朋友鞠躬回给你。不幸的是,这条规则有个缺陷，那就是如果两个朋友同一时间向对方鞠躬，那就永远不会完了。这个示例应用程序中,死锁模型是这样的:
 
-```
+```java
 public class Deadlock {
     static class Friend {
         private final String name;
@@ -558,7 +556,7 @@ public class Deadlock {
 
 假设 guardedJoy 方法必须要等待另一线程为共享变量 joy 设值才能继续执行。那么理论上可以用一个简单的条件循环来实现，但在等待过程中 guardedJoy 方法不停的检查循环条件实际上是一种资源浪费。
 
-```
+```java
 public void guardedJoy() {
     // Simple loop guard. Wastes
     // processor time. Don't do this!
@@ -569,7 +567,7 @@ public void guardedJoy() {
 
 更加高效的保护方法是调用 [Object.wait](https://docs.oracle.com/javase/8/docs/api/java/lang/Object.html#wait--) 将当前线程挂起，直到有另一线程发起事件通知（尽管通知的事件不一定是当前线程等待的事件）。
 
-```
+```java
 public synchronized void guardedJoy() {
     // This guard only loops once for each special event, which may not
     // be the event we're waiting for.
@@ -590,7 +588,7 @@ public synchronized void guardedJoy() {
 
 当一个线程调用 wait 方法时，它释放锁并挂起。然后另一个线程请求并获得这个锁并调用 Object.notifyAll 通知所有等待该锁的线程。
 
-```
+```java
 public synchronized notifyJoy() {
     joy = true;
     notifyAll();
@@ -605,7 +603,7 @@ public synchronized notifyJoy() {
 
 在下面的例子中，数据通过 Drop 对象共享的一系列文本消息：
 
-```
+```java
 public class Drop {
       // Message sent from producer
     // to consumer.
@@ -653,7 +651,7 @@ public class Drop {
 
 Producer 是生产者线程，发送一组消息，字符串 DONE 表示所有消息都已经发送完成。为了模拟现实情况，生产者线程还会在消息发送时随机的暂停。
 
-```
+```java
 public class Producer implements Runnable {
     private Drop drop;
 
@@ -680,7 +678,7 @@ public class Producer implements Runnable {
 
 Consumer 是消费者线程，读取消息并打印出来，直到读取到字符串 DONE 为止。消费者线程在消息读取时也会随机的暂停。
 
-```
+```java
 public class Consumer implements Runnable {
     private Drop drop;
 
@@ -703,7 +701,7 @@ public class Consumer implements Runnable {
 
 ProducerConsumerExample 是主线程，它启动生产者线程和消费者线程。
 
-```
+```java
 public class ProducerConsumerExample {
     public static void main(String[] args) {
         Drop drop = new Drop();
@@ -729,7 +727,7 @@ public class ProducerConsumerExample {
 
 SynchronizedRGB 是表示颜色的类，每一个对象代表一种颜色，使用三个整形数表示颜色的三基色，字符串表示颜色名称。
 
-```
+```java
 public class SynchronizedRGB {
     // Values must be between 0 and 255.
     private int red;
@@ -790,7 +788,7 @@ public class SynchronizedRGB {
 
 使用 SynchronizedRGB 时需要小心，避免其处于不一致的状态。例如一个线程执行了以下代码：
 
-```
+```java
 SynchronizedRGB color =
     new SynchronizedRGB(0, 0, 0, "Pitch Black");
 ...
@@ -800,7 +798,7 @@ String myColorName = color.getName(); //Statement 2
 
 如果有另外一个线程在 Statement 1 之后、Statement 2 之前调用了 color.set 方法，那么 myColorInt 的值和 myColorName 的值就会不匹配。为了避免出现这样的结果，必须要像下面这样把这两条语句绑定到一块执行：
 
-```
+```java
 synchronized (color) {
     int myColorInt = color.getRGB();
     String myColorName = color.getName();
@@ -829,7 +827,7 @@ synchronized (color) {
 
 经过以上这些修改后，我们得到了 ImmutableRGB：
 
-```
+```java
 public class ImmutableRGB {
       // Values must be between 0 and 255.
     final private int red;
@@ -891,7 +889,7 @@ Lock 对象之于隐式锁最大的优势在于，它们有能力收回获得锁
 
 让我们使用 Lock 对象来解决我们在活跃度中见到的死锁问题。Alphonse 和 Gaston 已经把自己训练成能注意到朋友何时要鞠躬。我们通过要求 Friend 对象在双方鞠躬前必须先获得锁来模拟这次改善。下面是改善后模型的源代码 Safelock :
 
-```
+```java
  public class Safelock {
     static class Friend {
         private final String name;
@@ -995,13 +993,13 @@ Lock 对象之于隐式锁最大的优势在于，它们有能力收回获得锁
 
 [Executor](https://docs.oracle.com/javase/8/docs/api/java/util/concurrent/Executor.html) 接口只有一个 execute 方法，用来替代通常创建（启动）线程的方法。例如：r 是一个 Runnable 对象，e 是一个 Executor 对象。可以使用
 
-```
+```java
 e.execute(r); 
 ```
 
 代替
 
-```
+```java
 (new Thread(r)).start(); 
 ```
 
@@ -1049,7 +1047,7 @@ fork/join 框架的核心是 ForkJoinPool 类，它是对 AbstractExecutorServic
 
 使用 fork/join 框架的第一步是编写执行一部分工作的代码。你的代码结构看起来应该与下面所示的伪代码类似：
 
-```
+```java
 if (my portion of the work is small enough)
   do the work directly
 else
@@ -1059,7 +1057,7 @@ else
 
 翻译为中文为：
 
-```
+```java
 if (当前这个任务工作量足够小)
     直接完成这个任务
 else
@@ -1073,7 +1071,7 @@ else
 
 想要了解 fork/join 框架的基本工作原理，接下来的这个例子会有所帮助。假设你想要模糊一张图片。原始的 source 图片由一个整数的数组表示，每个整数表示一个像素点的颜色数值。与 source 图片相同，模糊之后的 destination 图片也由一个整数数组表示。 对图片的模糊操作是通过对 source 数组中的每一个像素点进行处理完成的。处理的过程是这样的：将每个像素点的色值取出，与周围像素的色值（红、黄、蓝三个组成部分）放在一起取平均值，得到的结果被放入 destination 数组。因为一张图片会由一个很大的数组来表示，这个流程会花费一段较长的时间。如果使用 fork/join 框架来实现这个模糊算法，你就能够借助多处理器系统的并行处理能力。下面是上述算法结合 fork/join 框架的一种简单实现：
 
-```
+```java
 public class ForkBlur extends RecursiveAction {
     private int[] mSource;
     private int mStart;
@@ -1121,7 +1119,7 @@ public class ForkBlur extends RecursiveAction {
 
 接下来你需要实现父类中的 compute() 方法，它会直接执行模糊处理，或者将当前的工作拆分成两个更小的任务。数组的长度可以作为一个简单的阀值来判断任务是应该直接完成还是应该被拆分。
 
-```
+```java
 protected static int sThreshold = 100000;
 
 protected void compute() {
@@ -1176,7 +1174,7 @@ java.util.concurrent 包囊括了 Java 集合框架的一些附加类。它们�
 
 为了看看这个包如何使用，让我们返回到最初用于演示线程干扰的 Counter 类：
 
-```
+```java
 class Counter {
     private int c = 0;
 
@@ -1196,7 +1194,7 @@ class Counter {
 
 使用同步是一种使 Counter 类变得线程安全的方法，如 SynchronizedCounter：
 
-```
+```java
 class SynchronizedCounter {
     private int c = 0;
 
@@ -1216,7 +1214,7 @@ class SynchronizedCounter {
 
 对于这个简单的类，同步是一种可接受的解决方案。但是对于更复杂的类，我们可能想要避免不必要同步所带来的活跃度影响。将 int 替换为 AtomicInteger 允许我们在不进行同步的情况下阻止线程干扰，如 AtomicCounter：
 
-```
+```java
 import java.util.concurrent.atomic.AtomicInteger;
 
 class AtomicCounter {
@@ -1246,6 +1244,6 @@ class AtomicCounter {
 
 你只需调用 ThreadLocalRandom.current()， 然后调用它的其中一个方法去获取一个随机数即可。下面是一个例子：
 
-```
+```java
 int r = ThreadLocalRandom.current().nextInt(4, 77); 
 ```

@@ -31,7 +31,7 @@ Category 类与 Contact 类 
 
 Category 类有 id 和 name 属性，分别存储序号和分类姓名。它定义在 Category.java 中：
 
-```
+```java
 package me.vamei.vamei.model;
 
 public class Category {
@@ -69,7 +69,7 @@ public class Category {
 
 Contact 类的定义在 Contact.java 中。它的 id 和 name 属性，用于记录联系人序号和联系人姓名。url 用以存储联系人的博客地址。Contact 还有一个 Category 类的属性。这是用组合的方式，说明了 Contact 所归属的 Category。
 
-```
+```java
 package me.vamei.vamei.model;
 
 public class Contact {
@@ -139,7 +139,7 @@ SQLiteOpenHelper 是对象数据模型和关系型数据库的一个接口。我
 
 下面的 contactsManager 类管理了"contactsManager"数据库。这个类定义在 ContactsManager.java 中。我需要覆盖该类的 onCreate()和 onUpgrade()方法，用于说明创建和升级时，数据库将采取的行动，比如在创建时新建数据库的表。SQLite 利用 SQL 语言进行操作，所以建表的过程就是执行 SQL 的"create table ..."语句。在该类中，我还额外增加 CRUD 方法，即新建(Create)、读取(Read)、更新(Update)、删除(Delete)数据库记录。
 
-```
+```java
 package me.vamei.vamei.model;
 
 import java.util.LinkedList;
@@ -382,7 +382,7 @@ onCreate()方法负责了表格的创建。而 onUpgrade()方法中，则说明�
 
 在之前编写的 MainActivity 的 onCreate()方法中，调用数据库：
 
-```
+```java
 ......
     @Override
     public void onCreate() {
@@ -413,7 +413,7 @@ onCreate()方法负责了表格的创建。而 onUpgrade()方法中，则说明�
 
 adb 是安卓提供的命令行工具。你可以在计算机上使用该命令行，查看安卓设备中的 SQLite 数据库。首先，查看连接在计算机上的安卓设备：
 
-```
+```java
 adb devices -l
 ```
 
@@ -421,7 +421,7 @@ adb devices -l
 
 打开某个设备：
 
-```
+```java
 adb -s 192.168.56.101:5555 shell
 ```
 
@@ -435,7 +435,7 @@ adb -s 192.168.56.101:5555 shell
 
 之前部分已经创建了 contactsManager 数据库。使用 sqlite3 打开：
 
-```
+```java
 sqlite3 /data/data/me.vamei.vamei/databases/contactsManager
 ```
 

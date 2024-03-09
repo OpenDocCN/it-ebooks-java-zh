@@ -22,7 +22,7 @@ Scatter/gather 在有些场景下会非常有用，比如需要处理多份分�
 
 用代码来表示的话如下：
 
-```
+```java
 ByteBuffer header = ByteBuffer.allocate(128);
 ByteBuffer body   = ByteBuffer.allocate(1024);
 
@@ -47,7 +47,7 @@ channel.read(bufferArray);
 
 用代码表示的话如下：
 
-```
+```java
 ByteBuffer header = ByteBuffer.allocate(128);
 ByteBuffer body   = ByteBuffer.allocate(1024);
 

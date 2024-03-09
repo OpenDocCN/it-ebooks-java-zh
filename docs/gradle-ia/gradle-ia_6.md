@@ -44,7 +44,7 @@ Gradle 给项目模块化提供了强大的支持，在 Gradle 中每个模块�
 
 首先在你的根目录新建一个 build.gradle 文件，创建一个空的 build 脚本然后运行 gradle projects:
 
-```
+```java
     $ gradle projects
     :projects
     ------------------------------------------------------------
@@ -62,7 +62,7 @@ Gradle 给项目模块化提供了强大的支持，在 Gradle 中每个模块�
 
 设置文件用来表示项目的层次结构，默认的设置文件名称是 settings.gradle,对于你想添加的每一个子项目，调用 include 方法来添加。
 
-```
+```java
     //参数是项目路径，不是文件路径
     include 'model'
     include 'repository', 'web'
@@ -70,7 +70,7 @@ Gradle 给项目模块化提供了强大的支持，在 Gradle 中每个模块�
 
 提供的项目路径是相对于根目录，记住冒号：是用来分隔目录层次，比如你想表示 model/todo/items 这个目录，在 gradle 里面是 model:todo:items 这样表示。接下来执行 gradle projects 任务：
 
-```
+```java
     $ gradle projects
     :projects
     ------------------------------------------------------------
@@ -126,7 +126,7 @@ Gradle 允许你从根目录或者任何子目录中运行构建任务，只要�
 
 指定项目的行为通过 project 方法来定义，为了给三个子项目 model、repository、web 定义构建逻辑，你需要给它们分别创建一个配置块。下面 build.gradle 文件：
 
-```
+```java
     ext.projectIds = ['group': 'com.manning.gia', 'version': '0.1']
 
     group = projectIds.group
@@ -165,7 +165,7 @@ Gradle 允许你从根目录或者任何子目录中运行构建任务，只要�
 
 从整个项目的根目录那里，你可以执行子项目的任务，需要记住项目路径是通过冒号分隔，比如你想执行 model 子项目的 build 任务，在命令行中执行 gradle :modle:build 就可以，如下所示：
 
-```
+```java
     $ gradle :model:build
     :model:compileJava
     :model:processResources UP-TO-DATE
@@ -184,7 +184,7 @@ Gradle 允许你从根目录或者任何子目录中运行构建任务，只要�
 
 声明项目依赖和声明外部依赖非常类似，只需要在 dependencies 配置块中声明，如下所示：
 
-```
+```java
     project(':model') {
     ...
     }
@@ -221,7 +221,7 @@ Gradle 允许你从根目录或者任何子目录中运行构建任务，只要�
 
 有时候你并不需要重新构建那些并未改变的项目，Gradle 提供了部分构建 partial builds 的选项，通过命令行选项-a 或者--no-rebuild。比如你只改变了 repository 项目不想重新构建 model 子项目，你可以这样做：gralde :repository:build -a,如下所示：
 
-```
+```java
     $ gradle :repository:build -a
     :repository:compileJava
     :repository:processResources UP-TO-DATE
@@ -244,7 +244,7 @@ Gradle 允许你从根目录或者任何子目录中运行构建任务，只要�
 
 这是什么意思？这意味着你可以用 allprojects 方法给所有的项目添加 group 和 version 属性，由于根项目不需要 Java 插件，你可以使用 subprojects 给所有子项目添加 Java 插件，如下所示：
 
-```
+```java
     allprojects {
         group = 'com.manning.gia'
         version = '0.1'
@@ -290,7 +290,7 @@ Gradle 允许你从根目录或者任何子目录中运行构建任务，只要�
 
 移除了那些与特定子项目相关的代码后，根项目的内容变得非常简单，只需要保留 allprojects 和 subprojects 配置块，如下所示：
 
-```
+```java
     allprojects {
         group = 'com.manning.gia'
         version = '0.1'
@@ -307,7 +307,7 @@ Gradle 允许你从根目录或者任何子目录中运行构建任务，只要�
 
 repository 子项目的构建代码：
 
-```
+```java
     dependencies {
         compile project(':model')
     }
@@ -315,7 +315,7 @@ repository 子项目的构建代码：
 
 web 子项目的构建代码：
 
-```
+```java
     apply plugin: 'war'
     apply plugin: 'jetty'
 
@@ -342,7 +342,7 @@ Gradle 构建脚本的标准名称是 build.gradle，在一个多项目构建的
 
 要使这个结构起作用关键点就是 settings 文件，它提供了除了包含哪个子目录的其他功能，实际上设置文件是一个构建脚本，它会在构建生命周期的评估阶段执行，通过 Gradle 提供的 API 来添加自定义的逻辑，如下所示：
 
-```
+```java
     //通过目录来添加子项目
     include 'todo-model', 'todo-repository', 'todo-web'
 

@@ -1,5 +1,3 @@
-# 泛型
-
 # 泛型（Generics）
 
 泛型通过在编译时检测到更多的代码 bug 从而使你的代码更加稳定。
@@ -18,7 +16,7 @@
 
 没有泛型的代码片需要强制转化：
 
-```
+```java
 List list = new ArrayList();
 list.add("hello");
 String s = (String) list.get(0); 
@@ -26,7 +24,7 @@ String s = (String) list.get(0);
 
 当重新编写使用泛型，代码不需要强转：
 
-```
+```java
 List<String> list = new ArrayList<String>();
 list.add("hello");
 String s = list.get(0);   // no cast 
@@ -42,7 +40,7 @@ String s = list.get(0);   // no cast
 
 ### 一个简单的 Box 类
 
-```
+```java
 public class Box {
     private Object object;
 
@@ -62,7 +60,7 @@ public class Box {
 
 泛型类定义语法如下：
 
-```
+```java
 class name<T1, T2, ..., Tn> { /* ... */ } 
 ```
 
@@ -70,7 +68,7 @@ class name<T1, T2, ..., Tn> { /* ... */ }
 
 下面是代码：
 
-```
+```java
 public class Box<T> {
     // T stands for "Type"
     private T t;
@@ -96,7 +94,7 @@ public class Box<T> {
 
 常用的类型参数名称如下：
 
-```
+```java
 E - Element (由 Java 集合框架广泛使用)
 K - Key
 N - Number
@@ -109,7 +107,7 @@ S,U,V 等. - 第二种、第三种、第四种类型
 
 从代码中引用泛型 Box 类，则必须执行一个泛型调用(generic type invocation)，用具体的值，比如 Integer 取代 T ：
 
-```
+```java
 Box<Integer> integerBox; 
 ```
 
@@ -125,7 +123,7 @@ Box<Integer> integerBox;
 
 实例化类，使用 new 关键字：
 
-```
+```java
 Box<Integer> integerBox = new Box<Integer>(); 
 ```
 
@@ -133,7 +131,7 @@ Box<Integer> integerBox = new Box<Integer>();
 
 Java SE 7 开始泛型可以使用空的类型参数集`<>`，只要编译器能够确定，或推断，该类型参数所需的类型参数。这对尖括号`<>`，被非正式地称为“菱形（diamond）”。例如：
 
-```
+```java
 Box<Integer> integerBox = new Box<>(); 
 ```
 
@@ -141,7 +139,7 @@ Box<Integer> integerBox = new Box<>();
 
 下面是一个泛型 Pair 接口和一个泛型 OrderedPair ：
 
-```
+```java
 public interface Pair<K, V> {
     public K getKey();
     public V getValue();
@@ -164,7 +162,7 @@ public class OrderedPair<K, V> implements Pair<K, V> {
 
 创建两个 OrderedPair 实例：
 
-```
+```java
 Pair<String, Integer> p1 = new OrderedPair<String, Integer>("Even", 8);
 Pair<String, String>  p2 = new OrderedPair<String, String>("hello", "world"); 
 ```
@@ -173,7 +171,7 @@ Pair<String, String>  p2 = new OrderedPair<String, String>("hello", "world");
 
 可以使用菱形（diamond）来简化代码：
 
-```
+```java
 OrderedPair<String, Integer> p1 = new OrderedPair<>("Even", 8);
 OrderedPair<String, String>  p2 = new OrderedPair<>("hello", "world"); 
 ```
@@ -182,7 +180,7 @@ OrderedPair<String, String>  p2 = new OrderedPair<>("hello", "world");
 
 您也可以用 参数化类型（例如，`List<String>`的）来替换类型参数（即 K 或 V ）。例如，使用`OrderedPair<K，V>`例如：
 
-```
+```java
 OrderedPair<String, Box<Integer>> p = new OrderedPair<>("primes", new Box<Integer>(...)); 
 ```
 
@@ -190,7 +188,7 @@ OrderedPair<String, Box<Integer>> p = new OrderedPair<>("primes", new Box<Intege
 
 原生类型是没有类型参数(type arguments)的泛型类和泛型接口，如泛型 Box 类;
 
-```
+```java
 public class Box<T> {
     public void set(T t) { /* ... */ }
     // ...

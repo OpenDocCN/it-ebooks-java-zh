@@ -1,12 +1,8 @@
 # 过滤 Observables
 
-# 过滤 Observables
-
 在上一章中，我们学习了使用 RxJava 创建一个 Android 工程以及如何创建一个可观测的列表来填充 RecyclerView。我们现在知道了如何从头、从列表、从一个已存在的传统 Java 函数来创建 Observable。
 
 这一章中，我们将研究可观测序列的本质：过滤。我们将学到如何从发射的 Observable 中选取我们想要的值，如何获取有限个数的值，如何处理溢出的场景，以及更多的有用的技巧。
-
-# 过滤序列
 
 # 过滤序列
 
@@ -14,7 +10,7 @@ RxJava 让我们使用`filter()`方法来过滤我们观测序列中不想要的
 
 上一章中`loadList()`函数可以改成这样：
 
-```
+```java
 private void loadList(List<AppInfo> apps) {
     mRecyclerView.setVisibility(View.VISIBLE);
     Observable.from(apps)
@@ -44,13 +40,13 @@ private void loadList(List<AppInfo> apps) {
 
 我们从上一章中的`loadList()`函数中添加下面一行：
 
-```
+```java
 .fliter((appInfo -> appInfo.getName().startsWith("C")) 
 ```
 
 创建 Observable 完以后，我们从发出的每个元素中过滤掉开头字母不是 C 的。为了让这里更清楚一些，我们用 Java 7 的语法来实现：
 
-```
+```java
 .filter(new Func1<AppInfo,Boolean>(){
     @Override
     public Boolean call(AppInfo appInfo){
@@ -65,7 +61,7 @@ private void loadList(List<AppInfo> apps) {
 
 `filter()`函数最常用的用法之一时过滤`null`对象：
 
-```
+```java
 .filter(new Func1<AppInfo,Boolean>(){
     @Override
     public Boolean call(AppInfo appInfo){
@@ -82,15 +78,13 @@ private void loadList(List<AppInfo> apps) {
 
 # 获取我们需要的数据
 
-# 获取我们需要的数据
-
 当我们不需要整个序列时，而是只想取开头或结尾的几个元素，我们可以用`take()`或`takeLast()`。
 
 ## Take
 
 如果我们只想要一个可观测序列中的前三个元素那将会怎么样，发射它们，然后让 Observable 完成吗？`take()`函数用整数 N 来作为一个参数，从原始的序列中发射前 N 个元素，然后完成：
 
-```
+```java
 private void loadList(List<AppInfo> apps) {
     mRecyclerView.setVisibility(View.VISIBLE);
     Observable.from(apps)
@@ -125,7 +119,7 @@ private void loadList(List<AppInfo> apps) {
 
 如果我们想要最后 N 个元素，我们只需使用`takeLast()`函数：
 
-```
+```java
 Observable.from(apps)
         .takeLast(3)
         .subscribe(...); 
@@ -140,8 +134,6 @@ Observable.from(apps)
 下图中展示了我们在已安装的应用列表使用`take()`和`takeLast()`函数后发生的结果：
 
 ![](img/chapter4_4.png)
-
-# 有且仅有一次
 
 # 有且仅有一次
 
@@ -164,7 +156,7 @@ Observable.from(apps)
 
 我们用程序实现一个重复的序列，然后过滤出它们。这听起来时不可思议的，但是为了实现这个例子来使用我们至今为止已学习到的东西则是个不错的练习。
 
-```
+```java
 Observable<AppInfo> fullOfDuplicates = Observable.from(apps)
     .take(3)
     .repeat(3); 
@@ -172,7 +164,7 @@ Observable<AppInfo> fullOfDuplicates = Observable.from(apps)
 
 `fullOfDuplicates`变量里把我们已安装应用的前三个重复了 3 次：有 9 个并且许多重复的。然后，我们使用`distinct()`:
 
-```
+```java
 fullOfDuplicates.distinct()
             .subscribe(new Observer<AppInfo>() {
 
@@ -204,7 +196,7 @@ fullOfDuplicates.distinct()
 
 如果在一个可观测序列发射一个不同于之前的一个新值时让我们得到通知这时候该怎么做？我们猜想一下我们观测的温度传感器，每秒发射的室内温度：
 
-```
+```java
 21°...21°...21°...21°...22°... 
 ```
 
@@ -213,8 +205,6 @@ fullOfDuplicates.distinct()
 下图用图形化的方式展示了我们如何将`distinctUntilChanged()`函数应用在一个存在的序列上来创建一个新的不重复发射元素的序列。
 
 ![](img/chapter4_7.png)
-
-# First and last
 
 # First and last
 
@@ -232,8 +222,6 @@ fullOfDuplicates.distinct()
 
 # Skip and SkipLast
 
-# Skip and SkipLast
-
 下图中展示了如何使用`skip(2)`来创建一个不发射前两个元素而是发射它后面的那些数据的序列。
 
 ![](img/chapter4_10.png)
@@ -246,8 +234,6 @@ fullOfDuplicates.distinct()
 
 # ElementAt
 
-# ElementAt
-
 如果我们只想要可观测序列发射的第五个元素该怎么办？`elementAt()`函数仅从一个序列中发射第 n 个元素然后就完成了。
 
 如果我们想查找第五个元素但是可观测序列只有三个元素可供发射时该怎么办？我们可以使用`elementAtOrDefault()`。下图展示了如何通过使用`elementAt(2)`从一个序列中选择第三个元素以及如何创建一个只发射指定元素的新的 Observable。
@@ -256,11 +242,9 @@ fullOfDuplicates.distinct()
 
 # Sampling
 
-# Sampling
-
 让我们再回到那个温度传感器。它每秒都会发射当前室内的温度。说实话，我们并不认为温度会变化这么快，我们可以使用一个小的发射间隔。在 Observable 后面加一个`sample()`，我们将创建一个新的可观测序列，它将在一个指定的时间间隔里由 Observable 发射最近一次的数值：
 
-```
+```java
 Observable<Integer> sensor = [...]
 
 sensor.sample(30,TimeUnit.SECONDS)
@@ -293,11 +277,9 @@ sensor.sample(30,TimeUnit.SECONDS)
 
 # Timeout
 
-# Timeout
-
 假设我们工作的是一个时效性的环境，我们温度传感器每秒都在发射一个温度值。我们想让它每隔两秒至少发射一个，我们可以使用`timeout()`函数来监听源可观测序列,就是在我们设定的时间间隔内如果没有得到一个值则发射一个错误。我们可以认为`timeout()`为一个 Observable 的限时的副本。如果在指定的时间间隔内 Observable 不发射值的话，它监听的原始的 Observable 时就会触发`onError()`函数。
 
-```
+```java
 Subscription subscription = getCurrentTemperature()
     .timeout(2,TimeUnit.SECONDS)
     .subscribe(new Observer<Integer>() {
@@ -327,8 +309,6 @@ Subscription subscription = getCurrentTemperature()
 
 # Debounce
 
-# Debounce
-
 `debounce()`函数过滤掉由 Observable 发射的速率过快的数据；如果在一个指定的时间间隔过去了仍旧没有发射一个，那么它将发射最后的那个。
 
 就像`sample()`和`timeout()`函数一样，`debounce()`使用`TimeUnit`对象指定时间间隔。
@@ -336,8 +316,6 @@ Subscription subscription = getCurrentTemperature()
 下图展示了多久从 Observable 发射一次新的数据，`debounce()`函数开启一个内部定时器，如果在这个时间间隔内没有新的数据发射，则新的 Observable 发射出最后一个数据：
 
 ![](img/chapter4_15.png)
-
-# 总结
 
 # 总结
 

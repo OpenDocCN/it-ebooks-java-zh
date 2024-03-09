@@ -34,7 +34,7 @@ Activity 是一个屏幕界面。界面上总是有各种各样的视图元素�
 
 在一个 Activity 中，我们可以通过新建 View 对象的方式，用编程的手段来创建视图树。视图元素的属性可以通过 View 对象的方法来调整。但更常用的方法是定义一个 XML 文件。利用 XML 天然的树形结构来表示一个视图树。一个 XML 节点对应一个 View 对象，View 对象的属性可以记录在节点的属性中。 安卓可以理解这样的 XML 定义，并把 XML 节点实例化为内存中的对象，也就是 Layout Inflate 的过程。比如下面的 XML 记录：
 
-```
+```java
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout 
               android:layout_width="match_parent"

@@ -1,7 +1,5 @@
 # 实战 Groovy: 构建和解析 XML
 
-# 实战 Groovy: 构建和解析 XML
-
 *简易 XML 操作*
 
 通过本文，您将了解使用 Groovy 分解 XML 是多么地容易。在本期的 [*实战 Groovy*](http://www.ibm.com/developerworks/cn/java/j-pg/) 中，作者 Scott Davis 演示了无论您是使用 `MarkupBuilder` 和 `StreamingMarkupBuilder` 创建 XML，还是使用 `XmlParser` 和 `XmlSlurper` 解析 XML，Groovy 都提供了一系列用于处理这类流行数据格式的工具。
@@ -24,7 +22,7 @@ Java 语言创始人 Sun Microsystems 一直是 XML 的积极支持者。毕竟�
 
 ##### 清单 1\. XML 文档，其中列出了我知道的语言
 
-```
+```java
 <langs type="current">
   <language>Java</language>
   <language>Groovy</language>
@@ -36,7 +34,7 @@ Java 语言创始人 Sun Microsystems 一直是 XML 的积极支持者。毕竟�
 
 ##### 清单 2\. 在 Java 中解析 XML 文件
 
-```
+```java
 import org.xml.sax.SAXException;
 import org.w3c.dom.*;
 import javax.xml.parsers.*;
@@ -74,7 +72,7 @@ public class ParseXml {
 
 ##### 清单 3\. 在 Groovy 中解析 XML
 
-```
+```java
 def langs = new XmlParser().parse("languages.xml")
 println "type = ${langs.attribute("type")}"
 langs.language.each{
@@ -98,7 +96,7 @@ Groovy 代码最出色的地方并不是它要比相应的 Java 代码简短很�
 
 ##### 清单 4\. 将 XML 存储在 Groovy 内部
 
-```
+```java
 def xml = """
 <langs type="current">
   <language>Java</language>
@@ -120,7 +118,7 @@ langs.language.each{
 
 ##### 清单 5\. 在 Java 代码内部存储 XML
 
-```
+```java
 import org.xml.sax.SAXException;
 import org.w3c.dom.*;
 import javax.xml.parsers.*;
@@ -173,7 +171,7 @@ Groovy 相对 Java 语言最大的优势体现于在代码中创建 XML 文档�
 
 ##### 清单 6\. 使用 Java 代码创建 XML
 
-```
+```java
 import org.w3c.dom.*;
 import javax.xml.parsers.*;
 import javax.xml.transform.*;
@@ -232,7 +230,7 @@ public class CreateXml {
 
 ##### 清单 7\. 使用 Groovy 创建 XML
 
-```
+```java
 def xml = new groovy.xml.MarkupBuilder()
 xml.langs(type:"current"){
   language("Java")
@@ -249,7 +247,7 @@ Groovy 能够实现这种 `Builder` 魔法，因为它是一种动态的语言�
 
 ##### 清单 8\. 经过扩展的 `MarkupBuilder` 示例
 
-```
+```java
 def sw = new StringWriter()
 def xml = new groovy.xml.MarkupBuilder(sw)
 xml.langs(type:"current", count:3, mainstream:true){
@@ -271,7 +269,7 @@ println sw
 
 ##### 清单 9\. 通过 `MarkupBuilder` 构建 HTML
 
-```
+```java
 def sw = new StringWriter()
 def html = new groovy.xml.MarkupBuilder(sw)
 html.html{
@@ -335,7 +333,7 @@ f.write(sw.toString())
 
 ##### 清单 10\. 使用 `StreamingMarkupBuilder` 创建 XML
 
-```
+```java
 def comment = "<![CDATA[<!-- address is new to this release -->]]>"
 def builder = new groovy.xml.StreamingMarkupBuilder()
 builder.encoding = "UTF-8"
@@ -379,7 +377,7 @@ Groovy 为您提供了两种生成 XML — `MarkupBuilder` 和 `StreamingMarkupB
 
 ##### 清单 11\. `XmlParser` 详细视图
 
-```
+```java
 def xml = """
 <langs type='current' count='3' mainstream='true'>
   <language flavor='static' version='1.5'>Java</language>
@@ -416,7 +414,7 @@ langs[attributes={type=current, count=3, mainstream=true};
 
 ##### 清单 12\. `XmlParser` 将属性作为 HashMap 对待
 
-```
+```java
 def langs = new XmlParser().parseText(xml)
 
 println langs.attribute("count")
@@ -450,7 +448,7 @@ true
 
 ##### 清单 13\. 使用 `GPath` 和 `XmlParser` 进行查询
 
-```
+```java
 def langs = new XmlParser().parseText(xml)
 
 // shortcut query syntax
@@ -477,7 +475,7 @@ println list.getClass()
 
 ##### 清单 14\. 结合 spread-dot 运算符与 `GPath`
 
-```
+```java
 // the long way of gathering the results
 def results = []
 langs.language.each{
@@ -507,7 +505,7 @@ def versions = langs.language*.attribute("version")
 
 ##### 清单 15\. `XmlParser` 和 `XmlSlurper`
 
-```
+```java
 def xml = """
 <langs type='current' count='3' mainstream='true'>
   <language flavor='static' version='1.5'>Java</language>
@@ -539,7 +537,7 @@ langs.language.each{
 
 ##### 清单 16\. 显示最新天气情况的 Yahoo! RSS 提要
 
-```
+```java
 <rss version="2.0"
 
      >
@@ -563,7 +561,7 @@ langs.language.each{
 
 ##### 清单 17\. 以编程的方式获取 RSS
 
-```
+```java
 def baseUrl = "http://weather.yahooapis.com/forecastrss"
 
 if(args){
@@ -584,7 +582,7 @@ if(args){
 
 ##### 清单 18\. 使用 `XmlSlurper` 解析 RSS
 
-```
+```java
 def baseUrl = "http://weather.yahooapis.com/forecastrss"
 
 if(args){

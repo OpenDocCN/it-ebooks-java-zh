@@ -1,7 +1,5 @@
 # 附录
 
-# 附录
-
 ## 参考引用
 
 *   [Core Java Tenth Edition](http://www.amazon.com/Core-Java-I--Fundamentals-10th/dp/0134177304)

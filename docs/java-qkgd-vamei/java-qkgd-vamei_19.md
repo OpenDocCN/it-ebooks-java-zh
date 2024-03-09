@@ -28,7 +28,7 @@
 
 Java 中“一切皆对象”，线程也被封装成一个对象。我们可以通过继承 Thread 类来创建线程。线程类中的的 run()方法包含了该线程应该执行的指令。我们在衍生类中覆盖该方法，以便向线程说明要做的任务:
 
-```
+```java
 public class Test
 {
     public static void main(String[] args)
@@ -92,7 +92,7 @@ Thread 类官方文档: [`docs.oracle.com/javase/6/docs/api/java/lang/Thread.htm
 
 实现多线程的另一个方式是实施 Runnable 接口，并提供 run()方法。实施接口的好处是容易实现多重继承(multiple inheritance)。然而，由于内部类语法，继承 Thread 创建线程可以实现类似的功能。我们在下面给出一个简单的例子，而不深入:
 
-```
+```java
 public class Test
 {
     public static void main(String[] args)
@@ -140,7 +140,7 @@ class NewThread implements Runnable {
 
 在 main()方法中，我们将共享的资源(r 对象)传递给多个线程:
 
-```
+```java
 public class Test
 {
     public static void main(String[] args)
@@ -235,7 +235,7 @@ Java 的每个对象都自动包含有一个用于支持同步的计数器，记
 
 上面，我们利用 synchronized 修饰符同步了整个方法。我们可以同步部分代码，而不是整个方法。这样的代码被称为关键代码(critical section)。我们使用下面的语法:
 
-```
+```java
 synchronized (syncObj) {
 
   ...;

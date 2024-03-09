@@ -1,7 +1,5 @@
 # 实战 Groovy: @Delegate 注释
 
-# 实战 Groovy: @Delegate 注释
-
 *探索静态类型语言中的 duck 类型的极限*
 
 Scott Davis 将继续有关 Groovy 元编程的讨论，这一次他将深入研究 `@Delegate` 注释，@Delegate 注释模糊了数据类型和行为以及静态和动态类型之间的区别。
@@ -12,7 +10,7 @@ Scott Davis 将继续有关 Groovy 元编程的讨论，这一次他将深入研
 
 ##### 清单 1\. 使用 `delegate` 访问 `String.toUpperCase()`
 
-```
+```java
 String.metaClass.shout = {->
   return delegate.toUpperCase()
 }
@@ -41,7 +39,7 @@ Groovy 是在 Java 平台上运行的一种现代编程语言。它能够与现�
 
 ##### 清单 2\. 扩展 `final` 类是不可能的
 
-```
+```java
 class AllCapsString extends String{
 }
 
@@ -61,7 +59,7 @@ overwrite the final class 'java.lang.String'.
 
 ##### 清单 3\. 对 `String` 类的新类型使用复合模式
 
-```
+```java
 class AllCapsString{
   final String body
 
@@ -87,7 +85,7 @@ class AllCapsString{
 
 ##### 清单 4\. 输出 `String` 类的所有方法
 
-```
+```java
 String.class.methods.eachWithIndex{method, i->
   println "${i} ${method}"
 }
@@ -111,7 +109,7 @@ String.class.methods.eachWithIndex{method, i->
 
 ##### 清单 5\. 在使用 `@Delegate` 前使用 `AllCapsString`
 
-```
+```java
 $ groovyc AllCapsString.groovy
 $ javap AllCapsString
 Compiled from "AllCapsString.groovy"
@@ -127,7 +125,7 @@ public class AllCapsString extends java.lang.Object
 
 ##### 清单 6\. 使用 `@Delegate` 注释将 `String` 的所有方法推到周围的类中
 
-```
+```java
 class AllCapsString{
   @Delegate final String body
 
@@ -169,7 +167,7 @@ public class AllCapsString extends java.lang.Object
 
 ##### 清单 7\. Java 语言中的静态类型阻止 `AllCapsString` 与 `String` 之间互相替换
 
-```
+```java
 public class JavaExample{
   public static void main(String[] args){
     String s = new AllCapsString("Hello");
@@ -191,7 +189,7 @@ required: java.lang.String
 
 ##### 清单 8\. 多个 `@Delegate` 提供了多重继承的行为
 
-```
+```java
 class RemoteFile{
   @Delegate File file
   @Delegate URL url
@@ -218,7 +216,7 @@ class RemoteFile{
 
 ##### 清单 9\. 第一步创建 `FixedList` 类
 
-```
+```java
 class FixedList{
   @Delegate private List list = new ArrayList()
   final int sizeLimit
@@ -253,7 +251,7 @@ public class FixedList extends java.lang.Object
 
 ##### 清单 10\. 首先编写一个失败的测试
 
-```
+```java
 class FixedListTest extends GroovyTestCase{
 
   void testAdd(){
@@ -277,7 +275,7 @@ There was 1 failure:
 
 ##### 清单 11\. 重写 `ArrayList` 的 `add()` 方法
 
-```
+```java
 class FixedList{
   @Delegate private List list = new ArrayList()
   final int sizeLimit
@@ -305,7 +303,7 @@ There was 1 error:
 
 ##### 清单 12\. `shouldFail()` 方法捕捉到预期的异常
 
-```
+```java
 class FixedListTest extends GroovyTestCase{
   void testAdd(){
     List threeStooges = new FixedList(3)
@@ -328,7 +326,7 @@ class FixedListTest extends GroovyTestCase{
 
 ##### 清单 13\. 测试操作员重载
 
-```
+```java
 class FixedListTest extends GroovyTestCase{
 
   void testOperatorOverloading(){
@@ -347,7 +345,7 @@ class FixedListTest extends GroovyTestCase{
 
 ##### 清单 14\. 测试极端情况
 
-```
+```java
 class FixedListTest extends GroovyTestCase{
   void testNegativeSize(){
     List badList = new FixedList(-1)
@@ -366,7 +364,7 @@ class FixedListTest extends GroovyTestCase{
 
 ##### 清单 15\. 使用索引添加元素
 
-```
+```java
 class FixedList{
   @Delegate private List list = new ArrayList()
   final int sizeLimit
@@ -396,7 +394,7 @@ class FixedList{
 
 ##### 清单 16\. 测试将元素添加到 `FixedList` 中的情况
 
-```
+```java
 class FixedListTest extends GroovyTestCase{
   void testAddWithIndex(){
     List threeStooges = new FixedList(3)
@@ -436,7 +434,7 @@ class FixedListTest extends GroovyTestCase{
 
 ##### 清单 17\. 实现 `addAll()` 方法
 
-```
+```java
 class FixedList{
   @Delegate private List list = new ArrayList()
   final int sizeLimit
@@ -459,7 +457,7 @@ class FixedList{
 
 ##### 清单 18\. 测试 `addAll()` 方法
 
-```
+```java
 class FixedListTest extends GroovyTestCase{
   void testAddAll(){
     def quartet = ["John", "Paul", "George", "Ringo"]
@@ -486,7 +484,7 @@ class FixedListTest extends GroovyTestCase{
 
 ##### 清单 19\. 完整的 `FixedList` 类
 
-```
+```java
 class FixedList{
   @Delegate private List list = new ArrayList()
   final int sizeLimit

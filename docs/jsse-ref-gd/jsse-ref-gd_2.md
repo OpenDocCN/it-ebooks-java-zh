@@ -1,9 +1,5 @@
 # 问题解决
 
-# 问题解决
-
-# 代码示例
-
 # 代码示例
 
 下面是本节包含代码示例：
@@ -12,8 +8,6 @@
 *   运行 JSSE 示例代码
 *   使用 JSSE 创建 Keystore
 *   使用 SNI 扩展
-
-# 将不安全的 Socket 转为安全的 Socket
 
 # 将不安全的 Socket 转为安全的 Socket
 
@@ -27,7 +21,7 @@
 
 在一个 Java 程序中，作为服务器和客户端使用 socket 交互，建立 socket 通讯类似是以下的代码：
 
-```
+```java
 import java.io.*;
 import java.net.*;
 
@@ -53,7 +47,7 @@ try {
 
 客户端使用 socket 来与服务器通讯，代码设置如下：
 
-```
+```java
 import java.io.*;
 import java.net.*;
 
@@ -81,7 +75,7 @@ try {
 
 在一个 Java 程序中，作为服务器和客户端使用安全的 socket 交互，建立 socket 通讯类似是以下的代码：
 
-```
+```java
 import java.io.*;
 import javax.net.ssl.*;
 
@@ -112,8 +106,6 @@ catch (IOException e) {
 ```
 
 户端使用安全的 socket 来与服务器通讯，代码设置如下：
-
-# 运行 JSSE 示例代码
 
 # 运行 JSSE 示例代码
 
@@ -150,7 +142,7 @@ catch (IOException e) {
 
 为了让 samplecacerts 文件提供给客户端和服务器，你可以将它复制到 java-home/lib/security/jssecacerts ，重命名为 cacerts，用它来代替 java-home/lib/security/cacerts 文件，或添在 java 命令行形式加以下选项在 客户端和服务器中：
 
-```
+```java
 -Djavax.net.ssl.trustStore=path_to_samplecacerts_file 
 ```
 
@@ -172,7 +164,7 @@ catch (IOException e) {
 
 [SSLSocketClientWithTunneling.java](https://docs.oracle.com/javase/8/docs/technotes/guides/security/jsse/samples/sockets/client/SSLSocketClientWithTunneling.java) 程序说明了如何实现代理隧道访问一个安全的 web 服务器在防火墙保护下。要运行这个程序,您必须将 Java 系统属性设置为适当的值:
 
-```
+```java
 java -Dhttps.proxyHost=webproxy
 -Dhttps.proxyPort=ProxyPortNumber
 SSLSocketClientWithTunneling 
@@ -209,7 +201,7 @@ SSLSocketClientWithTunneling
 *   端口是为 ClassFileServer 指定相同的端口
 *   requestedfilepath 表明文件的路径,你想从服务器检索。你必须给出这个 /filepath 参数。正斜杠被用作 GET 语句的一部分,无关乎使用运行在什么类型的操作系统。形成的声明如下:
 
-```
+```java
 "GET " + requestedfilepath + " HTTP/1.0" 
 ```
 
@@ -233,14 +225,14 @@ SSLSocketClientWithTunneling
 
 如果您正在运行防火墙后面的示例代码,那么你必须设置 https.proxyHost 和 https.proxyPort 系统属性。例如,要使用代理主机“webproxy”在端口 8080 上,您可以使用 java 命令以下选项:
 
-```
+```java
 -Dhttps.proxyHost=webproxy
 -Dhttps.proxyPort=8080 
 ```
 
 此外,您可以在代码中设置系统属性，使用 java.lang.System 的 setProperty()。例如,你可以在你的程序包括以下行:
 
-```
+```java
 System.setProperty("java.protocol.handler.pkgs", "com.ABC.myhttpsprotocol");
 System.setProperty("https.proxyHost", "webproxy");
 System.setProperty("https.proxyPort", "8080"); 
@@ -257,7 +249,7 @@ System.setProperty("https.proxyPort", "8080");
 
 运行 URLReaderWithOptions ，这如下命令：
 
-```
+```java
 java URLReaderWithOptions [-h proxyhost -p proxyport] [-k protocolhandlerpkgs] [-c ciphersarray] 
 ```
 
@@ -269,7 +261,7 @@ java URLReaderWithOptions [-h proxyhost -p proxyport] [-k protocolhandlerpkgs] [
 
 这里有一个例子运行 URLReaderWithOptions 并指定代理主机的“webproxy”在端口 8080 上:
 
-```
+```java
 java URLReaderWithOptions -h webproxy -p 8080 
 ```
 
@@ -308,9 +300,5 @@ SSLEngineResult 提供了大量的关于 SSLEngine 的当前状态的信息。�
 **注意:**在这一节中讨论的服务器的例子包括在 JDK 中。你可以在 jdk-home/samples/nio/server 目录中找到。
 
 # 使用 JSSE 创建 Keystore
-
-# 使用 JSSE 创建 Keystore
-
-# 使用 SNI 扩展
 
 # 使用 SNI 扩展

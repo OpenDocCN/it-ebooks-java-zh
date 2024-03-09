@@ -1,12 +1,8 @@
 # 组合 Observables
 
-# 组合 Observables
-
 上一章中，我们学到如何转换可观测序列。我们也看到了`map()`,`scan()`,`groupBY()`,以及更多有用的函数的实际例子，它们帮助我们操作 Observable 来创建我们想要的 Observable。
 
 本章中，我们将研究组合函数并学习如何同时处理多个 Observables 来创建我们想要的 Observable。
-
-# Merge
 
 # Merge
 
@@ -18,7 +14,7 @@
 
 像往常一样，我们用我们的 App 和已安装的 App 列表来创建了一个“真实世界”的例子。为此我们还需要第二个 Observable。我们可以创建一个单独的应用列表然后让它逆序排列。当然这没有实际的意义，只是为了这个例子。对于第二个列表，我们的`loadList()`函数像下面这样：
 
-```
+```java
 private void loadList(List<AppInfo> apps) {
     mRecyclerView.setVisibility(View.VISIBLE);
     List reversedApps = Lists.reverse(apps);
@@ -58,21 +54,19 @@ private void loadList(List<AppInfo> apps) {
 
 # Zip
 
-# ZIP
-
 在一种新的可能场景中处理多个数据来源时会带来：多从个 Observables 接收数据，处理它们，然后将它们合并成一个新的可观测序列来使用。RxJava 有一个特殊的方法可以完成：`zip()`合并两个或者多个 Observables 发射出的数据项，根据指定的函数`Func*`变换它们，并发射一个新值。下图展示了`zip()`方法如何处理发射的“numbers”和“letters”然后将它们合并一个新的数据项：
 
 ![](img/chapter6_4.png)
 
 对于“真实世界”的例子来说，我们将使用已安装的应用列表和一个新的动态的 Observable 来让例子变得有点有趣味。
 
-```
+```java
 Observable<Long> tictoc = Observable.interval(1, TimeUnit.SECONDS); 
 ```
 
 `tictoc`Observable 变量使用`interval()`函数每秒生成一个 Long 类型的数据：虽简单但有效，正如之前所说的，我们需要一个`Func`对象。因为它需要传两个参数，所以是`Func2`:
 
-```
+```java
 private AppInfo updateTitle(AppInfoappInfo, Long time) {
     appInfo.setName(time + " " + appInfo.getName());
     return appInfo;
@@ -81,7 +75,7 @@ private AppInfo updateTitle(AppInfoappInfo, Long time) {
 
 现在我们的`loadList()`函数变成这样：
 
-```
+```java
 private void loadList(List<AppInfo> apps) {
     mRecyclerView.setVisibility(View.VISIBLE);
     Observable<AppInfo> observableApp = Observable.from(apps);
@@ -127,8 +121,6 @@ private void loadList(List<AppInfo> apps) {
 
 # Join
 
-# Join
-
 前面两个方法，`zip()`和`merge()`方法作用在发射数据的范畴内，在决定如何操作值之前有些场景我们需要考虑时间的。RxJava 的`join()`函数基于时间窗口将两个 Observables 发射的数据结合在一起。
 
 ![](img/chapter6_6.png)
@@ -141,7 +133,7 @@ private void loadList(List<AppInfo> apps) {
 *   `Func2`参数：定义已发射的数据如何与新发射的数据项相结合。
 *   如下练习的例子，我们可以修改`loadList()`函数像下面这样：
 
-    ```
+    ```java
     private void loadList(List<AppInfo> apps) {
       mRecyclerView.setVisibility(View.VISIBLE);
 
@@ -188,7 +180,7 @@ private void loadList(List<AppInfo> apps) {
 
 我们有一个新的对象`appsSequence`，它是一个每秒从我们已安装的 app 列表发射 app 数据的可观测序列。`tictoc`这个 Observable 数据每秒只发射一个新的`Long`型整数。为了合并它们，我们需要指定两个`Func1`变量：
 
-```
+```java
 appInfo -> Observable.timer(2, TimeUnit.SECONDS)
 
 time -> Observable.timer(0, TimeUnit.SECONDS) 
@@ -196,7 +188,7 @@ time -> Observable.timer(0, TimeUnit.SECONDS)
 
 上面描述了两个时间窗口。下面一行描述我们如何使用`Func2`将两个发射的数据结合在一起。
 
-```
+```java
 this::updateTitle 
 ```
 
@@ -212,8 +204,6 @@ this::updateTitle
 
 # combineLatest
 
-# combineLatest
-
 RxJava 的`combineLatest()`函数有点像`zip()`函数的特殊形式。正如我们已经学习的，`zip()`作用于最近未打包的两个 Observables。相反，`combineLatest()`作用于最近发射的数据项：如果`Observable1`发射了 A 并且`Observable2`发射了 B 和 C，`combineLatest()`将会分组处理 AB 和 AC，如下图所示：
 
 ![](img/chapter6_9.png)
@@ -222,7 +212,7 @@ RxJava 的`combineLatest()`函数有点像`zip()`函数的特殊形式。正如�
 
 从之前的例子中把`loadList()`函数借用过来，我们可以修改一下来用于`combineLatest()`实现“真实世界”这个例子：
 
-```
+```java
 private void loadList(List<AppInfo> apps) {
     mRecyclerView.setVisibility(View.VISIBLE);
     Observable<AppInfo> appsSequence = Observable.interval(1000, TimeUnit.MILLISECONDS)
@@ -266,15 +256,13 @@ private void loadList(List<AppInfo> apps) {
 
 # And,Then 和 When
 
-# And,Then 和 When
-
 在将来还有一些`zip()`满足不了的场景。如复杂的架构，或者是仅仅为了个人爱好，你可以使用 And/Then/When 解决方案。它们在 RxJava 的 joins 包下，使用 Pattern 和 Plan 作为中介，将发射的数据集合并到一起。
 
 ![](img/chapter6_11.png)
 
 我们的`loadList()`函数将会被修改从这样：
 
-```
+```java
 private void loadList(List<AppInfo> apps) {
 
     mRecyclerView.setVisibility(View.VISIBLE);
@@ -319,25 +307,23 @@ private void loadList(List<AppInfo> apps) {
 
 和通常一样，我们有两个发射的序列，`observableApp`，发射我们安装的应用列表数据，`tictoc`每秒发射一个`Long`型整数。现在我们用`and()`连接源 Observable 和第二个 Observable。
 
-```
+```java
 JoinObservable.from(observableApp).and(tictoc); 
 ```
 
 这里创建一个`pattern`对象，使用这个对象我们可以创建一个`Plan`对象:"我们有两个发射数据的 Observables,`then()`是做什么的？"
 
-```
+```java
 pattern.then(this::updateTitle); 
 ```
 
 现在我们有了一个`Plan`对象并且当 plan 发生时我们可以决定接下来发生的事情。
 
-```
+```java
 .when(plan).toObservable() 
 ```
 
 这时候，我们可以订阅新的 Observable，正如我们总是做的那样。
-
-# Switch
 
 # Switch
 
@@ -351,13 +337,9 @@ RxJava 的`switch()`，正如定义的，将一个发射多个 Observables 的 O
 
 # StartWith
 
-# StartWith
-
 我们已经学到如何连接多个 Observables 并追加指定的值到一个发射序列里。RxJava 的`startWith()`是`concat()`的对应部分。正如`concat()`向发射数据的 Observable 追加数据那样，在 Observable 开始发射他们的数据之前， `startWith()`通过传递一个参数来先发射一个数据序列。
 
 ![](img/chapter6_13.png)
-
-# 总结
 
 # 总结
 

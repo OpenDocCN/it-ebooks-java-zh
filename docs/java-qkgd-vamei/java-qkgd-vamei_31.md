@@ -10,7 +10,7 @@
 
 JBcrypt 是一个外部的包，提供了 Bcrypt 功能。要在 build.sbt 中说明这个包的来源和版本：
 
-```
+```java
 name := "test"
 
 version := "1.0-SNAPSHOT"
@@ -30,7 +30,7 @@ play.Project.playJavaSettings
 
 我下面用一个小例子，来说明该 Bcrypt 的哈希转换。在 Play 中增加动作：
 
-```
+```java
 public static Result bcrypt() {
     String passwordHash = BCrypt.hashpw("Hello",BCrypt.gensalt());
     boolean correct = BCrypt.checkpw("Hello", passwordHash);
@@ -43,7 +43,7 @@ public static Result bcrypt() {
 
 在 routes 增加对应 URL，/bcrypt
 
-```
+```java
 GET     /bcrypt                     controllers.Application.bcrypt()
 ```
 
@@ -55,7 +55,7 @@ GET     /bcrypt                     controllers.Application.bcrypt()
 
 有了[表单](http://www.cnblogs.com/vamei/p/3708612.html)、[数据库](http://www.cnblogs.com/vamei/p/3713820.html)和加密的基础，用户注册很容易实现。首先建立数据模型 app/models/User.java：
 
-```
+```java
 package models;
 
 import javax.persistence.*;
@@ -81,7 +81,7 @@ public class User extends Model {
 
 下面修改控制器 Application(app/controllers/Application.java)。控制器中包含两个动作和一个表单类 Registration。一个动作 register()用于显示注册页面，另一个动作 postRegister 处理表单提交的信息，并增加相应的数据库记录。Registration 则对应注册页面所显示的表格：
 
-```
+```java
 package controllers;
 
 import play.*;
@@ -114,7 +114,7 @@ public class Application extends Controller {
 
 register()动作使用的模板为 app/views/register.scala.html:
 
-```
+```java
 @(userForm: Form[controllers.Application.Registration])
 
 <!DOCTYPE html>
@@ -132,7 +132,7 @@ register()动作使用的模板为 app/views/register.scala.html:
 
 在 routes 中为两个动作增加对应的 URL：
 
-```
+```java
 GET     /register                   controllers.Application.register()
 POST    /register                   controllers.Application.postRegister()
 ```
@@ -149,7 +149,7 @@ POST    /register                   controllers.Application.postRegister()
 
 将用户验证的主要逻辑放入到模型 User 中。修改 User 类，为 User 类增加 authenticate()方法：
 
-```
+```java
 package models;
 
 import javax.persistence.*;
@@ -193,7 +193,7 @@ authenticate()接收的是明文密码。上面的验证中，首先检查用户
 
 我进一步修改控制器 Application。这一次还是增加两个动作和一个表单类。动作 login()用于显示登录页面，动作 postLogin()用于处理登录表单填写的信息，并根据信息决定是否登入用户。Login 类对应登录页面的表单。
 
-```
+```java
 package controllers;
 
 import play.*;
@@ -260,7 +260,7 @@ public class Application extends Controller {
 
 为新增的动作增加对应的 URL：
 
-```
+```java
 GET     /login                      controllers.Application.login()
 POST    /login                      controllers.Application.postLogin()
 ```
@@ -273,7 +273,7 @@ POST    /login                      controllers.Application.postLogin()
 
 提交登录表格时，如果登录合法，我将让服务器开启和该客户的会话，记录客户的信息。因此，修改 postLogin()为：
 
-```
+```java
     public static Result postLogin() {
         Form<Login> userForm = Form.form(Login.class).bindFromRequest();
         if (userForm.hasErrors()) {
@@ -290,7 +290,7 @@ POST    /login                      controllers.Application.postLogin()
 
 增加 index()动作，对应/这一 URL。在该动作中，我调用 session 中保存的用户信息：
 
-```
+```java
     public static Result index() {
         String email = session("email");
         if (email != null) {
@@ -303,7 +303,7 @@ POST    /login                      controllers.Application.postLogin()
 
 增加 routes 中对应的 URL：
 
-```
+```java
 GET     /                           controllers.Application.index()
 ```
 
@@ -313,7 +313,7 @@ GET     /                           controllers.Application.index()
 
 可以看到，会话中的信息可以持续到以后的页面访问。为了销毁会话，可以在某个动作中调用：
 
-```
+```java
 session().clear();
 ```
 

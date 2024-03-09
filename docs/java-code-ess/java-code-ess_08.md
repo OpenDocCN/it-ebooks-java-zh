@@ -1,10 +1,8 @@
 # 关键字
 
-# 关键字
-
 下面是 Java 里面的关键字。不能使用以下任一作为您的程序标识符。关键字 const 和 goto 语句被保留，即使他们目前尚未使用。true, false, 和 null 似乎是关键字，但它们实际上是字面值;你不能使用它们作为你的程序标识符。
 
-```
+```java
 abstract    continue    for    new    switch
 assert***    default    goto*    package    synchronized
 boolean    do    if    private    this

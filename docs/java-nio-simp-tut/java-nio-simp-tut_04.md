@@ -21,7 +21,7 @@ buffer 本质上就是一块内存区，可以用来写入数据，并在稍后�
 
 这里有一个简单的 buffer 案例，包括了 write，flip 和 clear 操作：
 
-```
+```java
 RandomAccessFile aFile = new RandomAccessFile("data/nio-data.txt", "rw");
 FileChannel inChannel = aFile.getChannel();
 
@@ -102,13 +102,13 @@ MappedByteBuffer 稍有不同，我们会单独介绍。
 
 为了获取一个 Buffer 对象，你必须先分配。每个 Buffer 实现类都有一个 allocate()方法用于分配内存。下面看一个实例,开辟一个 48 字节大小的 buffer：
 
-```
+```java
 ByteBuffer buf = ByteBuffer.allocate(48);
 ```
 
 开辟一个 1024 个字符的 CharBuffer：
 
-```
+```java
 CharBuffer buf = CharBuffer.allocate(1024);
 ```
 
@@ -121,13 +121,13 @@ CharBuffer buf = CharBuffer.allocate(1024);
 
 下面是一个实例，演示从 Channel 写数据到 Buffer：
 
-```
+```java
  int bytesRead = inChannel.read(buf); //read into buffer.
 ```
 
 通过 put 写数据：
 
-```
+```java
 buf.put(127);
 ```
 
@@ -146,14 +146,14 @@ flip()方法可以吧 Buffer 从写模式切换到读模式。调用 flip 方法
 
 读取数据到 channel 的例子：
 
-```
+```java
 //read from buffer into channel.
 int bytesWritten = inChannel.write(buf);
 ```
 
 调用 get 读取数据的例子：
 
-```
+```java
 byte aByte = buf.get();
 ```
 
@@ -177,7 +177,7 @@ clear 方法会重置 position 为 0，limit 为 capacity，也就是整个 Buff
 
 通过 mark 方法可以标记当前的 position，通过 reset 来恢复 mark 的位置，这个非常像 canva 的 save 和 restore：
 
-```
+```java
 buffer.mark();
 
 //call buffer.get() a couple of times, e.g. during parsing.

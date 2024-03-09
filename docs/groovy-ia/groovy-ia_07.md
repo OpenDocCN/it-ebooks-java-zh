@@ -1,7 +1,5 @@
 # 实战 Groovy: Groovy：Java 程序员的 DSL
 
-# 实战 Groovy: Groovy：Java 程序员的 DSL
-
 *用 Groovy 编写更少的代码，完成更多的工作*
 
 Groovy 专家 Scott Davis 将重新开始撰写 [*实战 Groovy*](http://www.ibm.com/developerworks/cn/java/j-pg/) 系列文章，该系列文章于 2006 年停止编写。作为开篇文章，本文将介绍 Groovy 最近的发展以及 Groovy 当前的状态。然后了解*大约* 从 2009 年开始，使用 Groovy 是多么轻松。
@@ -47,7 +45,7 @@ Groovy 运行在 Java 5 或 6 上的效果最佳。在命令提示中输入 `jav
 
 ##### 清单 1\. 用 Java 代码编写的 “Hello World” 示例
 
-```
+```java
 public class HelloJavaWorld{
   public static void main(String[] args){
     System.out.println("Hello Java World");
@@ -63,7 +61,7 @@ public class HelloJavaWorld{
 
 ##### 清单 2\. 用 Groovy 代码编写的 “Hello World” 示例
 
-```
+```java
 println "Hello Groovy World" 
 ```
 
@@ -81,7 +79,7 @@ Groovy 解释器将先在内存中编译源代码，然后再将其转到 JVM �
 
 ##### 清单 3\. 尝试在 `CLASSPATH` 中没有 Groovy JAR 的情况下运行经过编译的 Groovy 类
 
-```
+```java
 $ java HelloGroovyWorld
 Exception in thread "main" java.lang.NoClassDefFoundError: groovy/lang/Script 
 ```
@@ -90,7 +88,7 @@ Exception in thread "main" java.lang.NoClassDefFoundError: groovy/lang/Script
 
 ##### 清单 4\. 用 `java` 命令成功运行经过编译的 Groovy 类
 
-```
+```java
 //For UNIX, Linux, and Mac OS X
 $ java -classpath $GROOVY_HOME/embeddable/groovy-all-x.y.z.jar:. HelloGroovyWorld
 Hello Groovy World
@@ -104,7 +102,7 @@ Hello Groovy World
 
 ##### 清单 5\. 解释 Java 字节码
 
-```
+```java
 $ javap HelloJavaWorld
 Compiled from "HelloJavaWorld.java"
 public class HelloJavaWorld extends java.lang.Object{
@@ -119,7 +117,7 @@ public class HelloJavaWorld extends java.lang.Object{
 
 ##### 清单 6\. 解释 Groovy 字节码
 
-```
+```java
 $ javap HelloGroovyWorld
 Compiled from "HelloGroovyWorld.groovy"
 public class HelloGroovyWorld extends groovy.lang.Script{
@@ -143,7 +141,7 @@ Dave Thomas 进一步阐明 DSL 的概念（请参阅 参考资料）。他写�
 
 ##### 清单 7\. 接受命令行输入的 Groovy 脚本
 
-```
+```java
 println "Hello, " + args[0] 
 ```
 
@@ -159,7 +157,7 @@ JavaBean — 或更通俗的名称，普通的旧 Java 对象（Plain Old Java O
 
 ##### 清单 8\. Java POJO
 
-```
+```java
 public class JavaPerson{
   private String firstName;
   private String lastName;
@@ -176,7 +174,7 @@ public class JavaPerson{
 
 ##### 清单 9\. Groovy POGO
 
-```
+```java
 class GroovyPerson{
   String firstName
   String lastName
@@ -189,7 +187,7 @@ class GroovyPerson{
 
 ##### 清单 10\. 从 Java 代码中调用 Groovy 类
 
-```
+```java
 public class JavaTest{
   public static void main(String[] args){
     JavaPerson jp = new JavaPerson();
@@ -209,7 +207,7 @@ public class JavaTest{
 
 ##### 清单 11\. 从 Groovy 中调用 Java 类
 
-```
+```java
 JavaPerson jp = new JavaPerson(firstName:"John", lastName:"Doe")
 println "Greetings, " + jp.getFirstName() + ". 
    It is a pleasure to make your acquaintance."
@@ -248,7 +246,7 @@ Groovy 最被低估的一个方面是它完全支持 Java 语法的事实。如�
 
 ##### 清单 12\. 用 Ant 编译 Groovy 和 Java 代码
 
-```
+```java
 <taskdef name="groovyc"
          classname="org.codehaus.groovy.ant.Groovyc"
          classpathref="my.classpath"/>

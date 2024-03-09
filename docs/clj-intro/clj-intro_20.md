@@ -4,7 +4,7 @@
 
 Clojure 里面的元数据是附加到一个符号或者集合的一些数据，它们和符号或者集合的逻辑数据没有直接的关系。两个逻辑上一样的方法可以有不同的元数据。 下面是一个有关扑克牌的例子
 
-```
+```java
 (defstruct card-struct :rank :suit)
 
 (def card1 (struct card-struct :king :club))
@@ -28,7 +28,7 @@ Clojure 里面的元数据是附加到一个符号或者集合的一些数据，
 
 函数以及宏，都是有一个 `Var` 对象来表示的, 它们都有关联的元数据。比如输入这个在 REPL 里面： `(meta (var reverse))` 或者 `^#'reverse` 。输出结果应该下面这些类似(为了好看我加了换行缩进)
 
-```
+```java
 {
   :ns #<Namespace clojure.core>,
   :name reverse,
@@ -41,13 +41,13 @@ Clojure 里面的元数据是附加到一个符号或者集合的一些数据，
 
 clojure.repl 包里面的 `source` 函数， 利用元数据来获取一个指定函数的源代码，比如：
 
-```
+```java
 (source reverse) 
 ```
 
 上面代码的输出应该是：
 
-```
+```java
 (defn reverse
   "Returns a seq of the items in coll in reverse order. Not lazy."
   [coll]

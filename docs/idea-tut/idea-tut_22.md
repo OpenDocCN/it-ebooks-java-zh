@@ -136,7 +136,7 @@
 > *   通过上面的配置，IntelliJ IDEA 环境配置算是配置好了，现在配置下该项目相关的。
 > *   打开你的 Mysql，执行下面脚本，创建一个新的数据库和用户：
 
-```
+```java
 CREATE DATABASE `jsprun` CHARACTER SET utf8;
 CREATE USER 'jsprun'@'localhost' IDENTIFIED BY 'jsprun';
 GRANT ALL PRIVILEGES ON jsprun.* TO 'jsprun'@'localhost';

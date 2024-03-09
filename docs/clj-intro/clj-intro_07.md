@@ -18,7 +18,7 @@ Clojure 里面是不支持变量的。它跟变量有点像，但是在被赋值
 
 下面的例子介绍了 `def` , `let` 和 `binding` 的用法。
 
-```
+```java
 (def ^:dynamic v 1) ; v is a global binding
 
 (defn f1 []
@@ -49,7 +49,7 @@ Clojure 里面是不支持变量的。它跟变量有点像，但是在被赋值
 
 上面代码的输出是这样的：
 
-```
+```java
 f2: before let v = 1
 f2: in let, v = 2
 f1: v = 1 (let DID NOT change value of global binding)

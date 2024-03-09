@@ -42,7 +42,7 @@
 
 ### Docker
 
-```
+```java
 docker pull apachecn0/it-ebooks-java-zh
 docker run -tid -p <port>:80 apachecn0/it-ebooks-java-zh
 # 访问 http://localhost:{port} 查看文档
@@ -50,7 +50,7 @@ docker run -tid -p <port>:80 apachecn0/it-ebooks-java-zh
 
 ### NPM
 
-```
+```java
 npm install -g it-ebooks-java-zh
 it-ebooks-java-zh <port>
 # 访问 http://localhost:{port} 查看文档

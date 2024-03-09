@@ -6,7 +6,7 @@
 
 每行至多包含一条语句，例如:
 
-```
+```java
  argv++;         // 正确
     argc--;         // 正确 
     argv++; argc--; // 避免! 
@@ -24,7 +24,7 @@
 
 一个带返回值的`return`语句不使用小括号"()"，除非它们以某种方式使返回值更为显见。例如:
 
-```
+```java
  return;
 
     return myDisk.size();
@@ -36,7 +36,7 @@
 
 `if-else`语句应该是以下形式:
 
-```
+```java
  if (condition) {
         statements;
     }
@@ -58,7 +58,7 @@
 
 **注意:** `if`语句通常使用`{}`。避免下面容易出错的形式:
 
-```
+```java
  if (condition) // 避免！这省略了括号{ }！
         statement; 
 ```
@@ -67,7 +67,7 @@
 
 `for` 语句应该是如下形式:
 
-```
+```java
  for (initialization; condition; update) {
         statements;
     } 
@@ -75,7 +75,7 @@
 
 空的`for`语句 (所有工作都在初始化，条件判断，更新子句中完成) 应该是如下形式:
 
-```
+```java
  for (initialization; condition; update); 
 ```
 
@@ -85,7 +85,7 @@
 
 `while` 语句应该是如下形式:
 
-```
+```java
  while (condition) {
         statements;
     } 
@@ -93,7 +93,7 @@
 
 空的 `while` 语句应该是如下形式:
 
-```
+```java
  while (condition); 
 ```
 
@@ -101,7 +101,7 @@
 
 `do-while` 语句应该是如下形式:
 
-```
+```java
  do {
         statements;
     } while (condition); 
@@ -111,7 +111,7 @@
 
 `switch` 语句应该是如下形式:
 
-```
+```java
  switch (condition) {
     case ABC:
         statements;
@@ -136,7 +136,7 @@ Every `switch` statement should include a default case. The `break` in the defau
 
 `try-catch` 语句应该是如下格式:
 
-```
+```java
  try {
         statements;
     } catch (ExceptionClass e) {
@@ -146,7 +146,7 @@ Every `switch` statement should include a default case. The `break` in the defau
 
 一个`try-catch`语句后面也可能跟着一个`finally`语句，不论`try`代码块是否顺利执行完，它都会被执行。
 
-```
+```java
  try {
         statements;
     } catch (ExceptionClass e) {

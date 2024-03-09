@@ -1,7 +1,5 @@
 # 实战 Groovy: 用 Groovy 进行 Ant 脚本编程
 
-# 实战 Groovy: 用 Groovy 进行 Ant 脚本编程
-
 *为更具表现力、更可控的构建而组合使用 Ant 和 Groovy*
 
 Ant 和 Maven 两者在构建处理工具的世界中占统治地位。但是 XML 却凑巧是一种非常没有表现力的配置格式。在“实战 Groovy”这个新系列的第 2 期中，Andrew Glover 将介绍 Groovy 的生成器实用工具，这个工具能够极其容易地把 Groovy 与 Ant 和 Maven 结合在一起，形成更具表现力、更可控的构建。
@@ -32,7 +30,7 @@ Ant 作为 Java 项目构建工具的普遍性和实用性是无法超越的。�
 
 ##### 清单 1\. 还记得这个简单的 Java Filter 接口吗？
 
-```
+```java
 public interface Filter {
   void setFilter(String fltr);  
   boolean applyFilter(String value);
@@ -45,7 +43,7 @@ public interface Filter {
 
 ##### 清单 2\. 更加 Groovy 的过滤器 —— 使用闭包
 
-```
+```java
 class Filter{
    strategy
    boolean applyFilter(str){
@@ -60,7 +58,7 @@ class Filter{
 
 ##### 清单 3\. 使用 Groovy 闭包的简单魔术
 
-```
+```java
 simplefilter = { str | 
    if(str.indexOf("java.") >= 0){
      return true
@@ -104,7 +102,7 @@ assert rfltr.apply("com.vanward.sedona.package")
 
 ##### 清单 4\. Ant 的 Echo 任务
 
-```
+```java
 <echo message="This was set via the message attribute"/>
 <echo>Hello World!</echo> 
 ```
@@ -113,7 +111,7 @@ assert rfltr.apply("com.vanward.sedona.package")
 
 ##### 清单 5\. 用 Groovy 表示的 Ant 的 Echo 任务
 
-```
+```java
 ant = new AntBuilder()
 ant.echo(message:"mapping it via attribute!")         
 ant.echo("Hello World!") 
@@ -123,7 +121,7 @@ ant.echo("Hello World!")
 
 ##### 清单 6\. 用 Groovy 和 Ant 进行流控制（flow control）
 
-```
+```java
 ant = new AntBuilder()
 ant.mkdir(dir:"/dev/projects/ighr/binaries/")
 try{
@@ -166,7 +164,7 @@ _ 哎呀！_Groovy 的功能真多！当然，知道什么时候应用这么聪�
 
 ##### 清单 7\. Md5ReportBuilder 的 Main 方法
 
-```
+```java
 static void main(args) {         
 
   assert args[0] && args[1] != null
@@ -190,7 +188,7 @@ Ant 包含一个 `checksum` 任务，调用起来非常容易，但需要传递�
 
 ##### 清单 8\. runCheckSum 方法
 
-```
+```java
 /**
  * runs checksum task for each dir in collection passed in
  */
@@ -214,7 +212,7 @@ runCheckSum(dirs){
 
 ##### 清单 9\. 构建报告
 
-```
+```java
 buildReport(bsedir){
   ant = new AntBuilder()
   scanner = ant.fileScanner {
@@ -256,7 +254,7 @@ buildReport(bsedir){
 
 ##### 清单 10\. 在 Maven 中运行 Md5ReportBuilder
 
-```
+```java
 <goal name="gmd5:run" prereqs="java:compile,test:compile">
   <path id="groovy.classpath">                        
     <ant:pathelement path="${plugin.getDependencyClasspath()}"/>
@@ -282,7 +280,7 @@ buildReport(bsedir){
 
 ##### 清单 11\. Groovy 必需的依赖项
 
-```
+```java
 <dependencies>
   <dependency>
     <groupId>groovy</groupId>

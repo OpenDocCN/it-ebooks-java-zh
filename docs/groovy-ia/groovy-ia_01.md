@@ -1,7 +1,5 @@
 # 实战 Groovy: SwingBuilder 和 Twitter API，第 2 部分
 
-# 实战 Groovy: SwingBuilder 和 Twitter API，第 2 部分
-
 *使用 HTTP 基本身份验证和 ConfigSlurper*
 
 在本期 [*实战 Groovy*](http://www.ibm.com/developerworks/cn/java/j-pg/) 文章中，Scott Davis 将继续构建 [第 1 部分](http://www.ibm.com/developerworks/cn/java/j-groovy09299/) 中的 Groovy Twitter 客户机：Gwitter。这次，他将解决 HTTP Basic 身份验证问题，并使用 Groovy 的 `ConfigSlurper` 读入配置设置。
@@ -28,7 +26,7 @@ HTTP Basic 身份验证的流行归因于它的的实例非常简单（参见 �
 
 在 Groovy 中，Base64 编码的 Twitter 用户名和密码如下所示：
 
-```
+```java
 def authString = "username:password".getBytes().encodeBase64().toString() 
 ```
 
@@ -44,7 +42,7 @@ def authString = "username:password".getBytes().encodeBase64().toString()
 
 ##### 清单 1\. 在 Twitter 中请求朋友时间轴
 
-```
+```java
 def addr = "http://twitter.com/statuses/friends_timeline.atom"
 def authString = "username:password".getBytes().encodeBase64().toString()
 def conn = addr.toURL().openConnection()
@@ -66,7 +64,7 @@ if(conn.responseCode == 200){
 
 ##### 清单 2\. friends.groovy 的 Twitter 输出
 
-```
+```java
 --------------------
 Scott Davis
 scottdavis99: @neal4d Is the Bishop's Arms *diagonally* adjacent
@@ -87,7 +85,7 @@ quality time here.
 
 ##### 清单 3\. 使用 `cURL` 从 Twitter 获取原始 Atom
 
-```
+```java
 $ curl -u scottdavis99:password
     http://twitter.com/statuses/friends_timeline.atom
 
@@ -128,7 +126,7 @@ $ curl -u scottdavis99:password
 
 ##### 清单 4\. 一个简单的 Java 属性文件
 
-```
+```java
 login.username=fred
 login.password=wordpass 
 ```
@@ -137,7 +135,7 @@ login.password=wordpass
 
 ##### 清单 5\. 读取 Java 属性文件的简单单元测试
 
-```
+```java
 class PropertiesTest extends GroovyTestCase{
   void testReadingProperties(){
     Properties properties = new Properties();
@@ -160,7 +158,7 @@ class PropertiesTest extends GroovyTestCase{
 
 ##### 清单 6\. 通过 `ConfigSlurper` 读取 Java 属性文件
 
-```
+```java
 void testReadingPropertiesWithConfigSlurper(){
   Properties properties = new Properties();
   properties.load(new FileInputStream("config.properties"));
@@ -184,7 +182,7 @@ void testReadingPropertiesWithConfigSlurper(){
 
 ##### 清单 7\. Groovy 配置文件
 
-```
+```java
 login{
   username = "fred"
   password = "wordpass"
@@ -195,7 +193,7 @@ login{
 
 ##### 清单 8\. 使用 `ConfigSlurper` 读取 Groovy 配置文件
 
-```
+```java
 void testConfigSlurper(){
   def config = new ConfigSlurper().parse(new File("config.groovy").text)
   assertEquals "fred", config.login.username
@@ -207,7 +205,7 @@ void testConfigSlurper(){
 
 ##### 清单 9\. 创建模拟设置
 
-```
+```java
 void testMockConfig(){
   def mockConfig = """
     smtp{
@@ -235,7 +233,7 @@ void testMockConfig(){
 
 ##### 清单 10\. 使用 `ConfigSlurper` 管理数据库连接的 Grails
 
-```
+```java
 dataSource {
    pooled = true
    driverClassName = "org.hsqldb.jdbcDriver"
@@ -272,7 +270,7 @@ environments {
 
 ##### 清单 11\. 在 Groovy 配置文件中使用环境
 
-```
+```java
 //config.groovy
 login{
   username = "fred"
@@ -312,7 +310,7 @@ void testWithEnvironment(){
 
 ##### 清单 12\. 向 Gwitter 添加一个 `tabbedPane`
 
-```
+```java
 swingBuilder.frame(title:"Gwitter",
                    defaultCloseOperation:JFrame.EXIT_ON_CLOSE,
                    size:[400,500],
@@ -339,7 +337,7 @@ swingBuilder.frame(title:"Gwitter",
 
 ##### 清单 13\. 在分页面板的其余部分放置些选项卡
 
-```
+```java
 swingBuilder.frame(title:"Gwitter",
                    defaultCloseOperation:JFrame.EXIT_ON_CLOSE,
                    size:[400,500],
@@ -374,7 +372,7 @@ swingBuilder.frame(title:"Gwitter",
 
 ##### 清单 14\. gwitterConfig.groovy 文件
 
-```
+```java
 login{
   username = "username"
   password = "password"
@@ -385,7 +383,7 @@ login{
 
 ##### 清单 15\. FriendsTimeline.groovy 文件
 
-```
+```java
 class FriendsTimeline{
   static final String addr = "http://twitter.com/statuses/friends_timeline.atom"
 
@@ -429,7 +427,7 @@ class FriendsTimeline{
 
 ##### 清单 16\. 向 Gwitter 添加一个 `friendsList` 字段
 
-```
+```java
 class Gwitter{
   def searchField
   def resultsList
@@ -443,7 +441,7 @@ class Gwitter{
 
 ##### 清单 17\. 向 Gwitter 添加两个新面板
 
-```
+```java
 class Gwitter{
   def searchField
   def resultsList
@@ -478,7 +476,7 @@ class Gwitter{
 
 ##### 清单 18\. 在 Friends 选项卡中呈现两个面板
 
-```
+```java
 swingBuilder.frame(title:"Gwitter",
                    defaultCloseOperation:JFrame.EXIT_ON_CLOSE,
                    size:[400,500],

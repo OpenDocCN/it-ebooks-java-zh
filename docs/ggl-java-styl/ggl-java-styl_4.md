@@ -27,7 +27,7 @@
 
 示例：
 
-```
+```java
 return new MyClass() {
   @Override public void method() {
     if (condition()) {
@@ -51,7 +51,7 @@ return new MyClass() {
 
 示例：
 
-```
+```java
 void doNothing() {} 
 ```
 
@@ -160,7 +160,7 @@ void doNothing() {}
 
 以下示例先展示未对齐的代码，然后是对齐的代码：
 
-```
+```java
 private int x; // this is fine
 private Color color; // this too
 
@@ -188,7 +188,7 @@ private Color color;  // may leave it unaligned
 
 没有方法和文档的枚举类可写成数组初始化的格式：
 
-```
+```java
 private enum Suit { CLUBS, HEARTS, SPADES, DIAMONDS } 
 ```
 
@@ -214,7 +214,7 @@ private enum Suit { CLUBS, HEARTS, SPADES, DIAMONDS }
 
 数组初始化可以写成块状结构，比如，下面的写法都是 OK 的：
 
-```
+```java
 new int[] {
   0, 1, 2, 3
 }
@@ -255,7 +255,7 @@ new int[]
 
 在一个 switch 块内，每个语句组要么通过`break, continue, return`或抛出异常来终止，要么通过一条注释来说明程序将继续执行到下一个语句组， 任何能表达这个意思的注释都是 OK 的(典型的是用`// fall through`)。这个特殊的注释并不需要在最后一个语句组(一般是`default`)中出现。示例：
 
-```
+```java
 switch (input) {
   case 1:
   case 2:
@@ -279,7 +279,7 @@ switch (input) {
 
 注解紧跟在文档块后面，应用于类、方法和构造函数，一个注解独占一行。这些换行不属于自动换行(第 4.5 节，自动换行)，因此缩进级别不变。例如：
 
-```
+```java
 @Override
 @Nullable
 public String getNameIfPresent() { ... } 
@@ -287,13 +287,13 @@ public String getNameIfPresent() { ... }
 
 **例外**：单个的注解可以和签名的第一行出现在同一行。例如：
 
-```
+```java
 @Override public int hashCode() { ... } 
 ```
 
 应用于字段的注解紧随文档块出现，应用于字段的多个注解允许与字段出现在同一行。例如：
 
-```
+```java
 @Partial @Mock DataLoader loader; 
 ```
 
@@ -307,7 +307,7 @@ public String getNameIfPresent() { ... }
 
 块注释与其周围的代码在同一缩进级别。它们可以是`/* ... */`风格，也可以是`// ...`风格。对于多行的`/* ... */`注释，后续行必须从`*`开始， 并且与前一行的`*`对齐。以下示例注释都是 OK 的。
 
-```
+```java
 /*
  * This is          // And so           /* Or you can
  * okay.            // is this.          * even do this. */
@@ -324,6 +324,6 @@ public String getNameIfPresent() { ... }
 
 类和成员的 modifiers 如果存在，则按 Java 语言规范中推荐的顺序出现。
 
-```
+```java
 public protected private abstract static final transient volatile synchronized native strictfp 
 ```

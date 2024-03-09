@@ -1,16 +1,10 @@
 # 与 REST 无缝结合-RxJava 和 Retrofit
 
-# 与 REST 无缝结合-RxJava 和 Retrofit
-
 在上一章中，我们学习了如何使用调度器在不同于 UI 线程的线程上操作。我们学习了如何高效的运行 I/O 任务而不用阻塞 UI 以及如何运行耗时的计算任务而不耗损应用性能。在最后一章中，我们将创建一个最终版的应用实例，用 Retrofit 映射远程 API,异步查询数据，轻松创造一个丰富的 UI。
 
 # 项目目标
 
-# 项目目标
-
 我们将在已有的例子中创建一个新的`Activity`。这个`Activity`将通过 StackExchange API 从 stackoverflow 检索出最活跃的 10 位用户。App 使用这些信息来展示一个包含用户头像、姓名、名望数以及住址的列表。对每一位用户，app 使用 OpenWeatherMap API 来检索该用户住址当地的天气预报，并显示一个小天气图标。基于从 StackOverflow 检索的信息，app 对列表中的每一位用户提供一个`onClick`事件，打开他们在个人信息中设定的个人网站或者 Stack Overflow 的个人主页。
-
-# Retrofit
 
 # Retrofit
 
@@ -20,7 +14,7 @@ Retrofit 是 Square 公司专为 Android 和 Java 设计的一个类型安全的
 
 当我们把所有的 Java model 准备好后，我们就可以开始建立 Retrofit。Retrofi 使用标准的 Java 接口来映射 API 路由。例如例子中，我们将使用来自 API 的一个路由，下面是我们 Retrofit 的接口:
 
-```
+```java
 public interface StackExchangeService {
     @GET("/2.2/users?order=desc&sort=reputation&site=stackoverflow")
     Observable<User sResponse> getMostPopularSOusers(@Query("pagesize") int howmany);
@@ -31,7 +25,7 @@ public interface StackExchangeService {
 
 当我们有了`interface`，我们可以创建`RestAdapter`类，为了更清楚的组织我们的代码，我们创建一个`SeApiManager`函数提供一种更适当的方式来和 StackExchange API 交互。
 
-```
+```java
 public class SeApiManager {
     private final StackExchangeService mStackExchangeService;
 
@@ -61,15 +55,11 @@ Retrofit 把`RestAdapter`类和我们的 API 接口绑定在一起后就完成�
 
 现在，我们已经有一个 API 管理者来提供一个响应式的方法，它从远程 API 获取数据并给 I/O 调度器，解析映射最后为我们的消费者提供一个简洁的用户列表。
 
-```
-
-# App 架构
+```java
 
 # App 架构
 
 我们不使用任何 MVC，MVP，或者 MVVM 模式。因为那不是这本书的目的，因此我们的`Activity`类将包含我们需要创建和展示用户列表的所有逻辑。
-
-# 创建 Activity 类
 
 # 创建 Activity 类
 
@@ -89,11 +79,9 @@ private void refreshList() {
             showRefresh(false);
         });
 } 
-```
+```java
 
 我们显示了进度条，从 StackExchange API 管理器观测用户列表。一旦获取到列表数据，我们开始展示它并更新`Adapter`的内容并让`RecyclerView`显示为可见。
-
-# 创建 RecyclerView Adapter
 
 # 创建 RecyclerView Adapter
 
@@ -110,7 +98,7 @@ public static class ViewHolder extends RecyclerView.ViewHolder {
         ButterKnife.inject(this, view); 
     }
 } 
-```
+```java
 
 我们一旦收到来自 API 管理器的数据，我们可以设置界面上所有的标签：`name`,`city`和`reputation`。
 
@@ -124,7 +112,7 @@ public void onBindViewHolder(SoAdapter.ViewHolder holder, int position) {
     User user = mUsers.get(position);
     holder.setUser(user); 
 } 
-```
+```java
 
 在`ViewHolder`，我们可以这样：
 
@@ -136,7 +124,7 @@ public void setUser(User user) {
 
     ImageLoader.getInstance().displayImage(user.getProfileImage(), user_image);
 } 
-```
+```java
 
 此时，我们可以允许代码获得一个用户列表，正如下图所示：
 
@@ -153,7 +141,7 @@ public interface OpenWeatherMapService {
     @GET("data2.5/weather")
     Observable<WeatherResponse> getForecastByCity(@Query("q") String city);
 } 
-```
+```java
 
 这个方法用城市名字作为参数提供当地的预报信息。我们像下面这样将接口和`RestAdapter`类绑定在一起：
 
@@ -163,7 +151,7 @@ RestAdapter restAdapter = new RestAdapter.Builder()
         .setLogLevel(RestAdapter.LogLevel.BASIC)
         .build();
 mOpenWeatherMapService = restAdapter.create(OpenWeatherMapService.class); 
-```
+```java
 
 像以前一样，我们只有两件事需要立马去做：设置 API 端口和 log 级别。
 
@@ -175,7 +163,7 @@ public Observable<WeatherResponse> getForecastByCity(String city) {
     .subscribeOn(Schedulers.io())
     .observeOn(AndroidSchedulers.mainThread());
 } 
-```
+```java
 
 现在，我们有了用户列表，我们可以根据城市名来查询 OpenWeatherMap 获得天气预报信息。下一步是修改我们的`ViewHolder`类来为每位用户展示相应的天气图标。
 
@@ -202,19 +190,19 @@ private String getCity(String location, int position) {
         return ""; 
     }
 } 
-```
+```java
 
 借助一个有效的城市名，我们可以用下面命令来获得我们所需要天气的所有数据：
 
 ```
 OpenWeatherMapApiManager.getInstance().getForecastByCity(city) 
-```
+```java
 
 用天气响应的结果，我们可以获得天气图标的 URL：
 
 ```
 getWeatherIconUrl(weatherResponse); 
-```
+```java
 
 用图标 URL，我们可以检索到图标本身：
 
@@ -244,7 +232,7 @@ private Observable<Bitmap> loadBitmap(String url) {
          });
     });
 } 
-```
+```java
 
 这个`loadBitmap()`返回的 Observable 可以链接前面一个，并且最后我们可以为这个任务返回一个单独的 Observable：
 
@@ -277,7 +265,7 @@ if (isCityValid(location)) {
         }
     });
 } 
-```
+```java
 
 运行代码，我们可以在下面列表中为每个用户获得新的天气图标： ![](img/chapter8_2.png)
 
@@ -293,7 +281,7 @@ if (isCityValid(location)) {
 public interface OpenProfileListener {
     public void open(String url); 
 } 
-```
+```java
 
 `Activity`实现它：
 
@@ -308,7 +296,7 @@ public void open(String url) {
     i.setData(Uri.parse(url)); 
     startActivity(i);
 } 
-```
+```java
 
 `Activity`收到 URL 并用外部 Android 浏览器打开它。我们的`ViewHolder`负责在用户列表的每个卡片上创建`OnClickListener`并检查我们是打开 Stack Overflow 用户主页还是外部个人站：
 
@@ -323,7 +311,7 @@ mView.setOnClickListener(view -> {
         }
     }
 )}； 
-```
+```java
 
 一旦我们点击了，我们将直接重定向到预期的网站。在 Android 上，我们可以用 RxAndroid 的一种特殊形式（ViewObservable）以更加响应式的方式实现同样的结果。
 
@@ -339,11 +327,9 @@ ViewObservable.clicks(mView)
         } 
     }
 }); 
-```
+```java
 
 上面两块代码片段是等价的，你可以选择最喜欢的方式来实现。
-
-# 总结
 
 # 总结
 

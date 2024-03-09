@@ -1,7 +1,5 @@
 # alt.lang.jre: 感受 Groovy
 
-# alt.lang.jre: 感受 Groovy
-
 *介绍 Java 平台的一种新标准语言*
 
 虽然 Java 语言因其严密性和扩展性的承诺而在整整一代程序员中胜出，但是 Groovy 预示了 Java 平台上的一个编程新时代，这种语言是以方便性、适宜性和敏捷性为出发点定义的。在新的 *alt.lang.jre*专栏的第二期文章中，Andrew Glover 对提议添加到 Java 平台的标准编程语言作了非正式的介绍。
@@ -54,7 +52,7 @@
 
 ##### 清单 1\. Java 静态类型
 
-```
+```java
 String myStr = "Hello World"; 
 ```
 
@@ -62,7 +60,7 @@ String myStr = "Hello World";
 
 ##### 清单 2\. Groovy 动态类型
 
-```
+```java
 myStr = "Hello World" 
 ```
 
@@ -70,7 +68,7 @@ myStr = "Hello World"
 
 ##### 清单 3\. 更多 Groovy 动态类型
 
-```
+```java
 class Song{
   length
   name
@@ -90,7 +88,7 @@ def doSomething(thing){
 
 ##### 清单 4\. 试验动态类型
 
-```
+```java
 mySong = new Song(length:90, name:"Burning Down the House")
 myBook = new Book(name:"One Duck Stuck", author:"Phyllis Root")
 doSomething(mySong) //prints Burning Down the House
@@ -109,7 +107,7 @@ anotherSomething(myBook) //prints One Duck Stuck
 
 ##### 清单 5\. 简单的 TemplateReader Java 类
 
-```
+```java
 import java.io.File;
 import java.io.IOException;
 import freemarker.template.Configuration;
@@ -135,7 +133,7 @@ public class TemplateReader {
 
 ##### 清单 6\. 用 Groovy 编写的更简单的 TemplateReader
 
-```
+```java
 import freemarker.template.Configuration as tconf
 import java.io.File
 cfg = tconf.getDefaultConfiguration()
@@ -171,7 +169,7 @@ Groovy 代码只有 Java 代码的一半那么长，下面是原因：
 
 ##### 清单 7\. 示例 Groovy 类：Dog
 
-```
+```java
 class Dog{
   name
   bark(){
@@ -192,7 +190,7 @@ class Dog{
 
 ##### 清单 8\. 示例 Groovy 类：DogOwner
 
-```
+```java
 class DogOwner{
   fname
   lname
@@ -207,7 +205,7 @@ class DogOwner{
 
 ##### 清单 9\. 使用 Groovy 类
 
-```
+```java
 myDog = new Dog()
 myDog.name = "Mollie"
 myDog.bark()
@@ -238,7 +236,7 @@ Groovy 中最令人兴奋和最强大的功能是支持闭包。 *闭包（Closu
 
 ##### 清单 10\. 使用闭包
 
-```
+```java
 class Dog{  
   action
   train(){
@@ -257,7 +255,7 @@ mollie.train() // prints Down! DOWN!
 
 ##### 清单 11\. 使用带参数的闭包
 
-```
+```java
 import org.apache.commons.httpclient.HttpClient
 import org.apache.commons.httpclient.methods.PostMethod
 postRequest = { location, xml |
@@ -289,7 +287,7 @@ println str
 
 ##### 清单 12\. 使用集合
 
-```
+```java
 collect = ['groovy', 29, 'here', 'groovy'] 
 ```
 
@@ -297,7 +295,7 @@ collect = ['groovy', 29, 'here', 'groovy']
 
 ##### 清单 13\. 使用 Groovy 集合
 
-```
+```java
 aCollect = [5, 9, 2, 2, 4, 5, 6] 
 println aCollect.join(' - ')  // prints 5 - 9 - 2 - 2 - 4 - 5 - 6
 println aCollect.count(2)     // prints 2
@@ -310,7 +308,7 @@ println aCollect.sort()       // prints [2, 2, 4, 5, 5, 6, 9]
 
 ##### 清单 14\. 处理映射
 
-```
+```java
 myMap = ["name" : "Groovy", "date" : new Date()]
 println myMap["date"]
 println myMap.date 
@@ -322,7 +320,7 @@ println myMap.date
 
 ##### 清单 15\. 处理范围
 
-```
+```java
 myRange = 29...32
 myInclusiveRange = 2..5
 println myRange.size() // prints 3
@@ -337,7 +335,7 @@ println myInclusiveRange.contains(5) //prints true
 
 ##### 清单 16\. 用范围实现循环
 
-```
+```java
 aRange = 'a'...'e'
 for (i in aRange){
   println i
@@ -350,7 +348,7 @@ for (i in aRange){
 
 ##### 清单 17\. 负索引
 
-```
+```java
 aList = ['python', 'ruby', 'groovy']
 println aList[-1] // prints groovy
 println aList[-3] // prints python 
@@ -360,7 +358,7 @@ Groovy 还让您可以用范围分割列表。分割可获得列表的准确子�
 
 ##### 清单 18\. 用范围分割
 
-```
+```java
 fullName = "Andrew James Glover"
 mName = fullName[7...13]
 print "middle name: " + mName // prints James 
@@ -372,7 +370,7 @@ print "middle name: " + mName // prints James
 
 ##### 清单 19\. Ruby 风格的集合
 
-```
+```java
 collec = [1, 2, 3, 4, 5]
 collec << 6 //appended 6 to collec
 acol = ['a','b','c'] * 3 //acol now has 9 elements
@@ -389,7 +387,7 @@ assert [1, 2, 3] == [1, 2, 3] //true
 
 ##### 清单 20\. 迭代器示例
 
-```
+```java
 str = "uncle man, uncle man"
 for (ch in str){
   println ch
@@ -400,7 +398,7 @@ Groovy 中的大多数对象具有像 `each` 和 `find` 这样的以闭包为参
 
 ##### 清单 21\. 带有迭代器的闭包
 
-```
+```java
 [1, 2, 3].each {  
   val = it 
   val += val
@@ -429,7 +427,7 @@ Groovy 中的大多数对象具有像 `each` 和 `find` 这样的以闭包为参
 
 ##### 清单 22\. 一个简单的 JavaBean 组件
 
-```
+```java
 public class LavaLamp {
   private Long model;
   private String baseColor;
@@ -466,7 +464,7 @@ public class LavaLamp {
 
 ##### 清单 23\. 用 Groovy 编写的 JavaBeans 组件
 
-```
+```java
 class LavaLamp{
   model
   baseColor
@@ -490,7 +488,7 @@ Groovy IO 操作很轻松，特别是与迭代器和闭包结合时。Groovy 使
 
 ##### 清单 24\. Groovy IO
 
-```
+```java
 import java.io.File
 new File("File-IO-Example.txt").eachLine{ line |
  println "read the following line -> " + line
@@ -509,7 +507,7 @@ Groovy 脚本实际上是字节码级别的 Java 类。因此，可以容易地�
 
 ##### 清单 25\. Groovy RegEx
 
-```
+```java
 str =  "Water, water, every where,
         And all the boards did shrink;
         Water, water, every where,

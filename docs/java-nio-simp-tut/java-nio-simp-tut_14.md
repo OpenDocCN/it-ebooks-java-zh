@@ -52,7 +52,7 @@ Java NIO 的 selector 允许一个单一线程监听多个 channel 输入。我�
 
 数据的处理方式也随着是 NIO 或 IO 而异。 在 IO 设计中，我们从 InputStream 或者 Reader 中读取字节。假设我们现在需要处理一个按行排列的文本数据，如下：
 
-```
+```java
 Name: Anna
 Age: 25
 Email: anna@mailserver.com
@@ -61,7 +61,7 @@ Phone: 1234567890
 
 这个处理文本行的过程大概是这样的：
 
-```
+```java
 InputStream input = ... ; // get the InputStream from the client socket
 
 BufferedReader reader = new BufferedReader(new InputStreamReader(input));

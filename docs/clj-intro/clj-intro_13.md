@@ -6,14 +6,14 @@
 
 宏 `dotimes` 会执行给定的表达式一定次数, 一个本地 binding 会被给定值：从 0 到一个给定的数值. 如果这个本地 binding 是不需要的 (下面例子里面的 `card-number` ), 可以用下划线来代替， 看例子:
 
-```
+```java
 (dotimes [card-number 3]
   (println "deal card number" (inc card-number))) ; adds one to card-number 
 ```
 
 注意下上面例子里面的 `inc` 函数是为了让输出变成 1, 2, 3 而不是 0, 1, 2。上面代码的输出是这样的:
 
-```
+```java
 deal card number 1
 deal card number 2
 deal card number 3 
@@ -21,7 +21,7 @@ deal card number 3
 
 宏 `while` 会一直执行一个表达式只要指定的条件为 true. 下面例子里面的 `while` 会一直执行，只要这个线程没有停:
 
-```
+```java
 (defn my-fn [ms]
   (println "entered my-fn")
   (Thread/sleep ms)
@@ -38,7 +38,7 @@ deal card number 3
 
 上面代码的输出是这样的:
 
-```
+```java
 started thread
 .....entered my-fn.
 .............leaving my-fn.
@@ -53,7 +53,7 @@ thread stopped
 
 下面的例子会打印一个矩阵里面 所有的元素出来。 它们会跳过 “B” 列 并且只输出小于 3 的那些行。我们会在“序列”那一节介绍 `dorun` , 它会强制提取 for 所返回的懒惰集合.
 
-```
+```java
 (def cols "ABCD")
 (def rows (range 1 4)) ; purposely larger than needed to demonstrate :while
 
@@ -71,7 +71,7 @@ thread stopped
 
 上面的代码的输出是这样的：
 
-```
+```java
 for demo
 A1
 A2

@@ -4,7 +4,7 @@
 
 有很多 Clojure 类库可以帮助我们创建 web 应用。现在比较流行使用 Chris Granger 写的 [Noir](http://webnoir.org/) 。另外一个简单的，基于 MVC 的框架， 使用 Christophe Grand 写的? [Enlive](https://github.com/cgrand/enlive) 来做页面的 template, 是 Sean Corfield 写的 [Framework One](https://github.com/seancorfield/fw1-clj) 。另一个流行的选择是 James Reeves 写的 Compojure，你可以在这里下载： [`github.com/weavejester/compojure/tree/master`](http://github.com/weavejester/compojure/tree/master) 。所有这些框架都是基于 Mark McGranahan 写的 [Ring](https://github.com/mmcgrana/ring) (James Reeves 同学现在在维护). 我们以 Compojure 为例子来稍微介绍一下 web 应用开发。最新的版本可以通过 git 来获取:
 
-```
+```java
 git clone git://github.com/weavejester/compojure.git 
 ```
 
@@ -14,14 +14,14 @@ git clone git://github.com/weavejester/compojure.git
 
 要获取 Compojure 的更新, 切换到 `compojure` 目录下面执行下面的命令:
 
-```
+```java
 git pull
 ant clean deps jar 
 ```
 
 所有的 `deps` 目录里面的 jar 包都必须包含在 classpath 里面。一个方法是修改我们的 `clj` 脚本，然后用这个脚本来运行 web 应用. 把 " `-cp $CP` " 添加到 `java` 命令后面去 执行 `clojure.main 添加下面这些行到脚本里面去，以把那些 jar 包包含在` `CP` 里面。
 
-```
+```java
 # Set CP to a path list that contains clojure.jar
 # and possibly some Clojure contrib JAR files.
 COMPOJURE_DIR=<em>path-to-compojure-dir</em>
@@ -37,7 +37,7 @@ done
 
 ![Compojure input page](img/QNN7Rj.png) ![Compojure output page](img/RVjmqe.png)
 
-```
+```java
 (ns com.ociweb.hello
   (:use compojure))
 

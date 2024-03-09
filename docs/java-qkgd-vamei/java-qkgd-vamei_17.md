@@ -12,14 +12,14 @@
 
  下面是我用于演示的文件 file.txt
 
-```
+```java
 Hello World!
 Hello Nerd!
 ```
 
 我们先来研究一个文件读取的例子:
 
-```
+```java
 import java.io.*;
 
 public class Test
@@ -103,7 +103,7 @@ InputStream 和 OutputStream 及其衍生类是处理字节(byte)流。计算机
 
 写入(write)操作与读取操作相似。我们可以通过使用装饰，实现复杂的写入功能。这里是一个简单的写入文本的例子:
 
-```
+```java
 import java.io.*;
 
 public class Test

@@ -1,12 +1,8 @@
 # IO
 
-# IO
-
 本章交要讲解基本的 I/O 。它首先集中在 “I/O 流”（I/O Streams），一个强大的概念用于简化 I/O 操作。本文还讲解了序列化，它可以让程序将整个对象转出为流，然后再从流读回来。随后介绍文件 I/O 和文件系统的操作，其中包括了随机访问文件。
 
 大多数涵盖 I/O 流 的类都在`java.io`包。大多数涵盖文件 I/O 的类都在`java.nio.file`包。
-
-# I/O 流
 
 # I/O 流
 
@@ -20,7 +16,7 @@
 
 下面一例子 CopyBytes， 从 xanadu.txt 文件复制到 outagain.txt，每次只复制一个字节：
 
-```
+```java
 public class CopyBytes {
     /**
      * @param args
@@ -78,7 +74,7 @@ Java 平台存储字符值使用 Unicode 约定。字符流 I/O 会自动将这�
 
 字符流类描述在 [Reader](https://docs.oracle.com/javase/8/docs/api/java/io/Reader.html) 和 [Writer](https://docs.oracle.com/javase/8/docs/api/java/io/Writer.html)。而对应文件 I/O ，在 [FileReader](https://docs.oracle.com/javase/8/docs/api/java/io/FileReader.html) 和 [FileWriter](https://docs.oracle.com/javase/8/docs/api/java/io/FileWriter.html)，下面是一个 CopyCharacters 例子：
 
-```
+```java
 public class CopyCharacters {
     /**
      * @param args
@@ -124,7 +120,7 @@ CopyCharacters 与 CopyBytes 是非常相似的。最重要的区别在于 CopyC
 
 该 CopyLines 示例调用 BufferedReader.readLine 和 PrintWriter.println 同时做一行的输入和输出。
 
-```
+```java
 public class CopyLines {
     /**
      * @param args
@@ -168,7 +164,7 @@ public class CopyLines {
 
 程序可以转换的非缓冲流为缓冲流，这里用非缓冲流对象传递给缓冲流类的构造器。
 
-```
+```java
 inputStream = new BufferedReader(new FileReader("xanadu.txt"));
 outputStream = new BufferedWriter(new FileWriter("characteroutput.txt")); 
 ```
@@ -195,7 +191,7 @@ I/O 编程通常涉及对人类喜欢的整齐的格式化数据进行转换。�
 
 默认情况下，Scanner 使用空格字符分隔标记。（空格字符包括空格，制表符和行终止符。为完整列表，请参阅 [Character.isWhitespace](https://docs.oracle.com/javase/8/docs/api/java/lang/Character.html#isWhitespace-char-)）。示例 ScanXan 读取 xanadu.txt 的单个词语并打印他们：
 
-```
+```java
 public class ScanXan {
     /**
      * @param args
@@ -223,7 +219,7 @@ public class ScanXan {
 
 调用 useDelimiter() ,指定一个正则表达式可以使用不同的标记分隔符。例如,假设您想要标记分隔符是一个逗号，后面可以跟空格。你会调用
 
-```
+```java
 s.useDelimiter(",\\s*"); 
 ```
 
@@ -233,13 +229,13 @@ s.useDelimiter(",\\s*");
 
 这里要注意的是语言环境，因为千位分隔符和小数点符号是特定于语言环境。所以，下面的例子将无法正常在所有的语言环境中，如果我们没有指定 scanner 应该用在美国地区工作。可能你平时并不用关心，因为你输入的数据通常来自使用相同的语言环境。可以使用下面的语句来设置语言环境：
 
-```
+```java
 s.useLocale(Locale.US); 
 ```
 
 该 ScanSum 示例是将读取的 double 值列表进行相加：
 
-```
+```java
 public class ScanSum {
     /**
      * @param args
@@ -286,7 +282,7 @@ public class ScanSum {
 
 调用 print 或 println 输出使用适当 toString 方法变换后的值的单一值。我们可以看到这 Root 例子：
 
-```
+```java
 public class Root {
     /**
      * @param args
@@ -310,7 +306,7 @@ public class Root {
 
 输出为：
 
-```
+```java
 The square root of 2 is 1.4142135623730951.
 The square root of 5 is 2.23606797749979. 
 ```
@@ -325,7 +321,7 @@ The square root of 5 is 2.23606797749979.
 
 Root2 示例在一个 format 调用里面设置两个值：
 
-```
+```java
 public class Root2 {
     /**
      * @param args
@@ -359,7 +355,7 @@ public class Root2 {
 
 除了用于转换，格式说明符可以包含若干附加的元素，进一步定制格式化输出。下面是一个 Format 例子，使用一切可能的一种元素。
 
-```
+```java
 public class Format {
     /**
      * @param args
@@ -399,7 +395,7 @@ Java 平台支持三种标准流：标准输入（Standard Input, 通过 System.
 
 相比之下，System.in 是一个没有字符流功能的字节流。若要想将标准的输入作为字符流，可以包装 System.in 在 InputStreamReader
 
-```
+```java
 InputStreamReader cin = new InputStreamReader(System.in); 
 ```
 
@@ -413,7 +409,7 @@ Console 对象支持通过读取密码的方法安全输入密码。该方法有
 
 Password 例子是一个展示了更改用户的密码原型程序。它演示了几种 Console 方法
 
-```
+```java
 public class Password {
     /**
      * @param args
@@ -493,7 +489,7 @@ DataStreams 例子展示了数据流通过写出的一组数据记录到文件�
 
 首先，定义了几个常量，数据文件的名称，以及数据。
 
-```
+```java
 static final String dataFile = "invoicedata";
 
 static final double[] prices = { 19.99, 9.99, 15.99, 3.99, 4.99 };
@@ -509,14 +505,14 @@ static final String[] descs = {
 
 DataStreams 打开一个输出流，提供一个缓冲的文件输出字节流：
 
-```
+```java
 out = new DataOutputStream(new BufferedOutputStream(
               new FileOutputStream(dataFile))) 
 ```
 
 DataStreams 写出记录并关闭输出流：
 
-```
+```java
 for (int i = 0; i < prices.length; i ++) {
     out.writeDouble(prices[i]);
     out.writeInt(units[i]);
@@ -528,7 +524,7 @@ for (int i = 0; i < prices.length; i ++) {
 
 现在，DataStreams 读回数据。首先，它必须提供一个输入流，和变量来保存的输入数据。像 DataOutputStream 、DataInputStream 类，必须构造成一个字节流的包装器。
 
-```
+```java
 in = new DataInputStream(new
             BufferedInputStream(new FileInputStream(dataFile)));
 
@@ -540,7 +536,7 @@ double total = 0.0;
 
 现在，DataStreams 可以读取流里面的每个记录，并在遇到它时将数据报告出来：
 
-```
+```java
 try {
     while (true) {
         price = in.readDouble();
@@ -570,7 +566,7 @@ DataStreams 使用了一个非常糟糕的编程技术：它使用浮点数来�
 
 对象流类包括 [ObjectInputStream](https://docs.oracle.com/javase/8/docs/api/java/io/ObjectInputStream.html) 和 [ObjectOutputStream](https://docs.oracle.com/javase/8/docs/api/java/io/ObjectOutputStream.html) 的。这些类实现的 [ObjectInput](https://docs.oracle.com/javase/8/docs/api/java/io/ObjectInput.html) 与 [ObjectOutput](https://docs.oracle.com/javase/8/docs/api/java/io/ObjectOutput.html) 的，这些都是 DataInput 和 DataOutput 的子接口。这意味着，所有包含在数据流中的基本数据类型 I/O 方法也在对象流中实现了。这样一个对象流可以包含基本数据类型值和对象值的混合。该 ObjectStreams 例子说明了这一点。ObjectStreams 创建与 DataStreams 相同的应用程序。首先，价格现在是 [BigDecimal](https://docs.oracle.com/javase/8/docs/api/java/math/BigDecimal.html) 对象，以更好地代表分数值。其次，[Calendar](https://docs.oracle.com/javase/8/docs/api/java/util/Calendar.html) 对象被写入到数据文件中，指示发票日期。
 
-```
+```java
 public class ObjectStreams {
     static final String dataFile = "invoicedata";
 
@@ -650,7 +646,7 @@ writeObject 和 readObject 方法简单易用，但它们包含了一些非常�
 
 如果在同一个流的两个对象引用了同一个对象会发生什么？流只包含一个对象的一个拷贝，尽管它可以包含任何数量的对它的引用。因此，如果你明确地写一个对象到流两次，实际上只是写入了 2 此引用。例如，如果下面的代码写入一个对象 ob 两次到流：
 
-```
+```java
 Object ob = new Object();
 out.writeObject(ob);
 out.writeObject(ob); 
@@ -658,7 +654,7 @@ out.writeObject(ob);
 
 每个 writeObject 都对应一个 readObject， 所以从流里面读回的代码如下：
 
-```
+```java
 Object ob1 = in.readObject();
 Object ob2 = in.readObject(); 
 ```
@@ -670,8 +666,6 @@ ob1 和 ob2 都是相同对象的引用。
 ## 源码
 
 本章例子的源码，可以在 [`github.com/waylau/essential-java`](https://github.com/waylau/essential-java) 中 `com.waylau.essentialjava.io` 包下找到。
-
-# 文件 I/O
 
 # 文件 I/O
 
@@ -691,13 +685,13 @@ ob1 和 ob2 都是相同对象的引用。
 
 文件系统通过路径来确定文件。例如，上图 statusReport 在 Solaris OS 描述为：
 
-```
+```java
 /home/sally/statusReport 
 ```
 
 而在 Microsoft Windows 下，描述如下：
 
-```
+```java
 C:\home\sally\statusReport 
 ```
 
@@ -749,7 +743,7 @@ Path 实例包含用于指定文件或目录的位置的信息。在它被定义
 
 您可以通过 [Paths](https://docs.oracle.com/javase/8/docs/api/java/nio/file/Paths.html)（注意是复数）助手类的 get 方法很容易地创建一个 Path 对象：
 
-```
+```java
 Path p1 = Paths.get("/tmp/foo");
 Path p2 = Paths.get(args[0]);
 Path p3 = Paths.get(URI.create("file:///Users/joe/FileTest.java")); 
@@ -757,7 +751,7 @@ Path p3 = Paths.get(URI.create("file:///Users/joe/FileTest.java"));
 
 Paths.get 是下面方式的简写：
 
-```
+```java
 Path p4 = FileSystems.getDefault().getPath("/users/sally"); 
 ```
 
@@ -773,7 +767,7 @@ Path p4 = FileSystems.getDefault().getPath("/users/sally");
 
 下面的代码片段定义了一个 Path 实例，然后调用一些方法来获取有关的路径信息：
 
-```
+```java
 // None of these methods requires that the file corresponding
 // to the Path exists.
 // Microsoft Windows syntax
@@ -805,7 +799,7 @@ System.out.format("getRoot: %s%n", path.getRoot());
 
 下面是一个相对路径的例子：
 
-```
+```java
 // Solaris syntax
 Path path = Paths.get("sally/bar");
 or
@@ -831,7 +825,7 @@ Path path = Paths.get("sally\\bar");
 
 下面的例子都包含冗余：
 
-```
+```java
 /home/./joe/foo
 /home/sally/../joe/foo 
 ```
@@ -846,7 +840,7 @@ normalize 方法是删除任何多余的元素，其中包括任何 出现的“
 
 可以使用 3 个方法来转换路径。[toUri](https://docs.oracle.com/javase/8/docs/api/java/nio/file/Path.html#toUri--) 将路径转换为可以在浏览器中打开一个字符串，例如：
 
-```
+```java
 Path p1 = Paths.get("/home/logfile");
 // Result is file:///home/logfile
 System.out.format("%s%n", p1.toUri()); 
@@ -854,7 +848,7 @@ System.out.format("%s%n", p1.toUri());
 
 [toAbsolutePath](https://docs.oracle.com/javase/8/docs/api/java/nio/file/Path.html#toAbsolutePath--) 方法将路径转为相对路径。如果传递的路径已是绝对的，则返回同一 Path 对象。toAbsolutePath 方法可以非常有助于处理用户输入的文件名。例如
 
-```
+```java
 public class FileTest {
     /**
      * @param args
@@ -897,7 +891,7 @@ public class FileTest {
 
 若文件不存在或者无法访问,则方法抛出异常。可以捕捉处理异常：
 
-```
+```java
 try {
     Path fp = path.toRealPath();
 } catch (NoSuchFileException x) {
@@ -915,7 +909,7 @@ try {
 
 例如，请考虑下面的代码片段：
 
-```
+```java
 // Solaris
 Path p1 = Paths.get("/home/joe/foo");
 // Result is /home/joe/foo/bar
@@ -931,7 +925,7 @@ System.out.format("%s%n", p1.resolve("bar"));
 
 传递相对路径到 resolve 方法返回路径中的传递路径：
 
-```
+```java
 // Result is /home/joe
 Paths.get("foo").resolve("/home/joe"); 
 ```
@@ -942,14 +936,14 @@ Paths.get("foo").resolve("/home/joe");
 
 例如，定义为 joe 和 sally 相对路径：
 
-```
+```java
 Path p1 = Paths.get("joe");
 Path p2 = Paths.get("sally"); 
 ```
 
 在没有任何其他信息的，假定 joe 和 sally 是同一级别的节点。从 joe 导航到 sally，你会希望首先导航上一级父节点，然后向下找到 sally：
 
-```
+```java
 // Result is ../sally
 Path p1_to_p2 = p1.relativize(p2);
 // Result is ../joe
@@ -958,7 +952,7 @@ Path p2_to_p1 = p2.relativize(p1);
 
 下面是复杂点的例子:
 
-```
+```java
 Path p1 = Paths.get("home");
 Path p3 = Paths.get("home/sally/bar");
 // Result is sally/bar
@@ -969,7 +963,7 @@ Path p3_to_p1 = p3.relativize(p1);
 
 Copy 是个完整的使用 relativize 和 resolve 的例子：
 
-```
+```java
 public class Copy {
 
     /**
@@ -1138,7 +1132,7 @@ public class Copy {
 
 Path 类支持 [equals](https://docs.oracle.com/javase/8/docs/api/java/nio/file/Path.html#equals-java.lang.Object-)，从而使您能够测试两个路径是否相等。[startsWith](https://docs.oracle.com/javase/8/docs/api/java/nio/file/Path.html#startsWith-java.nio.file.Path-) 和 [endsWith](https://docs.oracle.com/javase/8/docs/api/java/nio/file/Path.html#endsWith-java.nio.file.Path-) 方法，可以测试路径中是否有特定的字符串开头或者结尾。这些方法很容易使用。 例如：
 
-```
+```java
 Path path = ...;
 Path otherPath = ...;
 Path beginning = Paths.get("/home");
@@ -1155,7 +1149,7 @@ if (path.equals(otherPath)) {
 
 Path 类实现了 [Iterable](https://docs.oracle.com/javase/8/docs/api/java/lang/Iterable.html) 接口。 iterator 方法返回一个对象，使您可以遍历路径中的元素名。返回的第一个元素是最接近目录树的根。下面的代码片段遍历路径，打印每个 name 元素：
 
-```
+```java
 Path path = ...;
 for (Path name: path) {
     System.out.println(name);
@@ -1182,7 +1176,7 @@ for (Path name: path) {
 
 使用 `try-with-resources` 语句的好处是，在资源不需要时，编译器会自动生成的代码以关闭资源。下面的代码显示了如何用：
 
-```
+```java
 Charset charset = Charset.forName("US-ASCII");
 String s = ...;
 try (BufferedWriter writer = Files.newBufferedWriter(file, charset)) {
@@ -1194,7 +1188,7 @@ try (BufferedWriter writer = Files.newBufferedWriter(file, charset)) {
 
 或者，你可以使用 try-catch-finally 语句，在 finally 块记得关闭它们。例子如下：
 
-```
+```java
 Charset charset = Charset.forName("US-ASCII");
 String s = ...;
 BufferedWriter writer = null;
@@ -1212,7 +1206,7 @@ try {
 
 下面的代码片段显示了 getFile 方法的使用：
 
-```
+```java
 try (...) {
     ...    
 } catch (NoSuchFileException x) {
@@ -1224,13 +1218,13 @@ try (...) {
 
 Files 方法可以接受 可变参数，用法如
 
-```
+```java
 Path Files.move(Path, Path, CopyOption...) 
 ```
 
 可变参数可以用逗号隔开的数组 (CopyOption[]) ，用法：
 
-```
+```java
 import static java.nio.file.StandardCopyOption.*;
 
 Path source = ...;
@@ -1253,7 +1247,7 @@ Files.move(source,
 
 许多文件 I/O 支持方法链。例如：
 
-```
+```java
 String value = Charset.defaultCharset().decode(buf).toString();
 UserPrincipal group =
     file.getFileSystem().getUserPrincipalLookupService().
@@ -1316,7 +1310,7 @@ Files 方法在遇到符号链接时，要检测做什么，或者提供启用�
 
 下面的代码片段验证一个特定的文件是否存在，以及该程序能够执行该文件：
 
-```
+```java
 Path file = ...;
 boolean isRegularExecutableFile = Files.isRegularFile(file) &
          Files.isReadable(file) & Files.isExecutable(file); 
@@ -1328,7 +1322,7 @@ boolean isRegularExecutableFile = Files.isRegularFile(file) &
 
 在使用符号链接的文件系统中，就可能有两个定位到相同文件的不同的路径。使用 [isSameFile(Path, Path)](https://docs.oracle.com/javase/8/docs/api/java/nio/file/Files.html#isSameFile-java.nio.file.Path-java.nio.file.Path-) 方法比较两个路径，以确定它们在该文件系统上是否定位为同一个文件。 例如：
 
-```
+```java
 Path p1 = ...;
 Path p2 = ...;
 
@@ -1345,7 +1339,7 @@ Files 类提供了两个删除方法。
 
 [delete(Path)](https://docs.oracle.com/javase/8/docs/api/java/nio/file/Files.html#delete-java.nio.file.Path-) 方法删除文件或者删除失败将引发异常。例如，如果文件不存在就抛出 NoSuchFileException。您可以捕获该异常，以确定为什么删除失败，如下所示：
 
-```
+```java
 try {
     Files.delete(path);
 } catch (NoSuchFileException x) {
@@ -1376,7 +1370,7 @@ try {
 
 下面演示了 copy 的用法：
 
-```
+```java
 import static java.nio.file.StandardCopyOption.*;
 ...
 Files.copy(source, target, REPLACE_EXISTING); 
@@ -1397,7 +1391,7 @@ Files.copy(source, target, REPLACE_EXISTING);
 
 下面介绍如何使用 move 方法：
 
-```
+```java
 import static java.nio.file.StandardCopyOption.*;
 ...
 Files.move(source, target, REPLACE_EXISTING); 

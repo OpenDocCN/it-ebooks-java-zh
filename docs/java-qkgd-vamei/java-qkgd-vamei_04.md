@@ -15,7 +15,7 @@
 
 我们定义 Human 类的构造器:
 
-```
+```java
 public class Test
 {
     public static void main(String[] args)
@@ -67,7 +67,7 @@ I'm born
 
 在[方法与数据成员](http://www.cnblogs.com/vamei/archive/2013/03/25/2964430.html)中，我们可以看到，如果我们提供显式初始值，那么数据成员就会采用显式初始值，而不是默认初始值。但如果我们既提供显式初始值，又在构造器初始化同一数据成员，最终的初始值将由构造器决定。比如下面的例子:
 
-```
+```java
 public class Test
 {
     public static void main(String[] args)
@@ -114,7 +114,7 @@ class Human
 
 一个类中可以定义不止一个构造器，比如:
 
-```
+```java
 public class Test
 {
     public static void main(String[] args)
@@ -170,7 +170,7 @@ Ne Zha: I'm born, shit
 
 在 Java 中，Java 会同时根据方法名和参数列表来决定所要调用的方法，这叫做方法重载(method overloading)。构建方法可以进行重载，普通方法也可以重载，比如下面的 breath()方法:
 
-```
+```java
 public class Test
 {
     public static void main(String[] args)

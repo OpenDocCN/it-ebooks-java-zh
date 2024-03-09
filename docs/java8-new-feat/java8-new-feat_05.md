@@ -1,7 +1,5 @@
 # 五、重复注解（repeating annotations）
 
-# 五、重复注解（repeating annotations）
-
 > 来源：[Java 8 新特性探究（五）重复注解（repeating annotations）](http://my.oschina.net/benhaile/blog/180932)
 
 ### **知识回顾**
@@ -24,7 +22,7 @@
 
 java 8 之前也有重复使用注解的解决方案，但可读性不是很好，比如下面的代码：
 
-```
+```java
 public @interface Authority {
      String role();
 }
@@ -43,7 +41,7 @@ public class RepeatAnnotationUseOldVersion {
 
 由另一个注解来存储重复注解，在使用时候，用存储注解 Authorities 来扩展重复注解，我们再来看看 java 8 里面的做法：
 
-```
+```java
 @Repeatable(Authorities.class)
 public @interface Authority {
      String role();

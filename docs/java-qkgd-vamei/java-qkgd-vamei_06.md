@@ -16,7 +16,7 @@ a cup in mind
 
 以杯子为例，定义一个杯子的接口:
 
-```
+```java
 interface Cup {
     void addWater(int w);
     void drinkWater(int w);
@@ -34,7 +34,7 @@ Cup 这个 interface 中定义了两个方法的原型(stereotype): addWater()�
 
 我们可以在一个类的定义中实施接口，比如下面的 MusicCup (可以播放音乐的杯子):
 
-```
+```java
 class MusicCup implements Cup 
 {
     public void addWater(int w) 
@@ -55,7 +55,7 @@ class MusicCup implements Cup
 
 在类中可以定义 interface 没有提及的其他 public 方法。也就是说，interface 规定一个必须要实施的最小接口。比如下面的 waterContent()方法就没有在 Cup 接口中规定原型:
 
-```
+```java
 class MusicCup implements Cup 
 {
     public void addWater(int w) 
@@ -98,7 +98,7 @@ class MusicCup implements Cup
 
 一个类可以实施不止一个的 interface。比如我们有下面一个 interface:
 
-```
+```java
 interface MusicPlayer {
     void play();
 }
@@ -110,7 +110,7 @@ interface MusicPlayer {
 
 所以 MusicCup 应该具备两套接口，即同时实施 MusicPlayer 接口和 Cup 接口:
 
-```
+```java
 class MusicCup implements MusicPlayer, Cup
 {
     public void addWater(int w) 

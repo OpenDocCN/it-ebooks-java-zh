@@ -1,7 +1,5 @@
 # 实战 Groovy: 用 Groovy 生成器作标记
 
-# 实战 Groovy: 用 Groovy 生成器作标记
-
 *抛开标记语言的细节，聚焦应用程序的内容*
 
 Groovy 生成器让您能够利用诸如 Swing 这样的框架来模拟标记语言（如 XML、HTML、Ant） 任务以及 GUI。它们对于快速原型化非常有 用，并且正像 Andrew Glover 这个月在“*实战 Groovy*”专栏中向您展示的那样，当您马上需要可消费的标记时，它们是数据绑定框架的一种便利的替代方案。
@@ -22,7 +20,7 @@ Groovy 生成器让您能够利用诸如 Swing 这样的框架来模拟标记语
 
 ##### 清单 1\. 简单 XML 结构
 
-```
+```java
  <person> 
    <name first="Megan" last="Smith"> 
      <age>32</age> 
@@ -44,7 +42,7 @@ Groovy 生成器让您能够利用诸如 Swing 这样的框架来模拟标记语
 
 ##### 清单 2\. 生成器是如此的简单
 
-```
+```java
  import groovy.xml.* 
  import java.io.* 
  class XMLBuilder{ 
@@ -79,7 +77,7 @@ Groovy 生成器让您能够利用诸如 Swing 这样的框架来模拟标记语
 
 ##### 清单 3\. HTML 101
 
-```
+```java
  <html> 
   <head> 
    <title>Groov'n with Builders</title> 
@@ -94,7 +92,7 @@ Groovy 生成器让您能够利用诸如 Swing 这样的框架来模拟标记语
 
 ##### 清单 4\. HTML in Groovy 101
 
-```
+```java
  import groovy.xml.* 
  import java.io.* 
  class HTMLBuilderExample{ 
@@ -120,7 +118,7 @@ Groovy 生成器让您能够利用诸如 Swing 这样的框架来模拟标记语
 
 ##### 清单 5\. Groovy 中的 GUI 生成器真的很“GROOVY”（很“棒”）
 
-```
+```java
  import java.awt.FlowLayout 
  import javax.swing.* 
  import groovy.swing.SwingBuilder 
@@ -183,7 +181,7 @@ Groovy 生成器让您能够利用诸如 Swing 这样的框架来模拟标记语
 
 ##### 清单 6\. 可采用的词典 XML
 
-```
+```java
  <words> 
   <word spelling="glib" partofspeech="adjective"> 
     <defintions> 
@@ -215,7 +213,7 @@ Groovy 生成器让您能够利用诸如 Swing 这样的框架来模拟标记语
 
 ##### 清单 7\. 用生成器集合所有元素
 
-```
+```java
  import groovy.sql.Sql 
  import groovy.xml.MarkupBuilder 
  import java.io.File 

@@ -4,7 +4,7 @@
 
 Clojure Contrib 里面的 jdbc 库简化了 clojure 对于关系型数据库的访问. 它通过 commit 和 rollback 来支持事务, 支持 prepared statements, 支持创建/删除表, 插入/更新/删除行, 以及查询。下面的例子链接到一个 Postgres 数据库并且执行了一个查询。代码的注释里面还提到了怎么使用 jdbc 来连接 mysql。
 
-```
+```java
 (use 'clojure.java.jdbc)
 
 (let [db-host "localhost"

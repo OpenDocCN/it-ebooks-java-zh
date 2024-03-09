@@ -1,7 +1,5 @@
 # 集合框架
 
-# 集合框架
-
 # 网络基础
 
 ## 网络基础
@@ -74,8 +72,6 @@ TCP 和 UDP 协议使用的端口来将接收到的数据映射到一个计算�
 
 # Socket
 
-# Socket
-
 ## 什么是 Socket
 
 Socket（套接字）：是在网络上运行两个程序之间的双向通信链路的一个端点。socket 绑定到一个端口号，使得 TCP 层可以标识数据最终要被发送到哪个应用程序。
@@ -112,7 +108,7 @@ EchoClient 创建一个 socket，从而得到回声服务器的连接。它从�
 
 EchoClient 代码：
 
-```
+```java
 public class EchoClient {
     public static void main(String[] args) throws IOException {
 
@@ -155,7 +151,7 @@ public class EchoClient {
 
 EchoServer 代码：
 
-```
+```java
 public class EchoServer {
     public static void main(String[] args) throws IOException {
 
@@ -190,19 +186,19 @@ public class EchoServer {
 
 首先启动服务器，在命令行输入如下，设定一个端口号，比如 7（Echo 协议指定端口是 7）：
 
-```
+```java
 java EchoServer 7 
 ```
 
 而后启动客户端，echoserver.example.com 是你主机的名称，如果是本机的话，主机名称可以是 localhost
 
-```
+```java
 java EchoClient echoserver.example.com 7 
 ```
 
 输出效果如下：
 
-```
+```java
 你好吗？
 echo: 你好吗？
 我很好哦
@@ -210,8 +206,6 @@ echo: 我很好哦
 要过年了，www.waylau.com 祝你 猴年大吉，身体健康哦！
 echo: 要过年了，www.waylau.com 祝你 猴年大吉，身体健康哦！ 
 ```
-
-# I/O 模型的演进
 
 # I/O 模型的演进
 
@@ -312,7 +306,7 @@ I/O 多路复用模型使用了 Reactor 设计模式实现了这一机制。
 
 EchoServer 代码：
 
-```
+```java
 public class EchoServer {
     public static int DEFAULT_PORT = 7;
 
@@ -354,7 +348,7 @@ public class EchoServer {
 
 主线程 MultiThreadEchoServer.java
 
-```
+```java
 public class MultiThreadEchoServer {
     public static int DEFAULT_PORT = 7;
 
@@ -386,7 +380,7 @@ public class MultiThreadEchoServer {
 
 处理器类 EchoServerHandler.java
 
-```
+```java
 public class EchoServerHandler implements Runnable {
     private Socket clientSocket;
 
@@ -418,7 +412,7 @@ public class EchoServerHandler implements Runnable {
 
 主线程 ThreadPoolEchoServer.java
 
-```
+```java
 public class ThreadPoolEchoServer {
     public static int DEFAULT_PORT = 7;
 
@@ -467,7 +461,7 @@ Java NIO 由以下几个核心部分组成：
 
 主线程 NonBlokingEchoServer.java
 
-```
+```java
 public class NonBlokingEchoServer {
     public static int DEFAULT_PORT = 7;
 
@@ -552,7 +546,7 @@ Java SE 7 版本之后，引入了异步 I/O （NIO.2） 的支持，为构建�
 
 主线程 AsyncEchoServer.java
 
-```
+```java
 public class AsyncEchoServer {
 
     public static int DEFAULT_PORT = 7;

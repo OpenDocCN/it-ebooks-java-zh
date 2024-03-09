@@ -31,7 +31,7 @@ Lisp 方言有一个非常简洁的语法 — 有些人觉得很美的语法。�
 | 创建一个匿名函数 | `#(_single-expression_)` 用 `%` (等同于 `%1` ), `%1` , `%2 来表示参数` | `(fn [_arg-names_] _expressions_)` |
 | 获取 Ref, Atom 和 Agent 对应的 valuea | `@_ref_` | `(deref _ref_)` |
 | get `Var` object instead of the value of a symbol (var-quote) | `#'_name_` | `(var _name_)` |
-| syntax quote (使用在宏里面) | ``` | none |
+| syntax quote (使用在宏里面) | ```java | none |
 | unquote (使用在宏里面) | `~_value_` | `(unquote _value_)` |
 | unquote splicing (使用在宏里面) | `~@_value_` | none |
 | auto-gensym (在宏里面用来产生唯一的 symbol 名字) | `_prefix_#` | `(gensym _prefix_ )` |
@@ -57,7 +57,7 @@ public class PigLatin {
   System.out.println(pigLatin("orange"));
   }
 } 
-```
+```java
 
 ```
 ; This is Clojure code.

@@ -19,7 +19,7 @@
 
 如果这个被编译的名字空间有一个叫做- `main` 的函数， 那么你可以把它当作 java 的主类的运行。命令行参数会被当作参数传递给这个函数。比如，如果 `talk.clj` 包含一个叫 `-main` 的函数， 你可以用下面的命令来运行:
 
-```
+```java
 java -classpath <em>path</em>/classes:<em>path</em>/clojure.jar com.ociweb.talk <em>args</em> 
 ```
 
@@ -29,7 +29,7 @@ java -classpath <em>path</em>/classes:<em>path</em>/clojure.jar com.ociweb.talk 
 
 提前编译的 Clojure 函数如果是静态的函数的话，那么它们可以被 java 程序调用。可以通过把函数的元数据项： `:static` 设置为 `true` 来达到这个目的。语法是这样的：
 
-```
+```java
 (ns <em>namespace</em>
   (:gen-class
    :methods [#^{:static true} [<em>function-name</em> [<em>param-types</em>] <em>return-type</em>]])) 
@@ -37,7 +37,7 @@ java -classpath <em>path</em>/classes:<em>path</em>/clojure.jar com.ociweb.talk 
 
 让我们看一个例子：下面是一个名字叫做 Demo.clj 的文件，它的路径是 `src/com/ociweb/clj。`
 
-```
+```java
 (ns com.ociweb.clj.Demo
   (:gen-class
    :methods [#^{:static true} [getMessage [String] String]]))
@@ -49,7 +49,7 @@ java -classpath <em>path</em>/classes:<em>path</em>/clojure.jar com.ociweb.talk 
 
 下面是一个叫做 `Main.java` 的 java 文件，它和 `src` 以及 `classes` 在同一个目录。
 
-```
+```java
 import com.ociweb.clj.Demo; // class created by compiling Clojure source file
 
 public class Main {

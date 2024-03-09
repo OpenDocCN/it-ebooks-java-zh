@@ -26,13 +26,13 @@ Clojure 是 [Lisp](http://en.wikipedia.org/wiki/Lisp_(programming_language)) 的
 
 Lisp 的语法很多人很喜欢，很多人很讨厌, 主要因为它大量的使用圆括号以及前置表达式. 如果你不喜欢这些，那么你要考虑一下是不是要学习 Clojure 了 。许多文件编辑器以及 IDE 会高亮显示匹配的圆括号, 所以你不用担心需要去人肉数有没有多加一个左括号，少写一个右括号. 同时 Clojure 的代码还要比 java 代码简洁. 一个典型的 java 方法调用是这样的:
 
-```
+```java
 methodName(arg1, arg2, arg3); 
 ```
 
 而 Clojure 的方法调用是这样的:
 
-```
+```java
 (function-name arg1 arg2 arg3) 
 ```
 
@@ -40,14 +40,14 @@ methodName(arg1, arg2, arg3);
 
 定义函数也比 java 里面简洁。Clojure 里面的 `println` 会在它的每个参数之间加一个空格。如果这个不是你想要的，那么你可以把参数传给 `str` ，然后再传给 `println` .
 
-```
+```java
 // Java
 public void hello(String name) {
     System.out.println("Hello, " + name);
 } 
 ```
 
-```
+```java
 ; Clojure
 (defn hello [name]
   (println "Hello," name)) 

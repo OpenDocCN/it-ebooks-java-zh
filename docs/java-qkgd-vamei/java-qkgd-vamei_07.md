@@ -18,7 +18,7 @@
 
 我们下面定义一个 Battery 类，并用 power 来表示其电量。一个 Battery 的可以充电(chargeBattery)和使用(useBattery)。我们在随后的 Torch 类定义中使用 Battery 类型的对象作为数据成员:
 
-```
+```java
 class Battery 
 {
     public void chargeBattery(double p)
@@ -87,7 +87,7 @@ has-a: 手电有电池 (注意上面的菱形连线)
 
 我们可以增加一个 Test 类，看看实际效果:
 
-```
+```java
 public class Test
 {
     public static void main(String[] args)

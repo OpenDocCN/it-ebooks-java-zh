@@ -1,7 +1,5 @@
 # 快速开始
 
-# 快速开始
-
 本章介绍了如何下载、安装、配置和调试 JDK。
 
 ## 下载、安装 JDK
@@ -36,7 +34,7 @@ JDK 支持如下操作系统的安装：
 
 包括 Linux、Mac OS X 和 Solaris 环境下，在`~/.bashrc`或 `~/.bash_profile` 文件末尾添加
 
-```
+```java
 export PATH=usr/local/java/jdk1.8.0_66:$PATH 
 ```
 
@@ -44,7 +42,7 @@ export PATH=usr/local/java/jdk1.8.0_66:$PATH
 
 把安装目录下的 `C:\Program Files\Java\jdk1.8.0_66\bin` 设置为 `PATH` 的环境变量。比如：
 
-```
+```java
 C:\WINDOWS\system32;C:\WINDOWS;C:\Program Files\Java\jdk1.8.0_66\bin 
 ```
 
@@ -52,13 +50,13 @@ C:\WINDOWS\system32;C:\WINDOWS;C:\Program Files\Java\jdk1.8.0_66\bin
 
 测试安装是否正确，可以在 shell 窗口，键入：
 
-```
+```java
 java -version 
 ```
 
 若能看到如下信息，则说明安装成功：
 
-```
+```java
 java version "1.8.0_66"
 Java(TM) SE Runtime Environment (build 1.8.0_66-b17)
 Java HotSpot(TM) 64-Bit Server VM (build 25.66-b17, mixed mode) 

@@ -1,7 +1,5 @@
 # 实战 Groovy: 用 Groovy 更迅速地对 Java 代码进行单元测试
 
-# 实战 Groovy: 用 Groovy 更迅速地对 Java 代码进行单元测试
-
 null
 
 不久以前，developerWorks 的作者 Andrew Glover 撰写了一篇介绍 Groovy 的文章，该文章是 *alt.lang.jre* 系列的一部分，而 Groovy 是一个新提议的用于 Java 平台的标准语言。读者对这篇文章的反应非常热烈，所以我们决定开办这个专栏，提供使用这项热门新技术的实用指导。本文是第一期，将介绍使用 Groovy 和 JUnit 对 Java 代码进行单元测试的一个简单策略。
@@ -50,7 +48,7 @@ null
 
 ##### 清单 1\. 一个简单的 Java Filter 接口
 
-```
+```java
 public interface Filter {
   void setFilter(String fltr);  
   boolean applyFilter(String value);
@@ -63,7 +61,7 @@ public interface Filter {
 
 ##### 清单 2\. 用 JUunit 制作的 Groovy RegexFilterTest
 
-```
+```java
 import junit.framework.TestCase
 import com.vanward.sedona.frmwrk.filter.impl.RegexPackageFilter
 class RegexFilterTest extends TestCase {  
@@ -94,7 +92,7 @@ class RegexFilterTest extends TestCase {
 
 ##### 清单 3\. 一个真正的 GroovyTestCase
 
-```
+```java
 import groovy.util.GroovyTestCase
 import com.vanward.sedona.frmwrk.filter.impl.SimplePackageFilter
 class SimpleFilterTest extends GroovyTestCase {
@@ -112,7 +110,7 @@ class SimpleFilterTest extends GroovyTestCase {
 
 ##### 清单 4\. 用 Java 代码编写的同样的测试用例
 
-```
+```java
 import junit.framework.TestCase;
 import com.vanward.sedona.frmwrk.filter.Filter;
 import com.vanward.sedona.frmwrk.filter.impl.SimplePackageFilter;
@@ -136,7 +134,7 @@ public class SimplePackageFilterTest extends TestCase {
 
 ##### 清单 5\. 定义一个 Java StringSplitter 类
 
-```
+```java
 import org.apache.commons.lang.StringUtils;
 public class StringSplitter {
   public static String[] split(final String input, final String separator){
@@ -149,7 +147,7 @@ public class StringSplitter {
 
 ##### 清单 6\. 使用 GroovyTestCase 的 assertArrayEquals 方法
 
-```
+```java
 import groovy.util.GroovyTestCase
 import com.vanward.resource.string.StringSplitter
 class StringSplitTest extends GroovyTestCase {
@@ -170,7 +168,7 @@ Groovy 可以让您单独或成批运行测试。使用 `GroovyTestCase` 扩展�
 
 ##### 清单 7\. 通过 groovy 命令运行 GroovyTestCase 测试用例
 
-```
+```java
 $./groovy test/com/vanward/sedona/frmwrk/filter/impl/SimpleFilterTest.groovy
 .
 Time: 0.047
@@ -203,7 +201,7 @@ Groovy 还提供了一个标准的 JUnit 测试套件，叫作 `GroovyTestSuite`
 
 ##### 清单 8\. 定义 Groovyc 目标的新 maven.xml 文件
 
-```
+```java
  <goal name="run-groovyc" prereqs="java:compile,test:compile">
 
    <path id="groovy.classpath">
@@ -232,7 +230,7 @@ Groovy 还提供了一个标准的 JUnit 测试套件，叫作 `GroovyTestSuite`
 
 ##### 清单 9\. project.xml 文件中的新的依存关系
 
-```
+```java
  <dependency>
     <groupId>groovy</groupId>
     <id>groovy</id>
@@ -249,7 +247,7 @@ Groovy 还提供了一个标准的 JUnit 测试套件，叫作 `GroovyTestSuite`
 
 ##### 清单 10\. Maven 项目的 build.properties 文件
 
-```
+```java
  maven.test.search.classdir = true 
 ```
 
@@ -257,7 +255,7 @@ Groovy 还提供了一个标准的 JUnit 测试套件，叫作 `GroovyTestSuite`
 
 ##### 清单 11\. maven.xml 的新目标
 
-```
+```java
  <goal name="test">
     <attainGoal name="run-groovyc"/>
     <attainGoal name="test:test"/>        
@@ -272,7 +270,7 @@ Groovy 还提供了一个标准的 JUnit 测试套件，叫作 `GroovyTestSuite`
 
 ##### 清单 12\. 运行新的测试目标
 
-```
+```java
 $ ./maven test
 test:
 java:compile:

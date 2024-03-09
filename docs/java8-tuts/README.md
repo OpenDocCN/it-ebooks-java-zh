@@ -8,7 +8,7 @@
 
 为了达到这个目的，我创建了一个简单的单元测试。通过过滤器将它序列化到磁盘上、读取然后执行。我们可以直接或间接地引用它的一个实例字段 “VALUE”，以此来查出究竟是什么导致了序列化失败。
 
-```
+```java
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -49,7 +49,7 @@ public class SerializablePredicateFilterTest {
 
 既然只是为了校对，我们可以让匿名内部类测试失败，因为它总是包含了一个宿主类的对象的引用……
 
-```
+```java
 @Test(expected = NotSerializableException.class)
 public void testAnonymousDirect() throwsIOException, ClassNotFoundException { 
 
@@ -68,7 +68,7 @@ public void testAnonymousDirect() throwsIOException, ClassNotFoundException {
 
 对于本地类来说同样如此， 本地类有什么不可以使用呢?
 
-```
+```java
 @Test(expected = NotSerializableException.class)
 public void testLocalClass() throws IOException, ClassNotFoundException {
 
@@ -87,7 +87,7 @@ public void testLocalClass() throws IOException, ClassNotFoundException {
 
 一个独立的类当然可以工作，在这个示例中为了方便起见使用了一个嵌套类。
 
-```
+```java
 public static class LengthPredicate implements SerializablePredicate<String> {
 
   private String value;
@@ -122,7 +122,7 @@ public void testStaticInnerClass() throws IOException, ClassNotFoundException {
 
 我们还是使用 JDK 8，结果证明我的第一个 try 也失败了。但它证明了，通常情况下序列化是非常乐意接受一个 Lambda 表达式的。
 
-```
+```java
 @Test(expected = NotSerializableException.class)
 public void testLambdaDirect() throws IOException, ClassNotFoundException {
 
@@ -133,7 +133,7 @@ public void testLambdaDirect() throws IOException, ClassNotFoundException {
 
 稍微做下改动，拷贝值到一个有效的 final 属性中。瞧，lambda 现在被正确地序列化并且恢复了。
 
-```
+```java
 @Test
 public void testLambdaInDirect() throws IOException, ClassNotFoundException {
 
@@ -146,7 +146,7 @@ public void testLambdaInDirect() throws IOException, ClassNotFoundException {
 
 当然，如果 value 是一个简单方法的参数，也可以工作正常。
 
-```
+```java
 @Test
 public void testLambdaParameter() throws IOException, ClassNotFoundException {
 
@@ -168,8 +168,6 @@ private void invokeWithParameter(String value) throws java.lang.ClassNotFoundExc
 译文链接： [`www.importnew.com/8554.html`](http://www.importnew.com/8554.html)
 
 **转载请保留原文出处、译者和译文链接。**
-
-# Java 8 lambda 最佳实践
 
 # Java 8 lambda 最佳实践
 
@@ -199,7 +197,7 @@ Java 8 已经推出一段时间了，越来越多开发人员选择升级 JDK，
 
 现在 Runnable 线程，Swing，JavaFX 的事件监听器代码等，在 java 8 中你可以使用 Lambda 表达式替代丑陋的匿名类。
 
-```
+```java
 //Before Java 8:
 new Thread(new Runnable() {
     @Override
@@ -232,7 +230,7 @@ show.addActionListener((e) -> {
 
 内循环：描述要干什么，而不是怎么干；不一定需要顺序处理 List 中的元素
 
-```
+```java
 //Prior Java 8 :
 List features = Arrays.asList("Lambdas", "Default Method",
 "Stream API", "Date and Time API");
@@ -261,7 +259,7 @@ Date and Time API
 
 为了支持函数编程，Java 8 加入了一个新的包 java.util.function，其中有一个接口 java.util.function.Predicate 是支持 Lambda 函数编程：
 
-```
+```java
 public static void main(args[]){
   List languages = Arrays.asList("Java", "Scala", "C++", "Haskell", "Lisp");
 
@@ -311,7 +309,7 @@ Java 8 里面新增的 Stream API ，让集合中的数据处理起来更加方�
 
 假设一个业务场景：对于 20 元以上的商品，进行 9 折处理，最后得到这些商品的折后价格。
 
-```
+```java
 final BigDecimal totalOfDiscountedPrices = prices.stream()
 .filter(price -> price.compareTo(BigDecimal.valueOf(20)) > 0)
 .map(price -> price.multiply(BigDecimal.valueOf(0.9)))
@@ -344,7 +342,7 @@ JVM 可以执行任何语言编写的代码，只要它们能编译成字节码�
 
 我们首先看看 Java 6/7 中的一个传统方法案例：
 
-```
+```java
 // simple check against empty strings
 public static int check(String s) {
     if (s.equals("")) {
@@ -364,14 +362,14 @@ for (String name : Arrays.asList(args)) {
 
 如果一个空的字符串传入，这段代码将抛出错误，堆栈跟踪如下：
 
-```
+```java
 at LmbdaMain.check(LmbdaMain.java:19)
 at LmbdaMain.main(LmbdaMain.java:34) 
 ```
 
 再看看 Lambda 的例子
 
-```
+```java
 Stream lengths = names.stream().map(name -> check(name));
 
 at LmbdaMain.check(LmbdaMain.java:19)
@@ -417,7 +415,7 @@ Java 8 刚于几周前发布，日期是 2014 年 3 月 18 日，这次开创性
 
 我开始使用 Java 8 时，首先做的就是使用 lambda 表达式替换匿名类，而实现 Runnable 接口是匿名类的最好示例。看一下 Java 8 之前的 runnable 实现方法，需要 4 行代码，而使用 lambda 表达式只需要一行代码。我们在这里做了什么呢？那就是用() -> {}代码块替代了整个[匿名类](http://javarevisited.blogspot.sg/2012/12/inner-class-and-nested-static-class-in-java-difference.html)。
 
-```
+```java
 // Java 8 之前：
 new Thread(new Runnable() {
     @Override
@@ -427,21 +425,21 @@ new Thread(new Runnable() {
 }).start(); 
 ```
 
-```
+```java
 //Java 8 方式：
 new Thread( () -> System.out.println("In Java8, Lambda expression rocks !!") ).start(); 
 ```
 
 输出：
 
-```
+```java
 too much code, for too little to do
 Lambda expression rocks !! 
 ```
 
 这个例子向我们展示了 Java 8 lambda 表达式的语法。你可以使用 lambda 写出如下代码：
 
-```
+```java
 (params) -> expression
 (params) -> statement
 (params) -> { statements } 
@@ -449,13 +447,13 @@ Lambda expression rocks !!
 
 例如，如果你的方法不对参数进行修改、重写，只是在控制台打印点东西的话，那么可以这样写：
 
-```
+```java
 () -> System.out.println("Hello Lambda Expressions"); 
 ```
 
 如果你的方法接收两个参数，那么可以写成如下这样：
 
-```
+```java
 (int even, int odd) -> even + odd 
 ```
 
@@ -465,7 +463,7 @@ Lambda expression rocks !!
 
 如果你用过 Swing API 编程，你就会记得怎样写事件监听代码。这又是一个旧版本简单匿名类的经典用例，但现在可以不这样了。你可以用 lambda 表达式写出更好的事件监听代码，如下所示：
 
-```
+```java
 // Java 8 之前：
 JButton show =  new JButton("Show");
 show.addActionListener(new ActionListener() {
@@ -476,7 +474,7 @@ show.addActionListener(new ActionListener() {
 }); 
 ```
 
-```
+```java
 // Java 8 方式：
 show.addActionListener((e) -> {
     System.out.println("Light, Camera, Action !! Lambda expressions Rocks");
@@ -489,7 +487,7 @@ Java 开发者经常使用匿名类的另一个地方是为 Collections.sort() �
 
 如果你使过几年 Java，你就知道针对集合类，最常见的操作就是进行迭代，并将业务逻辑应用于各个元素，例如处理订单、交易和事件的列表。由于 Java 是命令式语言，Java 8 之前的所有循环代码都是顺序的，即可以对其元素进行并行化处理。如果你想做并行过滤，就需要自己写代码，这并不是那么容易。通过引入 lambda 表达式和默认方法，将做什么和怎么做的问题分开了，这意味着 Java 集合现在知道怎样做迭代，并可以在 API 层面对集合元素进行并行处理。下面的例子里，我将介绍如何在[使用](http://javarevisited.blogspot.sg/2012/03/how-to-loop-arraylist-in-java-code.html)[lambda](http://javarevisited.blogspot.sg/2012/03/how-to-loop-arraylist-in-java-code.html)或不使用 lambda 表达式的情况下迭代列表。你可以看到列表现在有了一个 forEach() 方法，它可以迭代所有对象，并将你的 lambda 代码应用在其中。
 
-```
+```java
 // Java 8 之前：
 List features = Arrays.asList("Lambdas", "Default Method", "Stream API", "Date and Time API");
 for (String feature : features) {
@@ -497,7 +495,7 @@ for (String feature : features) {
 } 
 ```
 
-```
+```java
 // Java 8 之后：
 List features = Arrays.asList("Lambdas", "Default Method", "Stream API", "Date and Time API");
 features.forEach(n -> System.out.println(n));
@@ -509,7 +507,7 @@ features.forEach(System.out::println);
 
 输出：
 
-```
+```java
 Lambdas
 Default Method
 Stream API
@@ -522,7 +520,7 @@ Date and Time API
 
 除了在语言层面支持函数式编程风格，Java 8 也添加了一个包，叫做 java.util.function。它包含了很多类，用来支持 Java 的函数式编程。其中一个便是 Predicate，使用 java.util.function.Predicate 函数式接口以及 lambda 表达式，可以向 API 方法添加逻辑，用更少的代码支持更多的动态行为。下面是 Java 8 Predicate 的例子，展示了过滤集合数据的多种常用方法。Predicate 接口非常适用于做过滤。
 
-```
+```java
 public static void main(args[]){
     List languages = Arrays.asList("Java", "Scala", "C++", "Haskell", "Lisp");
 
@@ -553,7 +551,7 @@ public static void filter(List names, Predicate condition) {
 
 输出：
 
-```
+```java
 Languages which starts with J :
 Java
 Languages which ends with a
@@ -571,7 +569,7 @@ Scala
 Haskell 
 ```
 
-```
+```java
 // 更好的办法
 public static void filter(List names, Predicate condition) {
     names.stream().filter((name) -> (condition.test(name))).forEach((name) -> {
@@ -586,7 +584,7 @@ public static void filter(List names, Predicate condition) {
 
 上个例子说到，java.util.function.Predicate 允许将两个或更多的 Predicate 合成一个。它提供类似于逻辑操作符 AND 和 OR 的方法，名字叫做 and()、or()和 xor()，用于将传入 filter() 方法的条件合并起来。例如，要得到所有以 J 开始，长度为四个字母的语言，可以定义两个独立的 Predicate 示例分别表示每一个条件，然后用 Predicate.and() 方法将它们合并起来，如下所示：
 
-```
+```java
 // 甚至可以用 and()、or()和 xor()逻辑函数来合并 Predicate，
 // 例如要找到所有以 J 开始，长度为四个字母的名字，你可以合并两个 Predicate 并传入
 Predicate<String> startsWithJ = (n) -> n.startsWith("J");
@@ -602,7 +600,7 @@ names.stream()
 
 本例介绍最广为人知的函数式编程概念 map。它允许你将对象进行转换。例如在本例中，我们将 costBeforeTax 列表的每个元素转换成为税后的值。我们将 x -> x*x lambda 表达式传到 map() 方法，后者将其应用到流中的每一个元素。然后用 forEach() 将列表元素打印出来。使用流 API 的收集器类，可以得到所有含税的开销。有 toList() 这样的方法将 map 或任何其他操作的结果合并起来。由于收集器在流上做终端操作，因此之后便不能重用流了。你甚至可以用流 API 的 reduce() 方法将所有数字合成一个，下一个例子将会讲到。
 
-```
+```java
 // 不使用 lambda 表达式为每个订单加上 12%的税
 List costBeforeTax = Arrays.asList(100, 200, 300, 400, 500);
 for (Integer cost : costBeforeTax) {
@@ -617,7 +615,7 @@ costBeforeTax.stream().map((cost) -> cost + .12*cost).forEach(System.out::printl
 
 输出：
 
-```
+```java
 112.0
 224.0
 336.0
@@ -634,7 +632,7 @@ costBeforeTax.stream().map((cost) -> cost + .12*cost).forEach(System.out::printl
 
 在上个例子中，可以看到 map 将集合类（例如列表）元素进行转换的。还有一个 reduce() 函数可以将所有值合并成一个。Map 和 Reduce 操作是函数式编程的核心操作，因为其功能，reduce 又被称为折叠操作。另外，reduce 并不是一个新的操作，你有可能已经在使用它。SQL 中类似 sum()、avg() 或者 count() 的聚集函数，实际上就是 reduce 操作，因为它们接收多个值并返回一个值。流 API 定义的 reduceh() 函数可以接受 lambda 表达式，并对所有值进行合并。IntStream 这样的类有类似 average()、count()、sum() 的内建方法来做 reduce 操作，也有 mapToLong()、mapToDouble() 方法来做转换。这并不会限制你，你可以用内建方法，也可以自己定义。在这个 Java 8 的 Map Reduce 示例里，我们首先对所有价格应用 12% 的 VAT，然后用 reduce() 方法计算总和。
 
-```
+```java
 // 为每个订单加上 12%的税
 // 老方法：
 List costBeforeTax = Arrays.asList(100, 200, 300, 400, 500);
@@ -653,7 +651,7 @@ System.out.println("Total : " + bill);
 
 输出：
 
-```
+```java
 Total : 1680.0
 Total : 1680.0 
 ```
@@ -662,7 +660,7 @@ Total : 1680.0
 
 过滤是 Java 开发者在大规模集合上的一个常用操作，而现在使用 lambda 表达式和流 API 过滤大规模数据集合是惊人的简单。流提供了一个 filter() 方法，接受一个 Predicate 对象，即可以传入一个 lambda 表达式作为过滤逻辑。下面的例子是用 lambda 表达式过滤 Java 集合，将帮助理解。
 
-```
+```java
 // 创建一个字符串列表，每个字符串长度大于 2
 List<String> filtered = strList.stream().filter(x -> x.length()> 2).collect(Collectors.toList());
 System.out.printf("Original List : %s, filtered list : %s %n", strList, filtered); 
@@ -670,7 +668,7 @@ System.out.printf("Original List : %s, filtered list : %s %n", strList, filtered
 
 输出：
 
-```
+```java
 Original List : [abc, , bcd, , defg, jk], filtered list : [abc, bcd, defg] 
 ```
 
@@ -680,7 +678,7 @@ Original List : [abc, , bcd, , defg, jk], filtered list : [abc, bcd, defg]
 
 我们通常需要对列表的每个元素使用某个函数，例如逐一乘以某个数、除以某个数或者做其它操作。这些操作都很适合用 map() 方法，可以将转换逻辑以 lambda 表达式的形式放在 map() 方法里，就可以对集合的各个元素进行转换了，如下所示。
 
-```
+```java
 // 将字符串换成大写并用逗号链接起来
 List<String> G7 = Arrays.asList("USA", "Japan", "France", "Germany", "Italy", "U.K.","Canada");
 String G7Countries = G7.stream().map(x -> x.toUpperCase()).collect(Collectors.joining(", "));
@@ -689,7 +687,7 @@ System.out.println(G7Countries);
 
 输出：
 
-```
+```java
 USA, JAPAN, FRANCE, GERMANY, ITALY, U.K., CANADA 
 ```
 
@@ -697,7 +695,7 @@ USA, JAPAN, FRANCE, GERMANY, ITALY, U.K., CANADA
 
 本例展示了如何利用流的 distinct() 方法来对集合进行去重。
 
-```
+```java
 // 用所有不同的数字创建一个正方形列表
 List<Integer> numbers = Arrays.asList(9, 10, 3, 4, 7, 3, 4);
 List<Integer> distinct = numbers.stream().map( i -> i*i).distinct().collect(Collectors.toList());
@@ -706,7 +704,7 @@ System.out.printf("Original List : %s,  Square Without duplicates : %s %n", numb
 
 输出：
 
-```
+```java
 Original List : [9, 10, 3, 4, 7, 3, 4],  Square Without duplicates : [81, 100, 9, 16, 49] 
 ```
 
@@ -714,7 +712,7 @@ Original List : [9, 10, 3, 4, 7, 3, 4],  Square Without duplicates : [81, 100, 9
 
 IntStream、LongStream 和 DoubleStream 等流的类中，有个非常有用的方法叫做 summaryStatistics() 。可以返回 IntSummaryStatistics、LongSummaryStatistics 或者 DoubleSummaryStatistic s，描述流中元素的各种摘要数据。在本例中，我们用这个方法来计算列表的最大值和最小值。它也有 getSum() 和 getAverage() 方法来获得列表的所有元素的总和及平均值。
 
-```
+```java
 //获取数字的个数、最小值、最大值、总和以及平均值
 List<Integer> primes = Arrays.asList(2, 3, 5, 7, 11, 13, 17, 19, 23, 29);
 IntSummaryStatistics stats = primes.stream().mapToInt((x) -> x).summaryStatistics();
@@ -726,7 +724,7 @@ System.out.println("Average of all prime numbers : " + stats.getAverage());
 
 输出：
 
-```
+```java
 Highest prime number in List : 29
 Lowest prime number in List : 2
 Sum of all prime numbers : 129
@@ -747,14 +745,14 @@ Average of all prime numbers : 12.9
 
 2）lambda 表达式内可以使用方法引用，仅当该方法不修改 lambda 表达式提供的参数。本例中的 lambda 表达式可以换为方法引用，因为这仅是一个参数相同的简单方法调用。
 
-```
+```java
 list.forEach(n -> System.out.println(n)); 
 list.forEach(System.out::println);  // 使用方法引用 
 ```
 
 然而，若对参数有任何修改，则不能使用方法引用，而需键入完整地 lambda 表达式，如下所示：
 
-```
+```java
 list.forEach((String s) -> System.out.println("*" + s + "*")); 
 ```
 
@@ -766,25 +764,25 @@ list.forEach((String s) -> System.out.println("*" + s + "*"));
 
 5）Lambda 方法在编译器内部被翻译成私有方法，并派发 invokedynamic 字节码指令来进行调用。可以使用 JDK 中的 javap 工具来反编译 class 文件。使用 javap -p 或 javap -c -v 命令来看一看 lambda 表达式生成的字节码。大致应该长这样：
 
-```
+```java
 private static java.lang.Object lambda$0(java.lang.String); 
 ```
 
 6）lambda 表达式有个限制，那就是只能引用 final 或 final 局部变量，这就是说不能在 lambda 内部修改定义在域外的变量。
 
-```
+```java
 List<Integer> primes = Arrays.asList(new Integer[]{2, 3,5,7});
 int factor = 2;
 primes.forEach(element -> { factor++; }); 
 ```
 
-```
+```java
 Compile time error : "local variables referenced from a lambda expression must be final or effectively final" 
 ```
 
 另外，只是访问它而不作修改是可以的，如下所示：
 
-```
+```java
 List<Integer> primes = Arrays.asList(new Integer[]{2, 3,5,7});
 int factor = 2;
 primes.forEach(element -> { System.out.println(factor*element); }); 
@@ -792,7 +790,7 @@ primes.forEach(element -> { System.out.println(factor*element); });
 
 输出：
 
-```
+```java
 4
 6
 10
@@ -851,7 +849,7 @@ Lambda 表达式的速度介于流与并行流之间。这个结果确实挺令�
 
 iteratorMaxInteger()——使用迭代器遍历列表：
 
-```
+```java
 public int iteratorMaxInteger() {
     int max = Integer.MIN_VALUE;
     for (Iterator it = integers.iterator(); it.hasNext(); ) {
@@ -863,7 +861,7 @@ public int iteratorMaxInteger() {
 
 forEachLoopMaxInteger()——不使用迭代器，使用 For-Each 循环遍历列表（不要误用 Java 8 的 forEach）
 
-```
+```java
 public int forEachLoopMaxInteger() {
     int max = Integer.MIN_VALUE;
     for (Integer n : integers) {
@@ -875,7 +873,7 @@ public int forEachLoopMaxInteger() {
 
 forMaxInteger()——使用简单的 for 循环和索引遍历列表：
 
-```
+```java
 public int forMaxInteger() {
     int max = Integer.MIN_VALUE;
     for (int i = 0; i < size; i++) {
@@ -889,7 +887,7 @@ public int forMaxInteger() {
 
 parallelStreamMaxInteger()——使用 Java 8 并行流遍历列表：
 
-```
+```java
 public int parallelStreamMaxInteger() {
     Optional max = integers.parallelStream().reduce(Integer::max);
     return max.get();
@@ -898,7 +896,7 @@ public int parallelStreamMaxInteger() {
 
 lambdaMaxInteger()——使用 lambda 表达式及流遍历列表。优雅的一行代码：
 
-```
+```java
 public int lambdaMaxInteger() {
     return integers.stream().reduce(Integer.MIN_VALUE, (a, b) -> Integer.max(a, b));
 } 
@@ -906,7 +904,7 @@ public int lambdaMaxInteger() {
 
 forEachLambdaMaxInteger()——这个用例有点混乱。可能是因为 Java 8 的 forEach 特性有一个很烦人的东西：只能使用 final 变量，所以我们创建一个 final 包装类来解决该问题，这样我们就能访问到更新后的最大值。
 
-```
+```java
 public int forEachLambdaMaxInteger() {
     final Wrapper wrapper = new Wrapper();
     wrapper.inner = Integer.MIN_VALUE;
@@ -929,7 +927,7 @@ private int helper(int i, Wrapper wrapper) {
 
 streamMaxInteger()——使用 Java 8 的流遍历列表：
 
-```
+```java
 public int streamMaxInteger() {
     Optional max = integers.stream().reduce(Integer::max);
     return max.get();
@@ -980,7 +978,7 @@ public int streamMaxInteger() {
 
 首先，让我们先定义一个简单的实体类：
 
-```
+```java
 public class Human {
     private String name;
     private int age;
@@ -1004,7 +1002,7 @@ public class Human {
 
 在 Java 8 之前，对集合进行排序要**为 Comparator 创建一个匿名内部类**用来排序：
 
-```
+```java
 new Comparator<Human>() {
 @Override
 public int compare(Human h1, Human h2) {
@@ -1015,7 +1013,7 @@ return h1.getName().compareTo(h2.getName());
 
 简单地用它来对 Human 实体列表进行排序：
 
-```
+```java
 @Test
 public void givenPreLambda_whenSortingEntitiesByName_thenCorrectlySorted() {
 List<Human> humans = Lists.newArrayList(new Human("Sarah", 10), new Human("Jack", 12));
@@ -1033,13 +1031,13 @@ Assert.assertThat(humans.get(0), equalTo(new Human("Jack", 12)));
 
 根据 Lambda 表达式的介绍，我们现在可以不使用匿名内部类，只使用**简单实用的语义**就可以得到相同的结果。
 
-```
+```java
 (final Human h1, final Human h2) -> h1.getName().compareTo(h2.getName()); 
 ```
 
 类似地，我们现在可以像之前那样来测试它的行为：
 
-```
+```java
 @Test
 public void whenSortingEntitiesByName_thenCorrectlySorted() {
 List<Human> humans = Lists.newArrayList(new Human("Sarah", 10), new Human("Jack", 12));
@@ -1055,13 +1053,13 @@ Assert.assertThat(humans.get(0), equalTo(new Human("Jack", 12)));
 
 我们通过不指定类型定义来进一步简化表达式 ——**编译器自己可以进行类型判断**：
 
-```
+```java
 (h1, h2) -> h1.getName().compareTo(h2.getName()) 
 ```
 
 测试仍然很相似：
 
-```
+```java
 @Test
 public void givenLambdaShortForm_whenSortingEntitiesByName_thenCorrectlySorted() {
     List<Human> humans = Lists.newArrayList(new Human("Sarah", 10), new Human("Jack", 12));
@@ -1077,7 +1075,7 @@ public void givenLambdaShortForm_whenSortingEntitiesByName_thenCorrectlySorted()
 
 首先，我们要定义 compareByNameThenAge 方法 ——这个方法拥有与 Comparator<human class="calibre13">对象里的 compareTo 方法完全相同的签名：</human>
 
-```
+```java
 public static int compareByNameThenAge(Human lhs, Human rhs) {
     if (lhs.name.equals(rhs.name)) {
         return lhs.age - rhs.age;
@@ -1089,13 +1087,13 @@ public static int compareByNameThenAge(Human lhs, Human rhs) {
 
 现在，我们要使用这个引用去调用 humans.sort 方法：
 
-```
+```java
 humans.sort(Human::compareByNameThenAge); 
 ```
 
 最终结果是一个使用静态方法作为 Comparator 的有效的排序集合：
 
-```
+```java
 @Test
 public void givenMethodDefinition_whenSortingEntitiesByNameThenAge_thenCorrectlySorted() {
     List<Human> humans = Lists.newArrayList(new Human("Sarah", 10), new Human("Jack", 12));
@@ -1111,7 +1109,7 @@ public void givenMethodDefinition_whenSortingEntitiesByNameThenAge_thenCorrectly
 
 我们准备使用 getName() getter 方法去建造 Lambda 表达式并通过 name 对列表进行排序：
 
-```
+```java
 @Test
 public void givenInstanceMethod_whenSortingEntitiesByNameThenAge_thenCorrectlySorted() {
     List<Human> humans = Lists.newArrayList(new Human("Sarah", 10), new Human("Jack", 12));
@@ -1125,7 +1123,7 @@ public void givenInstanceMethod_whenSortingEntitiesByNameThenAge_thenCorrectlySo
 
 JDK 8 同样提供了一个有用的方法用来**反转 Comparator（reverse Comparator）**——我们可以快速地利用它来反转我们的排序：
 
-```
+```java
 @Test
 public void whenSortingEntitiesByNameReversed_thenCorrectlySorted() {
     List<Human> humans = Lists.newArrayList(
@@ -1141,7 +1139,7 @@ public void whenSortingEntitiesByNameReversed_thenCorrectlySorted() {
 
 比较操作的 Lambda 表达式不一定都是这么简单的——我们**同样可以编写更复杂的表达式，**比如先根据 name 后根据 age 来对实体进行排序：
 
-```
+```java
 @Test
 public void whenSortingEntitiesByNameThenAge_thenCorrectlySorted() {
     List<Human> humans = Lists.newArrayList(
@@ -1164,7 +1162,7 @@ public void whenSortingEntitiesByNameThenAge_thenCorrectlySorted() {
 
 **从 JDK 8 开始，我们现在可以把多个 Comparator 链在一起（chain together）**去建造更复杂的比较逻辑：
 
-```
+```java
 @Test
 public void givenComposition_whenSortingEntitiesByNameThenAge_thenCorrectlySorted() {
     List<Human> humans = Lists.newArrayList(
@@ -1249,8 +1247,6 @@ public void givenComposition_whenSortingEntitiesByNameThenAge_thenCorrectlySorte
 
 # Java 8 Optional 类深度解析
 
-# Java 8 Optional 类深度解析
-
 身为一名 Java 程序员，大家可能都有这样的经历：调用一个方法得到了返回值却不能直接将返回值作为参数去调用别的方法。我们首先要判断这个返回值是否为 null，只有在非空的前提下才能将其作为其他方法的参数。这正是一些类似[Guava](http://docs.guava-libraries.googlecode.com/git/javadoc/com/google/common/base/Optional.html)的外部 API 试图解决的问题。一些 JVM 编程语言比如 Scala、Ceylon 等已经将对在核心 API 中解决了这个问题。在我的[前一篇文章](http://blog.sanaulla.info/2013/08/24/a-brieft-introduction-to-using-option-and-either-classes/)中，介绍了[Scala](http://blog.sanaulla.info/category/scala-4/)是如何解决了这个问题。
 
 新版本的 Java，比如[Java 8](http://blog.sanaulla.info/tag/java-8/)引入了一个新的[Optional](http://download.java.net/jdk8/docs/api/java/util/Optional.html)类。Optional 类的 Javadoc 描述如下：
@@ -1265,7 +1261,7 @@ public void givenComposition_whenSortingEntitiesByNameThenAge_thenCorrectlySorte
 
 of 方法通过工厂方法创建 Optional 类。需要注意的是，创建对象时传入的参数不能为 null。如果传入参数为 null，则抛出 NullPointerException 。
 
-```
+```java
 //调用工厂方法创建 Optional 实例
 Optional<String> name = Optional.of("Sanaulla");
 //传入参数为 null，抛出 NullPointerException.
@@ -1278,7 +1274,7 @@ Optional<String> someNull = Optional.of(null);
 
 ofNullable 与 of 方法相似，唯一的区别是可以接受参数为 null 的情况。示例如下：
 
-```
+```java
 //下面创建了一个不包含任何值的 Optional 实例
 //例如，值为'null'
 Optional empty = Optional.ofNullable(null); 
@@ -1292,7 +1288,7 @@ Optional empty = Optional.ofNullable(null);
 
 类似下面的代码：
 
-```
+```java
 //isPresent 方法用来检查 Optional 实例中是否包含值
 if (name.isPresent()) {
   //在 Optional 实例内调用 get()返回已存在的值
@@ -1306,7 +1302,7 @@ if (name.isPresent()) {
 
 上面的示例中，get 方法用来得到 Optional 实例中的值。下面我们看一个抛出 NoSuchElementException 的例子：
 
-```
+```java
 //执行下面的代码会输出：No value present 
 try {
   //在空的 Optional 实例上调用 get()，抛出 NoSuchElementException
@@ -1324,7 +1320,7 @@ try {
 
 如果 Optional 实例有值，调用 ifPresent()可以接受接口段或 lambda 表达式。类似下面的代码：
 
-```
+```java
 //ifPresent 方法接受 lambda 表达式作为参数。
 //lambda 表达式对 Optional 的值调用 consumer 进行处理。
 name.ifPresent((value) -> {
@@ -1338,7 +1334,7 @@ name.ifPresent((value) -> {
 
 如果 Optional 实例有值则将其返回，否则返回 orElse 方法传入的参数。示例如下：
 
-```
+```java
 //如果值不为 null，orElse 方法返回 Optional 实例的值。
 //如果为 null，返回传入的消息。
 //输出：There is no value present!
@@ -1351,7 +1347,7 @@ System.out.println(name.orElse("There is some value!"));
 
 orElseGet 与 orElse 方法类似，区别在于得到的默认值。orElse 方法将传入的字符串作为默认值，orElseGet 方法可以接受[Supplier 接口](http://blog.sanaulla.info/2013/04/02/supplier-interface-in-java-util-function-package-in-java-8/)的实现用来生成默认值。示例如下：
 
-```
+```java
 //orElseGet 与 orElse 方法类似，区别在于 orElse 传入的是默认值，
 //orElseGet 可以接受一个 lambda 表达式生成默认值。
 //输出：Default Value
@@ -1366,7 +1362,7 @@ System.out.println(name.orElseGet(() -> "Default Value"));
 
 在 orElseGet 方法中，我们传入一个[Supplier 接口](http://blog.sanaulla.info/2013/04/02/supplier-interface-in-java-util-function-package-in-java-8/)。然而，在 orElseThrow 中我们可以传入一个 lambda 表达式或方法，如果值不存在来抛出异常。示例如下：
 
-```
+```java
 try {
   //orElseThrow 与 orElse 方法类似。与返回默认值不同，
   //orElseThrow 会抛出 lambda 表达式或方法生成的异常 
@@ -1380,7 +1376,7 @@ try {
 
 ValueAbsentException 定义如下：
 
-```
+```java
 class ValueAbsentException extends Throwable {
 
   public ValueAbsentException() {
@@ -1406,7 +1402,7 @@ map 方法文档说明如下：
 
 map 方法用来对 Optional 实例的值执行一系列操作。通过一组实现了 Function 接口的 lambda 表达式传入操作。如果你不熟悉 Function 接口，可以参考我的[这篇博客](http://blog.sanaulla.info/2013/03/27/function-interface-a-functional-interface-in-the-java-util-function-package-in-java-8/)。map 方法示例如下：
 
-```
+```java
 //map 方法执行传入的 lambda 表达式参数对 Optional 实例的值进行修改。
 //为 lambda 表达式的返回值创建新的 Optional 实例作为 map 方法的返回值。
 Optional<String> upperName = name.map((value) -> value.toUpperCase());
@@ -1421,7 +1417,7 @@ flatMap 方法与 map 方法类似，区别在于 mapping 函数的返回值不�
 
 参照 map 函数，使用 flatMap 重写的示例如下：
 
-```
+```java
 //flatMap 与 map（Function）非常类似，区别在于传入方法的 lambda 表达式的返回类型。
 //map 方法中的 lambda 表达式返回值可以是任意类型，在 map 函数返回之前会包装为 Optional。 
 //但 flatMap 方法中的 lambda 表达式返回值必须是 Optionl 实例。 
@@ -1439,7 +1435,7 @@ filter 个方法通过传入限定条件对 Optional 实例的值进行过滤。
 
 现在我来看看 filter 的各种用法，下面的示例介绍了满足限定条件和不满足两种情况：
 
-```
+```java
 //filter 方法检查给定的 Option 值是否满足某些条件。
 //如果满足则返回同一个 Option 实例，否则返回空 Optional。
 Optional<String> longName = name.filter((value) -> value.length() > 6);
@@ -1454,7 +1450,7 @@ System.out.println(shortName.orElse("The name is less than 6 characters"));
 
 以上，我们介绍了 Optional 类的各个方法。下面通过一个完整的示例对用法集中展示：
 
-```
+```java
 public class OptionalDemo {
 
   public static void main(String[] args) {
@@ -1528,7 +1524,7 @@ public class OptionalDemo {
 
 上述代码输出如下：
 
-```
+```java
 Sanaulla
 No value present
 The length of the value is: 8
@@ -1559,14 +1555,14 @@ The name is less than 6 characters
 
 下面的代码是创建一个无穷尽的 double 类型的数字流，这些数字在 0（包括 0）和 1（不包含 1）之间。
 
-```
+```java
  Random random = new Random();
     DoubleStream doubleStream = random.doubles(); 
 ```
 
 下面的代码是创建一个无穷尽的 int 类型的数字流，这些数字在 0（包括 0）和 100（不包括 100）之间。
 
-```
+```java
  Random random = new Random();
     IntStream intStream = random.ints(0, 100); 
 ```
@@ -1575,13 +1571,13 @@ The name is less than 6 characters
 
 示例 1：创建 10 个随机的整数流并打印出来：
 
-```
+```java
  intStream.limit(10).forEach(System.out::println); 
 ```
 
 示例 2：创建 100 个随机整数：
 
-```
+```java
  List<Integer> randomBetween0And99 = intStream
                                        .limit(100)
                                        .boxed()
@@ -1590,7 +1586,7 @@ The name is less than 6 characters
 
 对于高斯伪随机数（gaussian pseudo-random values）来说，random.doubles()方法所创建的流不能等价于高斯伪随机数，然而，如果用 java8 所提供的功能是非常容易实现的。
 
-```
+```java
  Random random = new Random();
     DoubleStream gaussianStream = Stream.generate(random::nextGaussian).mapToDouble(e -> e); 
 ```
@@ -1601,7 +1597,7 @@ The name is less than 6 characters
 
 通过下面的代码，我生成了一百万个伪随机数，这是通过 java8 提供的 api 实现的：
 
-```
+```java
  Random random = new Random();
     DoubleStream doubleStream = random.doubles(-1.0, 1.0);
     LinkedHashMap<Range, Integer> rangeCountMap = doubleStream.limit(1000000)
@@ -1614,7 +1610,7 @@ The name is less than 6 characters
 
 代码的运行结果如下：
 
-```
+```java
  -1      49730
     -0.9    49931
     -0.8    50057
@@ -1639,7 +1635,7 @@ The name is less than 6 characters
 
 为了类比，我们再生成一百万个高斯伪随机数：
 
-```
+```java
  Random random = new Random();
     DoubleStream gaussianStream = Stream.generate(random::nextGaussian).mapToDouble(e -> e);
     LinkedHashMap<Range, Integer> gaussianRangeCountMap =
@@ -1685,7 +1681,7 @@ The name is less than 6 characters
 
 从现在起，几乎不需要动大脑我们就可以提交 Runnables 给一个线程。让我们假设我们有一个很耗时的操作：
 
-```
+```java
  public static int longOperation() {
         System.out.println("Running on thread #"
         + Thread.currentThread().getId());
@@ -1697,7 +1693,7 @@ The name is less than 6 characters
 
 我们可以用多种方法把这个操作传递给线程，例如：
 
-```
+```java
  Thread[] threads = {
 
         // Pass a lambda to a thread
@@ -1723,7 +1719,7 @@ The name is less than 6 characters
 
 [在上一篇博文中](http://blog.jooq.org/2014/03/07/java-8-friday-goodies-sql-resultset-streams/)，我们已经因此而发布了[jOOλ(also jOOL，jOO-Lambda)](https://github.com/jOOQ/jOOL)包,该包包装了 JDK 中的每一个功能性接口，具有相同功能而且也允许抛出被检异常。这在使用老的 JDK API 时特别有用，例如 JDBC，或者上面提到的 Thread API。使用[jOOλ](https://github.com/jOOQ/jOOL)，我们可以这么写：
 
-```
+```java
  // Join all threads
     Arrays.stream(threads).forEach(Unchecked.consumer(
         t -> t.join()
@@ -1736,7 +1732,7 @@ Java 的多线程功能一直没有什么起色，直到 Java5 的[ExecutorServi
 
 下面是一个我们如何在 Java8 中利用这些 Java5 的并发 API 的例子：
 
-```
+```java
  ExecutorService service = Executors
         .newFixedThreadPool(5);
 
@@ -1756,7 +1752,7 @@ Java 的多线程功能一直没有什么起色，直到 Java5 的[ExecutorServi
 
 现在，Java8 的 Streams API 在并发和并行方面有了很大改进。 在 Java8 中你可以写出如下的代码：
 
-```
+```java
  Arrays.stream(new int[]{ 1, 2, 3, 4, 5, 6 })
       .parallel()
       .max()
@@ -1890,7 +1886,7 @@ Functional Programming in Java: Harnessing the Power Of Java 8 Lambda Expression
 
 Java 从 JDK1.0 开始执行线程。在开始一个新的线程之前，你必须指定由这个线程执行的代码，通常称为 task。这可以通过实现`Runnable`——一个定义了一个无返回值无参数的`run()`方法的函数接口，如下面的代码所示：
 
-```
+```java
 Runnable task = () -> {
     String threadName = Thread.currentThread().getName();
     System.out.println("Hello " + threadName);
@@ -1908,7 +1904,7 @@ System.out.println("Done!");
 
 控制台输出的结果可能像下面这样：
 
-```
+```java
 Hello main
 Hello Thread-0
 Done! 
@@ -1916,7 +1912,7 @@ Done!
 
 或者这样：
 
-```
+```java
 Hello main
 Done!
 Hello Thread-0 
@@ -1926,7 +1922,7 @@ Hello Thread-0
 
 我们可以将线程休眠确定的时间。在这篇文章接下来的代码示例中我们可以通过这种方法来模拟长时间运行的任务。
 
-```
+```java
 Runnable runnable = () -> {
     try {
         String name = Thread.currentThread().getName();
@@ -1955,7 +1951,7 @@ thread.start();
 
 下面是使用 executors 的第一个代码示例：
 
-```
+```java
 ExecutorService executor = Executors.newSingleThreadExecutor();
 executor.submit(() -> {
 String threadName = Thread.currentThread().getName();
@@ -1973,7 +1969,7 @@ System.out.println("Hello " + threadName);
 
 这是我喜欢的通常关闭 executors 的方式：
 
-```
+```java
 try {
     System.out.println("attempt to shutdown executor");
     executor.shutdown();
@@ -1999,7 +1995,7 @@ executor 通过等待指定的时间让当前执行的任务终止来“温柔�
 
 下面的 lambda 表达式定义了一个 callable：在休眠一分钟后返回一个整数。
 
-```
+```java
 Callable<Integer> task = () -> {
     try {
         TimeUnit.SECONDS.sleep(1);
@@ -2013,7 +2009,7 @@ Callable<Integer> task = () -> {
 
 Callbale 也可以像 runnbales 一样提交给 executor services。但是 callables 的结果怎么办？因为`submit()`不会等待任务完成，executor service 不能直接返回 callable 的结果。不过，executor 可以返回一个`Future`类型的结果，它可以用来在稍后某个时间取出实际的结果。
 
-```
+```java
 ExecutorService executor = Executors.newFixedThreadPool(1);
 Future<Integer> future = executor.submit(task);
 
@@ -2029,7 +2025,7 @@ System.out.print("result: " + result);
 
 在调用`get()`方法时，当前线程会阻塞等待，直到 callable 在返回实际的结果 123 之前执行完成。现在 future 执行完毕，我们可以在控制台看到如下的结果：
 
-```
+```java
 future done? false
 future done? true
 result: 123 
@@ -2037,7 +2033,7 @@ result: 123
 
 Future 与底层的 executor service 紧密的结合在一起。记住，如果你关闭 executor，所有的未中止的 future 都会抛出异常。
 
-```
+```java
 executor.shutdownNow();
 future.get(); 
 ```
@@ -2048,7 +2044,7 @@ future.get();
 
 任何`future.get()`调用都会阻塞，然后等待直到 callable 中止。在最糟糕的情况下，一个 callable 持续运行——因此使你的程序将没有响应。我们可以简单的传入一个时长来避免这种情况。
 
-```
+```java
  ExecutorService executor = Executors.newFixedThreadPool(1);
 
     Future<Integer> future = executor.submit(() -> {
@@ -2066,7 +2062,7 @@ future.get();
 
 运行上面的代码将会产生一个`TimeoutException`：
 
-```
+```java
 Exception in thread "main" java.util.concurrent.TimeoutException
     at java.util.concurrent.FutureTask.get(FutureTask.java:205) 
 ```
@@ -2077,7 +2073,7 @@ Exception in thread "main" java.util.concurrent.TimeoutException
 
 Executors 支持通过`invokeAll()`一次批量提交多个 callable。这个方法结果一个 callable 的集合，然后返回一个 future 的列表。
 
-```
+```java
 ExecutorService executor = Executors.newWorkStealingPool();
 
 List<Callable<String>> callables = Arrays.asList(
@@ -2106,7 +2102,7 @@ executor.invokeAll(callables)
 
 为了测试这种行为，我们利用这个帮助方法来模拟不同执行时间的 callable。这个方法返回一个 callable，这个 callable 休眠指定 的时间直到返回给定的结果。
 
-```
+```java
 Callable<String> callable(String result, long sleepSeconds) {
     return () -> {
         TimeUnit.SECONDS.sleep(sleepSeconds);
@@ -2117,7 +2113,7 @@ Callable<String> callable(String result, long sleepSeconds) {
 
 我们利用这个方法创建一组 callable，这些 callable 拥有不同的执行时间，从 1 分钟到 3 分钟。通过`invokeAny()`将这些 callable 提交给一个 executor，返回最快的 callable 的字符串结果-在这个例子中为任务 2：
 
-```
+```java
 ExecutorService executor = Executors.newWorkStealingPool();
 
 List<Callable<String>> callables = Arrays.asList(
@@ -2143,7 +2139,7 @@ ForkJoinPools 在 Java7 时引入，将会在这个系列后面的教程中详�
 
 下面的实例，调度一个任务在延迟 3 分钟后执行：
 
-```
+```java
 ScheduledExecutorService executor =                 Executors.newScheduledThreadPool(1);
 
 Runnable task = () -> System.out.println("Scheduling: " + System.nanoTime());
@@ -2159,7 +2155,7 @@ System.out.printf("Remaining Delay: %sms", remainingDelay);
 
 为了调度任务持续的执行，executors 提供了两个方法`scheduleAtFixedRate()`和`scheduleWithFixedDelay()`。第一个方法用来以固定频率来执行一个任务，比如，下面这个示例中，每分钟一次：
 
-```
+```java
 ScheduledExecutorService executor =     Executors.newScheduledThreadPool(1);
 
 Runnable task = () -> System.out.println("Scheduling: " + System.nanoTime());
@@ -2175,7 +2171,7 @@ executor.scheduleAtFixedRate(task, initialDelay, period, TimeUnit.SECONDS);
 
 在这种情况下，你应该考虑使用`scheduleWithFixedDelay()`。这个方法的工作方式与上我们上面描述的类似。不同之处在于等待时间 period 的应用是在一次任务的结束和下一个任务的开始之间。例如：
 
-```
+```java
 ScheduledExecutorService executor =         Executors.newScheduledThreadPool(1);
 
 Runnable task = () -> {
@@ -2223,7 +2219,7 @@ Java 的集合框架，如 List 和 Map 接口及 Arraylist 和 HashMap 类，�
 
 它采用一种全新的方式，将数据作为一个整体，而不是单独的个体来处理。当你使用流时，你不需要关心循环或遍历的细节。你可以直接从一个集合创建一个流。然 后你就能用这个流来许多事件了，如遍历、过滤及聚和。我将从项目 Java8Features 的 com.tm.java8.features.stream.traversing 包下的例子开始。代码在一个 SequentialStream 类中，Java SE 8 中有两种集合流，即串行流和并行流。
 
-```
+```java
 List<person> people = new ArrayList<>();
 
 people.add(new Person("Mohamed", 69));
@@ -2249,14 +2245,14 @@ private static void displayPeople(List<person> people, Predicate<person> pred) {
 
 在这两种流中，串行流相对比较简单，它类似一个迭代器，每次处理集合中的一个元素。但是语法与以前不同。在这段代码中，我创建了 pepole 的数组列表，向上转型为 List。它包含三个 Person 类的实例。然后我们使用 Predicate 声明一个条件，只有满足这个条件的 people 才会显示。在 displayPeople() 方法的 48 到 52 行循环遍历该集合，挨个测试其中的每一项。运行这段代码，你将获得如下的结果：
 
-```
+```java
 Selected:
 Mohamed 
 ```
 
 我将会展示如何使用流来[重构](http://www.amazon.cn/gp/product/B003BY6PLK/ref=as_li_qf_sp_asin_il_tl?ie=UTF8&tag=importnew-23&linkCode=as2&camp=536&creative=3200&creativeASIN=B003BY6PLK "重构")这段代码。首先，我注释了这段代码。然后，在这段注释的代码下，我开始使用集合对象 people。然后我调用一个 stream() 方法。一个 stream 对象，类似集合，也要声明泛型。如果你从一个集合获取流，则该流中每一项的类型与集合本身是一致的。我的集合是 Person 类的实例，所以流中也使用同样的泛型类型。
 
-```
+```java
 System.out.println("Selected:");
  //        people.forEach(p -> {
  //            if (pred.test(p)) {
@@ -2270,7 +2266,7 @@ System.out.println("Selected:");
 
 你可以调用一个 stream() 方法来获得了一个流对象，然后可以在该对象上进行一些操作。我简单地调用了 forEach 方法，该方法需要一个 Lamda 表达式。我在参数中传递了一个 Lamda 表达式。列表中的每一项就是通过迭代器处理的每一项。处理过程是通过 Lambda 操作符和方法实现来完成的。我简单使用 system output 来输出每个人的名称。保存并运行这段代码，输出结果如下。因为没有过滤，所以输出了列表中所有元素。
 
-```
+```java
 Selected:
 Mohamed
 Doaa
@@ -2279,7 +2275,7 @@ Malik
 
 现在，一旦有了一个流对象，就可以很容易使用 predicate 对象了。当使用 for each 方法处理每一项时，我不得不显示调用 predicate 的 test 方法，但是使用流时，你可以调用一个名为 filter 的方法。该方法接收一个 predicate 对象，所有的 predicate 对象都有一个 test 方法，所以它已经知道怎样去调用该方法。所以，我对该代码做一点改动。我将.forEach()方法下移了两行，然后在中间的空白行，我调用了 filter 方法。
 
-```
+```java
 people.stream()
      .filter(pred)
      .forEach(p -> System.out.println(p.getName())); 
@@ -2287,7 +2283,7 @@ people.stream()
 
 filter 方法接收一个 predicate 接口的实例对象。我将 predicate 对象传进去。filtr 方法返回一个过滤后的流对象，在这个对象上我就可以去调用 forEach()方法了。我运行这段代码，这次我只显示集合中满足预定义条件的项了。你可以在 流对象上做更多的事情。去看看 Java SE 8 API 中流的 doc 文档吧。
 
-```
+```java
 Selected:
 Mohamed 
 ```
@@ -2296,7 +2292,7 @@ Mohamed
 
 从语法上讲，有两种方法来实现流的转换。我复制一份串行流类。在包视图窗口，我复制并粘贴该类，然后对它重命名，ParallelStream，打开这个 新的类。在这个版本中，删除了注释的代码。我不再需要这些注释了。现在就可以通过两种方式创建并行流。第一种方式是调用集合中的 parallelStream()方法。现在我就拥有一个可以自动分配处理器的流了。
 
-```
+```java
 private static void displayPeople(List<person> people, Predicate<person> pred) {
      System.out.println("Selected:");
      people.parallelStream()
@@ -2307,14 +2303,14 @@ private static void displayPeople(List<person> people, Predicate<person> pred) {
 
 运行这段代码，就可以看到完全一致的结果，过滤然后返回数据。
 
-```
+```java
 Selected:
 Mohamed 
 ```
 
 第二种创建并行流的方式。再次调用 stream() 方法，然后在 stream 方法的基础上调用 parallel() 方法，其本质上做的事情是一样的。开始是一个串行的流，然后再将其转换为并行流。但是它仍然是一个流。可以过滤，可以用之前的一样方式去处理。只是现在的 流可以分解到多个处理起来处理。
 
-```
+```java
 people.stream()
       .parallel()
       .filter(pred)
@@ -2335,7 +2331,7 @@ Java SE 8’s stream API 是为了帮助管理数据集合而设计的，这些�
 
 在 Java8Features 项目中的 eg.com.tm.java8.features.stream.creating 包下，我创建了一个名为 ArrayToStream 的类。在这个类的 main 方法中，我创建了一个包含三个元素的数组。每个元素都是 Person 类的一个实例对象。
 
-```
+```java
 public static void main(String args[]) {
 
     Person[] people = {
@@ -2350,7 +2346,7 @@ public static void main(String args[]) {
 
 该类中为私有成员创建了 setters 和 getters 方法，以及 getInfo() 方法，该方法返回一个拼接的字符串。
 
-```
+```java
 public String getInfo() {
     return name + " (" + age + ")";
 } 
@@ -2362,7 +2358,7 @@ Stream 是 java.util.stream 下的一个接口。当我按下 Ctrl+Space 并选�
 
 第一个是需要单个对象，第二个是需要多个对象。我使用一个参数的方法，所以传递一个名为 people 的数组，这就是我需要做的所有事情。Stream.of() 意思就是传入一个数组，然后将该数组包装在流中。现在，我就可以使用 lambda 表达式、过滤、方法引用等流对象的方法。我将调用流的 for each 方法，并传入一个 lambda 表达式，将当前的 person 对象和 lambda 操作符后传入后，就能获取到 person 对象的信息。该信息是通过对象的 getInfo() 方法获取到的。
 
-```
+```java
 Person[] people = {
         new Person("Mohamed", 69),
         new Person("Doaa", 25),
@@ -2377,7 +2373,7 @@ Person[] people = {
 
 保存并运行这段代码，就可获取到结果。输出的元素的顺序与我放入的顺序是一致的。这就是第一种方式：使用 Stream.of() 方法。
 
-```
+```java
 Mohamed (69)
 Doaa (25)
 Malik (6) 
@@ -2385,7 +2381,7 @@ Malik (6)
 
 另一种方式与上面的方式实际上是相同的。复制上面的代码，并注释掉第一种方式。这次不使用 Stream.of() 方法，我们使用名为 Arrays 的类，该类位于 java.util 包下。在这个类上，可以调用名为 stream 的方法。注意，stream 方法可以包装各种类型的数组，包括基本类型和复合类型。
 
-```
+```java
 //      Stream<person> stream = Stream.of(people);
 
         Stream<person> stream = Arrays.stream(people);
@@ -2394,7 +2390,7 @@ Malik (6)
 
 保存并运行上面的代码，流完成的事情与之前实质上是一致的。
 
-```
+```java
 Mohamed (69)
 Doaa (25)
 Malik (6) 
@@ -2414,7 +2410,7 @@ Malik (6)
 
 我会在 Java8Features 项目的 eg.com.tm.java8.features.stream.aggregating 包下进行演示。首先我们使用 ParallelStreams 类。在这个类的 main 方法中，我创建了一个包含字符串元素的数组列表。我简单地使用循环在列表中添加了 10000 个元素。然后在 35 和 36 行，我创建了一个流对象，并通过 for each 方法挨个输出流中每一项。
 
-```
+```java
 public static void main(String args[]) {
 
     System.out.println("Creating list");
@@ -2429,7 +2425,7 @@ public static void main(String args[]) {
 
 运行这段代码后，就获得了一个我所预期的结果。在屏幕上输出的顺序与添加到列表中的顺序是一致的。
 
-```
+```java
 .........
 Item 9982
 Item 9983
@@ -2455,7 +2451,7 @@ Item 9999
 
 我将采用第二种方法。现在，我就可以使用并行流了，该流可以根据负载分配到多个处理器来处理。
 
-```
+```java
 strings.stream()
        .parallel()
        .forEach(str -> System.out.println(str)); 
@@ -2463,7 +2459,7 @@ strings.stream()
 
 再次运行该段代码，然后观察会发生什么。注意，现在最后打印的元素不是列表中最后一个元素，最后一个元素应该是 9999。如果我滚动输出结果，就能发现处理过程以某种方式在循环跳动。这是因为在运行时将数据划分成了多个块。
 
-```
+```java
 .........
 Item 5292
 Item 5293
@@ -2493,7 +2489,7 @@ Item 5311
 
 我们在这个类的 main 方法中来计数，开始还是用相同的基础代码。创建 10,000 个字符串的列表。然后通过一个 for each 方法循环处理每一项。
 
-```
+```java
 public static void main(String args[]) {
 
     System.out.println("Creating list");
@@ -2510,7 +2506,7 @@ public static void main(String args[]) {
 
 我将这个变量命名为 count，通过调用集合 strings 的.stream(), .count()方法，返回一个长整型的值。然后将这个值与“count:”拼接起来，再通过 system 的 output 来打印。
 
-```
+```java
 //      strings.stream()
 //             .forEach(str -> System.out.println(str));
         long count = strings.stream().count();
@@ -2519,21 +2515,21 @@ public static void main(String args[]) {
 
 保存并运行该段代码，下面是输出结果。集合中元素数量的统计几乎是瞬间完成。
 
-```
+```java
 Creating list
 Count: 10000 
 ```
 
 现在对上面的代码做一点小小的改动，增加两个 0。现在，开始处理 1000,000 个字符串。我再次运行这段代码，也很快就返回结果了。
 
-```
+```java
 Creating list
 Count: 1000000 
 ```
 
 现在，我使用并行流来处理，看会发生什么。我在下面增加 parallel 方法：
 
-```
+```java
 //      strings.stream()
 //             .forEach(str -> System.out.println(str));
         long count = strings.stream().parallel().count();
@@ -2548,7 +2544,7 @@ Count: 1000000
 
 关于 Lambda 表达式，开始是一个代表当前 person 的变量。然后，通过 Lambda 操作符和 Lambda 表达式（p.getAge()）返回一个整数。这种返回值，我们有时也叫做 int 字符串。也可以返回 double 字符串或其它类型。现在，由于已经知道它 是一个数字类型的值，所以我可以调用 sum() 方法。现在，我就已经将所有集合中 person 对象的年龄值全部加起来了。通过一条语句，我就可以用 System Output 来输出结果了。我将求和的结果与“Total of ages”连接在一起输出。
 
-```
+```java
 List<person> people = new ArrayList<>();
         people.add(new Person("Mohamed", 69));
         people.add(new Person("Doaa", 25));
@@ -2562,7 +2558,7 @@ List<person> people = new ArrayList<>();
 
 保存并运行上面的代码。三个年龄的总和是 100。
 
-```
+```java
 Total of ages 100 
 ```
 
@@ -2572,7 +2568,7 @@ Total of ages 100
 
 现在，获得了一个 OptionalDouble 类型的变量。在处理这个变量前，你可以通过 isPresent() 来确保它确实是一个 double 值。所以，我使用了一段 if/else 的模板代码来处理。判定的条件是 avg.isPresent()。如果条件为真，就使用 System Output 输出“Average”标签和平均值。在 else 子句中，我简单地打印“average wasn’t calculated”。
 
-```
+```java
 OptionalDouble avg = people.stream()
                 .mapToInt(p -> p.getAge())
                 .average();
@@ -2585,14 +2581,14 @@ if (avg.isPresent()) {
 
 现在，在这个例子中，我知道能成功，因为我给三个人的年龄都赋值了。但是，情况不总是这样的。正如我前面说的，存在除 0 的情况，这时你就不能获取到一个 double 类型返回值。我保存并运行这段代码，请注意 optional double 类，它是一个复合对象。
 
-```
+```java
 Total of ages 100
 Average: OptionalDouble[33.333333333333336] 
 ```
 
 所以，真实的值被包含在该类型中，回到这段代码，直接引用该对象，并调用 getAsDouble() 方法。
 
-```
+```java
 if (avg.isPresent()) {
     System.out.println("Average: " + avg.getAsDouble());
 } else {
@@ -2602,7 +2598,7 @@ if (avg.isPresent()) {
 
 现在，我就可以获得 double 类型的值。我再次运行这段代码，输出结果如下：
 
-```
+```java
 Total of ages 100
 Average: 33.333333333333336 
 ```
@@ -2650,13 +2646,13 @@ Java 中的 lambda 无法单独出现，它需要一个函数式接口来盛放�
 
 总体看起来像这样
 
-```
+```java
 (parameters) -> expression 或者 (parameters) -> { statements; } 
 ```
 
 看一个完整的例子，方便理解
 
-```
+```java
 /**
  * 测试 lambda 表达式
  *
@@ -2693,7 +2689,7 @@ public class TestLambda {
 
 其实是 lambda 表达式的一个简化写法，所引用的方法其实是 lambda 表达式的方法体实现，语法也很简单，左边是容器（可以是类名，实例名），中间是”::”，右边是相应的方法名。如下所示：
 
-```
+```java
 ObjectReference::methodName 
 ```
 
@@ -2705,7 +2701,7 @@ ObjectReference::methodName
 
 再来看一个完整的例子，方便理解
 
-```
+```java
 import java.awt.FlowLayout;
 import java.awt.event.ActionEvent;
 import javax.swing.JButton;
@@ -2755,8 +2751,6 @@ public class TestMethodReference {
 
 # Java 8 新特性探究（六）泛型的目标类型推断
 
-# Java 8 新特性探究（六）泛型的目标类型推断
-
 原文出处： [成熟的毛毛虫的博客](http://my.oschina.net/benhaile/blog/184390)
 
 ### **简单理解泛型**
@@ -2765,13 +2759,13 @@ public class TestMethodReference {
 
 理解 Java 泛型最简单的方法是把它看成一种便捷语法，能节省你某些 Java 类型转换(casting)上的操作：
 
-```
+```java
 List<Apple> box = new ArrayList<Apple>();box.add(new Apple());Apple apple =box.get(0); 
 ```
 
 上面的代码自身已表达的很清楚：box 是一个装有 Apple 对象的 List。get 方法返回一个 Apple 对象实例，这个过程不需要进行类型转换。没有泛型，上面的代码需要写成这样：
 
-```
+```java
 Apple apple = (Apple)box.get(0); 
 ```
 
@@ -2783,13 +2777,13 @@ Apple apple = (Apple)box.get(0);
 
 在以前的版本中使用泛型类型，需要在声明并赋值的时候，两侧都加上泛型类型。例如：
 
-```
+```java
 Map<String, String> myMap = new HashMap<String, String>(); 
 ```
 
 你可能觉得:老子在声明变量的的时候已经指明了参数类型，为毛还要在初始化对象时再指定？幸好，在 Java SE 7 中，这种方式得以改进，现在你可以使用如下语句进行声明并赋值：
 
-```
+```java
 Map<String, String> myMap = new HashMap<>(); //注意后面的"<>" 
 ```
 
@@ -2797,7 +2791,7 @@ Map<String, String> myMap = new HashMap<>(); //注意后面的"<>"
 
 但是：Java SE 7 在创建泛型实例时的类型推断是有限制的：只有构造器的参数化类型在上下文中被显著的声明了，才可以使用类型推断，否则不行。例如：下面的例子在 java 7 无法正确编译（但现在在 java8 里面可以编译，因为根据方法参数来自动推断泛型的类型）：
 
-```
+```java
 List<String> list = new ArrayList<>();
 list.add("A");// 由于 addAll 期望获得 Collection<? extends String>类型的参数，因此下面的语句无法通过
 list.addAll(new ArrayList<>()); 
@@ -2813,7 +2807,7 @@ java8 里面泛型的目标类型推断主要 2 个：
 
 让我们看看官网的例子
 
-```
+```java
 class List<E> {
    static <Z> List<Z> nil() { ... };
    static <Z> List<Z> cons(Z head, List<Z> tail) { ... };
@@ -2823,7 +2817,7 @@ class List<E> {
 
 根据 JEP101 的特性，我们在调用上面方法的时候可以这样写
 
-```
+```java
 //通过方法赋值的目标参数来自动推断泛型的类型
 List<String> l = List.nil();
 //而不是显示的指定类型
@@ -2866,7 +2860,7 @@ Tiago Fernandez 做过一次投票，选举最烂的 JAVA API，排第一的 EJB
 
 坑爹的 year 和 month
 
-```
+```java
 Date date = new Date(2012,1,1);
 System.out.println(date);
 输出 Thu Feb 01 00:00:00 CST 3912 
@@ -2876,14 +2870,14 @@ System.out.println(date);
 
 应该曾有人告诉你，如果你要设置日期，应该使用 java.util.Calendar，像这样…
 
-```
+```java
 Calendar calendar = Calendar.getInstance();
 calendar.set(2013, 8, 2); 
 ```
 
 这样写又不对了，calendar 的 month 也是从 0 开始的，表达 8 月份应该用 7 这个数字，要么就干脆用枚举
 
-```
+```java
 calendar.set(2013, Calendar.AUGUST, 2); 
 ```
 
@@ -2897,7 +2891,7 @@ java.util.Date 与 java.util.Calendar 中的所有属性都是可变的
 
 下面的代码，计算两个日期之间的天数….
 
-```
+```java
 public static void main(String[] args) {
     Calendar birth = Calendar.getInstance();
     birth.set(1975, Calendar.MAY, 26);
@@ -2918,7 +2912,7 @@ public static long daysBetween(Calendar begin, Calendar end) {
 
 daysBetween 有点问题，如果连续计算两个 Date 实例的话，第二次会取得 0，因为 Calendar 状态是可变的，考虑到重复计算的场合，最好复制一个新的 Calendar
 
-```
+```java
 public static long daysBetween(Calendar begin, Calendar end) {
     Calendar calendar = (Calendar) begin.clone(); // 复制
     long daysBetween = 0;
@@ -2972,7 +2966,7 @@ at：把这个对象与另一个对象组合起来，例如： date.atTime(time)
 
 参考[`jinnianshilongnian.iteye.com/blog/1994164`](http://jinnianshilongnian.iteye.com/blog/1994164) 被我揉在一起，可读性很差，相应的代码都有注释了，我就不过多解释了。
 
-```
+```java
 public class TimeIntroduction {
     public static void testClock() throws InterruptedException {
         //时钟提供给我们用于访问某个特定 时区的 瞬时时间、日期 和 时间的。  
@@ -3131,8 +3125,6 @@ Noda-Time：.NET 阵营的 Joda-Time 的复制
 
 # Java 8 新特性探究（八）精简的 JRE 详解
 
-# Java 8 新特性探究（八）精简的 JRE 详解
-
 原文出处： [成熟的毛毛虫的博客](http://my.oschina.net/benhaile/blog/211804)
 
 Oracle 公司如期发布了 Java 8 正式版！没有让广大 javaer 失望。对于一个人来说，18 岁是人生的转折点，从稚嫩走向成熟，法律意味着你是完全民事行为能力人，不再收益于未成年人保护法，到今年为止，java 也走过了 18 年，java8 是一个新的里程碑，带来了前所未有的诸多特性，lambda 表达式，Stream API，新的 Date time api，多核并发支持，重大安全问题改进等，相信 java 会越来越好，丰富的类库以及庞大的开源生态环境是其他语言所不具备的，说起丰富的类库，很多同学就吐槽了，java 该减肥了，确实是该减肥，java8 有个很好的特性，即 JEP161([`openjdk.java.net/jeps/161`](http://openjdk.java.net/jeps/161) ),该特性定义了 Java SE 平台规范的一些子集，使 java 应用程序不需要整个 JRE 平台即可部署和运行在小型设备上。开发人员可以基于目标硬件的可用资源选择一个合适的 JRE 运行环境。
@@ -3156,7 +3148,7 @@ javac –bootclasspath, or javac –profile
 
 如果不符合 compact 的 api，则报错。
 
-```
+```java
 $ javac -profile compact2 Test.java
 Test.java:7: error: ThreadMXBean is not available in profile 'compact2'
  ThreadMXBean bean = ManagementFactory.getThreadMXBean();
@@ -3175,7 +3167,7 @@ Test.java:7: error: ManagementFactory is not available in profile 'compact2'
 
 java8 新增一个工具，用来分析应用程序所依赖的 profile，有三个参数比较常用 -p，-v，-r
 
-```
+```java
 import java.util.Set;
 import java.util.HashSet;
 
@@ -3187,7 +3179,7 @@ public class Deps {
 } 
 ```
 
-```
+```java
 ************** PROFILE ********************
 jdeps -P Deps.class 
 Deps.class -> /Library/Java/JavaVirtualMachines/jdk1.8.0.jdk/Contents/Home/jre/lib/rt.jar
@@ -3253,7 +3245,7 @@ Deps.class -> /Library/Java/JavaVirtualMachines/jdk1.8.0.jdk/Contents/Home/jre/l
 
 ### **在 linux 上构建 profile**
 
-```
+```java
 $ hg clone http://hg.openjdk.java.net/jdk8/jdk8/
 $ cd jdk8
 $ make images profiles : 
@@ -3361,7 +3353,7 @@ Jstat 和 JVisualVM 两个工具，在使用 b75 版本进行测试时，已经�
 
 首先建立了一个模拟 PermGen OOM 的代码
 
-```
+```java
 public class ClassA {
  public void method(String name) {
   // do nothing
@@ -3371,7 +3363,7 @@ public class ClassA {
 
 上面是一个简单的 ClassA，把他编译成 class 字节码放到 D：/classes 下面，测试代码中用 URLClassLoader 来加载此类型上面类编译成 class
 
-```
+```java
 /**
  * 模拟 PermGen OOM
  * @author benhail
@@ -3419,7 +3411,7 @@ Java1.7 的 PermGen 默认空间为 85 MB（或者可以通过-XX:MaxPermSize=XX
 
 程序输出(摘取了部分)
 
-```
+```java
 ......
 [Loaded ClassA from file:/D:/classes/]
 total: 64887
@@ -3452,7 +3444,7 @@ Java 的 Metaspace 空间：128MB（-XX:MaxMetaspaceSize=128m）
 
 从 Java 程序的输出中看到如下异常。
 
-```
+```java
 [Loaded ClassA from file:/D:/classes/]
 total: 21393
 active: 21393
@@ -3491,7 +3483,7 @@ Java8 就像一个宝藏，一个小的 API 改进，也足与写一篇文章，
 
 大家对此应该不陌生，所以不多讲了，以下是代码示例
 
-```
+```java
 synchronized(this)
 // do operation
 } 
@@ -3501,7 +3493,7 @@ synchronized(this)
 
 ### **Lock**
 
-```
+```java
 rwlock.writeLock().lock();
 try {
 // do operation
@@ -3520,7 +3512,7 @@ ReentrantReadWriteLock, ReentrantLock 和 synchronized 锁都有相同的内存�
 
 下面是 Lock 的一个代码示例
 
-```
+```java
 class Point {
    private double x, y;
    private final StampedLock sl = new StampedLock();
@@ -3589,7 +3581,7 @@ StampedLock 控制锁有三种模式（写，读，乐观读），一个 Stamped
 
 下面是 java doc 提供的 StampedLock 一个例子
 
-```
+```java
 class Point {
    private double x, y;
    private final StampedLock sl = new StampedLock();
@@ -3693,7 +3685,7 @@ JDK1.6 中添加了另一个 Base64 的实现，javax.xml.bind.DatatypeConverter
 
 1）Basic 编码：是标准的 BASE64 编码，用于处理常规的需求
 
-```
+```java
 // 编码
 String asB64 = Base64.getEncoder().encodeToString("some string".getBytes("utf-8"));
 System.out.println(asB64); // 输出为: c29tZSBzdHJpbmc=
@@ -3704,7 +3696,7 @@ System.out.println(new String(asBytes, "utf-8")); // 输出为: some string
 
 2）URL 编码：使用下划线替换 URL 里面的反斜线“/”
 
-```
+```java
 String urlEncoded = Base64.getUrlEncoder().encodeToString("subjects?abcd".getBytes("utf-8"));
 System.out.println("Using URL Alphabet: " + urlEncoded);
 // 输出为:
@@ -3713,7 +3705,7 @@ Using URL Alphabet: c3ViamVjdHM_YWJjZA==
 
 3）MIME 编码：使用基本的字母数字产生 BASE64 输出，而且对 MIME 格式友好：每一行输出不超过 76 个字符，而且每行以“\r\n”符结束。
 
-```
+```java
 StringBuilder sb = new StringBuilder();
 for (int t = 0; t < 10; ++t) {
   sb.append(UUID.randomUUID().toString());
@@ -3739,7 +3731,7 @@ System.out.println(mimeEncoded);
 
 首先来定义两个接口
 
-```
+```java
 private static interface Base64Codec
     {
         public String encode(final byte[] data);
@@ -3754,7 +3746,7 @@ private static interface Base64Codec
 
 两个接口区别就是其中一个接口方法参数接收 byte 数组，返回 byte 数组，因为 byte->byte 相比 String->byte 或者 byte->String 性能上会快一点，所以区分两组来测试
 
-```
+```java
 private static final Base64Codec[] m_codecs = { new GuavaImpl(), new JavaXmlImpl(),
         new Java8Impl(), new SunImpl(), new ApacheImpl(),new MiGBase64Impl(),new IHarderImpl() };
 private static final Base64ByteCodec[] m_byteCodecs = {
@@ -3765,7 +3757,7 @@ private static final Base64ByteCodec[] m_byteCodecs = {
 
 7 个 Base64 的实现类
 
-```
+```java
 private static class Java8Impl implements Base64Codec, Base64ByteCodec
     {
         private final Base64.Decoder m_decoder = Base64.getDecoder();
@@ -3801,7 +3793,7 @@ private static class Java8Impl implements Base64Codec, Base64ByteCodec
 
 主要测试手段是，生成 100M 的随机数，分成 100byte 或者 1000byte 的块，然后将他们分别编码和解码，记录时间，如下方法
 
-```
+```java
 private static TestResult testByteCodec( final Base64ByteCodec codec, final List<byte[]> buffers ) throws IOException {
         final List<byte[]> encoded = new ArrayList<byte[]>( buffers.size() );
         final long start = System.currentTimeMillis();
@@ -3852,14 +3844,14 @@ Nashorn，发音“nass-horn”,是德国二战时一个坦克的命名，同时
 
 jjs 是在 java_home/bin 下面自带的，作为例子，让我们创建一个 func.js， 内容如下：
 
-```
+```java
 function f(){return 1;};
 print(f() + 1); 
 ```
 
 运行这个文件，把这个文件作为参数传给 jjs
 
-```
+```java
 jjs func.js 
 ```
 
@@ -3867,7 +3859,7 @@ jjs func.js
 
 另一个方面是 javax.script，也是以前 Rhino 余留下来的 API
 
-```
+```java
 ScriptEngineManager manager = new ScriptEngineManager();
 ScriptEngine engine = manager.getEngineByName( "JavaScript" );
 System.out.println( engine.getClass().getName() );
@@ -3886,7 +3878,7 @@ Result: 2
 
 javascript 运行在 jvm 已经不是新鲜事了，Rhino 早在 jdk6 的时候已经存在，但现在为何要替代 Rhino，官方的解释是 Rhino 相比其他 javascript 引擎（比如 google 的 V8）实在太慢了，要改造 Rhino 还不如重写。既然性能是 Nashorn 的一个亮点，下面就测试下性能对比，为了对比两者之间的性能，需要用到[Esprima](http://www.oschina.net/search?scope=project&q=esprima)，一个 ECMAScript 解析框架，用它来解析未压缩版的 jquery（大约 268kb），测试核心代码如下：
 
-```
+```java
 static void rhino(String parser, String code) {
         String source = "speedtest";
         int line = 1;
@@ -3955,8 +3947,6 @@ nashorn 首先编译 javascript 代码为 java 字节码，然后运行在 jvm �
 在企业中另外一种借力 Nashorn 方式是脚本，相比通常我们使用 Linux 等 shell 脚本，现在我们也可以使用 Javascript 脚本和 Java 交互了，甚至使用 Nashorn 通过 REST 接口来监视服务器运行状况。
 
 本文代码地址是：[`git.oschina.net/benhail/javase8-sample`](http://git.oschina.net/benhail/javase8-sample)
-
-# Java 8 新特性终极指南
 
 # Java 8 新特性终极指南
 
@@ -4039,19 +4029,19 @@ Lambda 表达式（也称为闭包）是整个 Java 8 发行版中最受期待�
 
 关于 Lambda 设计的讨论占用了大量的时间与社区的努力。可喜的是，最终找到了一个平衡点，使得可以使用一种即简洁又紧凑的新方式来构造 Lambdas。在最简单的形式中，一个 lambda 可以由用逗号分隔的参数列表、–>符号与函数体三部分表示。例如：
 
-```
+```java
 Arrays.asList( "a", "b", "d" ).forEach( e -> System.out.println( e ) ); 
 ```
 
 请注意参数 e 的类型是由编译器推测出来的。同时，你也可以通过把参数类型与参数包括在括号中的形式直接给出参数的类型：
 
-```
+```java
 Arrays.asList( "a", "b", "d" ).forEach( ( String e ) -> System.out.println( e ) ); 
 ```
 
 在某些情况下 lambda 的函数体会更加复杂，这时可以把函数体放到在一对花括号中，就像在 Java 中定义普通函数一样。例如：
 
-```
+```java
 Arrays.asList( "a", "b", "d" ).forEach( e -> {
     System.out.print( e );
     System.out.print( e );
@@ -4060,7 +4050,7 @@ Arrays.asList( "a", "b", "d" ).forEach( e -> {
 
 Lambda 可以引用类的成员变量与局部变量（如果这些变量不是 final 的话，它们会被隐含的转为 final，这样效率更高）。例如，下面两个代码片段是等价的：
 
-```
+```java
 String separator = ",";
 Arrays.asList( "a", "b", "d" ).forEach(
     ( String e ) -> System.out.print( e + separator ) ); 
@@ -4068,7 +4058,7 @@ Arrays.asList( "a", "b", "d" ).forEach(
 
 和：
 
-```
+```java
 final String separator = ",";
 Arrays.asList( "a", "b", "d" ).forEach(
     ( String e ) -> System.out.print( e + separator ) ); 
@@ -4076,13 +4066,13 @@ Arrays.asList( "a", "b", "d" ).forEach(
 
 Lambda 可能会返回一个值。返回值的类型也是由编译器推测出来的。如果 lambda 的函数体只有一行的话，那么没有必要显式使用 return 语句。下面两个代码片段是等价的：
 
-```
+```java
 Arrays.asList( "a", "b", "d" ).sort( ( e1, e2 ) -> e1.compareTo( e2 ) ); 
 ```
 
 和：
 
-```
+```java
 Arrays.asList( "a", "b", "d" ).sort( ( e1, e2 ) -> {
     int result = e1.compareTo( e2 );
     return result;
@@ -4091,7 +4081,7 @@ Arrays.asList( "a", "b", "d" ).sort( ( e1, e2 ) -> {
 
 语言设计者投入了大量精力来思考如何使现有的函数友好地支持 lambda。最终采取的方法是：增加函数式接口的概念。函数式接口就是一个具有一个方法的普通接口。像这样的接口，可以被隐式转换为 lambda 表达式。java.lang.Runnable 与 java.util.concurrent.Callable 是函数式接口最典型的两个例子。在实际使用过程中，函数式接口是容易出错的：如有某个人在接口定义中增加了另一个方法，这时，这个接口就不再是函数式的了，并且编译过程也会失败。为了克服函数式接口的这种脆弱性并且能够明确声明接口作为函数式接口的意图，Java 8 增加了一种特殊的注解@FunctionalInterface（Java 8 中所有类库的已有接口都添加了@FunctionalInterface 注解）。让我们看一下这种函数式接口的定义：
 
-```
+```java
 @FunctionalInterface
 public interface Functional {
     void method();
@@ -4100,7 +4090,7 @@ public interface Functional {
 
 需要记住的一件事是：默认方法与静态方法并不影响函数式接口的契约，可以任意使用：
 
-```
+```java
 @FunctionalInterface
 public interface FunctionalDefaultMethods {
     void method();
@@ -4118,7 +4108,7 @@ Java 8 用默认方法与静态方法这两个新概念来扩展接口的声明�
 
 默认方法与抽象方法不同之处在于抽象方法必须要求实现，但是默认方法则没有这个要求。相反，每个接口都必须提供一个所谓的默认实现，这样所有的接口实现者将会默认继承它（如果有必要的话，可以覆盖这个默认实现）。让我们看看下面的例子：
 
-```
+```java
 private interface Defaulable {
     // Interfaces now allow default methods, the implementer may or
     // may not implement (override) them.
@@ -4142,7 +4132,7 @@ Defaulable 接口用关键字 default 声明了一个默认方法 notRequired()�
 
 Java 8 带来的另一个有趣的特性是接口可以声明（并且可以提供实现）静态方法。例如：
 
-```
+```java
 private interface DefaulableFactory {
     // Interfaces now allow static methods
     static Defaulable create( Supplier< Defaulable > supplier ) {
@@ -4153,7 +4143,7 @@ private interface DefaulableFactory {
 
 下面的一小段代码片段把上面的默认方法与静态方法黏合到一起。
 
-```
+```java
 public static void main( String[] args ) {
     Defaulable defaulable = DefaulableFactory.create( DefaultableImpl::new );
     System.out.println( defaulable.notRequired() );
@@ -4165,7 +4155,7 @@ public static void main( String[] args ) {
 
 这个程序的控制台输出如下：
 
-```
+```java
 Default implementation
 Overridden implementation 
 ```
@@ -4180,7 +4170,7 @@ Overridden implementation
 
 下面，我们以定义了 4 个方法的 Car 这个类作为例子，区分 Java 中支持的 4 种不同的方法引用。
 
-```
+```java
 public static class Car {
     public static Car create( final Supplier< Car > supplier ) {
         return supplier.get();
@@ -4202,33 +4192,33 @@ public static class Car {
 
 第一种方法引用是构造器引用，它的语法是 Class::new，或者更一般的 Class< T >::new。请注意构造器没有参数。
 
-```
+```java
 final Car car = Car.create( Car::new );
 final List< Car > cars = Arrays.asList( car ); 
 ```
 
 第二种方法引用是静态方法引用，它的语法是 Class::static_method。请注意这个方法接受一个 Car 类型的参数。
 
-```
+```java
 cars.forEach( Car::collide ); 
 ```
 
 第三种方法引用是特定类的任意对象的方法引用，它的语法是 Class::method。请注意，这个方法没有参数。
 
-```
+```java
 cars.forEach( Car::repair ); 
 ```
 
 最后，第四种方法引用是特定对象的方法引用，它的语法是 instance::method。请注意，这个方法接受一个 Car 类型的参数
 
-```
+```java
 final Car police = Car.create( Car::new );
 cars.forEach( police::follow ); 
 ```
 
 运行上面的 Java 程序在控制台上会有下面的输出（Car 的实例可能不一样）：
 
-```
+```java
 Collided com.javacodegeeks.java8.method.references.MethodReferences$Car@7a81197d
 Repaired com.javacodegeeks.java8.method.references.MethodReferences$Car@7a81197d
 Following the com.javacodegeeks.java8.method.references.MethodReferences$Car@7a81197d 
@@ -4242,7 +4232,7 @@ Following the com.javacodegeeks.java8.method.references.MethodReferences$Car@7a8
 
 重复注解机制本身必须用@Repeatable 注解。事实上，这并不是语言层面上的改变，更多的是编译器的技巧，底层的原理保持不变。让我们看一个快速入门的例子：
 
-```
+```java
 package com.javacodegeeks.java8.repeatable.annotations;
 
 import java.lang.annotation.ElementType;
@@ -4284,7 +4274,7 @@ public class RepeatingAnnotations {
 
 程序输出结果如下：
 
-```
+```java
 filter1
 filter2 
 ```
@@ -4295,7 +4285,7 @@ filter2
 
 Java 8 在类型推测方面有了很大的提高。在很多情况下，编译器可以推测出确定的参数类型，这样就能使代码更整洁。让我们看一个例子：
 
-```
+```java
 package com.javacodegeeks.java8.type.inference;
 
 public class Value< T > {
@@ -4311,7 +4301,7 @@ public class Value< T > {
 
 这里是 Value< String >类型的用法。
 
-```
+```java
 package com.javacodegeeks.java8.type.inference;
 
 public class TypeInference {
@@ -4328,7 +4318,7 @@ Value.defaultValue()的参数类型可以被推测出，所以就不必明确给
 
 Java 8 扩展了注解的上下文。现在几乎可以为任何东西添加注解：局部变量、泛型类、父类与接口的实现，就连方法的异常也能添加注解。下面演示几个例子：
 
-```
+```java
 package com.javacodegeeks.java8.annotations;
 
 import java.lang.annotation.ElementType;
@@ -4365,7 +4355,7 @@ ElementType.TYPE_USE 和 ElementType.TYPE_PARAMETER 是两个新添加的用于�
 
 很长一段时间里，Java 程序员一直在发明不同的方式使得[方法参数的名字能保留在 Java 字节码](http://www.javacodegeeks.com/2014/04/constructormethod-parameters-metadata-available-via-reflection-in-jdk-8.html)中，并且能够在运行时获取它们（比如，[Paranamer 类库](https://github.com/paul-hammant/paranamer)）。最终，在 Java 8 中把这个强烈要求的功能添加到语言层面（通过反射 API 与 Parameter.getName()方法）与字节码文件（通过新版的 javac 的–parameters 选项）中。
 
-```
+```java
 package com.javacodegeeks.java8.parameter.names;
 
 import java.lang.reflect.Method;
@@ -4383,19 +4373,19 @@ public class ParameterNames {
 
 如果不使用–parameters 参数来编译这个类，然后运行这个类，会得到下面的输出：
 
-```
+```java
 Parameter: arg0 
 ```
 
 如果使用–parameters 参数来编译这个类，程序的结构会有所不同（参数的真实名字将会显示出来）：
 
-```
+```java
 Parameter: args 
 ```
 
 对于[有经验的 Maven 用户](http://www.javacodegeeks.com/tag/apache-maven/)，通过 maven-compiler-plugin 的配置可以将-parameters 参数添加到编译器中去。
 
-```
+```java
 <plugin>
     <groupId>org.apache.maven.plugins</groupId>
     maven-compiler-plugin
@@ -4428,7 +4418,7 @@ Optional 实际上是个容器：它可以保存类型 T 的值，或者仅仅�
 
 我们下面用两个小例子来演示如何使用 Optional 类：一个允许为空值，一个不允许为空值。
 
-```
+```java
 Optional< String > fullName = Optional.ofNullable( null );
 System.out.println( "Full Name is set? " + fullName.isPresent() );        
 System.out.println( "Full Name: " + fullName.orElseGet( () -> "[none]" ) );
@@ -4437,7 +4427,7 @@ System.out.println( fullName.map( s -> "Hey " + s + "!" ).orElse( "Hey Stranger!
 
 如果 Optional 类的实例为非空值的话，isPresent()返回 true，否从返回 false。为了防止 Optional 为空值，orElseGet()方法通过回调函数来产生一个默认值。map()函数对当前 Optional 的值进行转化，然后返回一个新的 Optional 实例。orElse()方法和 orElseGet()方法类似，但是 orElse 接受一个默认值而不是一个回调函数。下面是这个程序的输出：
 
-```
+```java
 Full Name is set? false
 Full Name: [none]
 Hey Stranger! 
@@ -4445,7 +4435,7 @@ Hey Stranger!
 
 让我们来看看另一个例子：
 
-```
+```java
 Optional< String > firstName = Optional.of( "Tom" );
 System.out.println( "First Name is set? " + firstName.isPresent() );        
 System.out.println( "First Name: " + firstName.orElseGet( () -> "[none]" ) );
@@ -4455,7 +4445,7 @@ System.out.println();
 
 下面是程序的输出：
 
-```
+```java
 First Name is set? true
 First Name: Tom
 Hey Tom! 
@@ -4469,7 +4459,7 @@ Hey Tom!
 
 Stream API 极大简化了集合框架的处理（但它的处理的范围不仅仅限于集合框架的处理，这点后面我们会看到）。让我们以一个简单的 Task 类为例进行介绍：
 
-```
+```java
 public class Streams  {
     private enum Status {
         OPEN, CLOSED
@@ -4502,7 +4492,7 @@ public class Streams  {
 
 Task 类有一个分数的概念（或者说是伪复杂度），其次是还有一个值可以为 OPEN 或 CLOSED 的状态.让我们引入一个 Task 的小集合作为演示例子：
 
-```
+```java
 final Collection< Task > tasks = Arrays.asList(
     new Task( Status.OPEN, 5 ),
     new Task( Status.OPEN, 13 ),
@@ -4512,7 +4502,7 @@ final Collection< Task > tasks = Arrays.asList(
 
 我们下面要讨论的第一个问题是所有状态为 OPEN 的任务一共有多少分数？在 Java 8 以前，一般的解决方式用 foreach 循环，但是在 Java 8 里面我们可以使用 stream：一串支持连续、并行聚集操作的元素。
 
-```
+```java
 // Calculate total points of all active tasks using sum()
 final long totalPointsOfOpenTasks = tasks
     .stream()
@@ -4525,7 +4515,7 @@ System.out.println( "Total points: " + totalPointsOfOpenTasks );
 
 程序在控制台上的输出如下：
 
-```
+```java
 Total points: 18 
 ```
 
@@ -4539,7 +4529,7 @@ Total points: 18
 
 stream 另一个有价值的地方是能够原生支持并行处理。让我们来看看这个算 task 分数和的例子。
 
-```
+```java
 // Calculate total points of all tasks
 final double totalPoints = tasks
    .stream()
@@ -4552,13 +4542,13 @@ System.out.println( "Total points (all tasks): " + totalPoints );
 
 这个例子和第一个例子很相似，但这个例子的不同之处在于这个程序是并行运行的，其次使用 reduce 方法来算最终的结果。 下面是这个例子在控制台的输出：
 
-```
+```java
 Total points (all tasks): 26.0 
 ```
 
 经常会有这个一个需求：我们需要按照某种准则来对集合中的元素进行分组。Stream 也可以处理这样的需求，下面是一个例子：
 
-```
+```java
 // Group tasks by their status
 final Map< Status, List< Task > > map = tasks
     .stream()
@@ -4568,13 +4558,13 @@ System.out.println( map );
 
 这个例子的控制台输出如下：
 
-```
+```java
 {CLOSED=[[CLOSED, 8]], OPEN=[[OPEN, 5], [OPEN, 13]]} 
 ```
 
 让我们来计算整个集合中每个 task 分数（或权重）的平均值来结束 task 的例子。
 
-```
+```java
 // Calculate the weight of each tasks (as percent of total points)
 final Collection< String > result = tasks
     .stream()                                        // Stream< String >
@@ -4591,13 +4581,13 @@ System.out.println( result );
 
 下面是这个例子的控制台输出：
 
-```
+```java
 [19%, 50%, 30%] 
 ```
 
 最后，就像前面提到的，Stream API 不仅仅处理 Java 集合框架。像从文本文件中逐行读取数据这样典型的 I/O 操作也很适合用 Stream API 来处理。下面用一个例子来应证这一点。
 
-```
+```java
 final Path path = new File( filename ).toPath();
 try( Stream< String > lines = Files.lines( path, StandardCharsets.UTF_8 ) ) {
     lines.onClose( () -> System.out.println("Done!") ).forEach( System.out::println );
@@ -4616,7 +4606,7 @@ Java 8 通过发布[新的 Date-Time API (JSR 310)](https://jcp.org/en/jsr/detai
 
 让我们用例子来看一下新版 API 主要类的使用方法。第一个是 Clock 类，它通过指定一个时区，然后就可以获取到当前的时刻，日期与时间。Clock 可以替换 System.currentTimeMillis()与 TimeZone.getDefault()。
 
-```
+```java
 // Get the system clock as UTC offset
 final Clock clock = Clock.systemUTC();
 System.out.println( clock.instant() );
@@ -4625,14 +4615,14 @@ System.out.println( clock.millis() );
 
 下面是程序在控制台上的输出：
 
-```
+```java
 2014-04-12T15:19:29.282Z
 1397315969360 
 ```
 
 我们需要关注的其他类是 LocaleDate 与 LocalTime。LocaleDate 只持有 ISO-8601 格式且无时区信息的日期部分。相应的，LocaleTime 只持有 ISO-8601 格式且无时区信息的时间部分。LocaleDate 与 LocalTime 都可以从 Clock 中得到。
 
-```
+```java
 // Get the local date and local time
 final LocalDate date = LocalDate.now();
 final LocalDate dateFromClock = LocalDate.now( clock );
@@ -4650,7 +4640,7 @@ System.out.println( timeFromClock );
 
 下面是程序在控制台上的输出：
 
-```
+```java
 2014-04-12
 2014-04-12
 11:25:54.568
@@ -4659,7 +4649,7 @@ System.out.println( timeFromClock );
 
 LocaleDateTime 把 LocaleDate 与 LocaleTime 的功能合并起来，它持有的是 ISO-8601 格式无时区信息的日期与时间。下面是一个[快速入门](http://www.javacodegeeks.com/2014/04/java-8-date-time-api-tutorial-localdatetime.html)的例子。
 
-```
+```java
 // Get the local date/time
 final LocalDateTime datetime = LocalDateTime.now();
 final LocalDateTime datetimeFromClock = LocalDateTime.now( clock );
@@ -4670,14 +4660,14 @@ System.out.println( datetimeFromClock );
 
 下面是程序在控制台上的输出：
 
-```
+```java
 2014-04-12T11:37:52.309
 2014-04-12T15:37:52.309 
 ```
 
 如果你需要特定时区的日期/时间，那么 ZonedDateTime 是你的选择。它持有 ISO-8601 格式具具有时区信息的日期与时间。下面是一些不同时区的例子：
 
-```
+```java
 // Get the zoned date/time
 final ZonedDateTime zonedDatetime = ZonedDateTime.now();
 final ZonedDateTime zonedDatetimeFromClock = ZonedDateTime.now( clock );
@@ -4690,7 +4680,7 @@ System.out.println( zonedDatetimeFromZone );
 
 下面是程序在控制台上的输出：
 
-```
+```java
 2014-04-12T11:47:01.017-04:00[America/New_York]
 2014-04-12T15:47:01.017Z
 2014-04-12T08:47:01.017-07:00[America/Los_Angeles] 
@@ -4698,7 +4688,7 @@ System.out.println( zonedDatetimeFromZone );
 
 最后，让我们看一下 Duration 类：在秒与纳秒级别上的一段时间。Duration 使计算两个日期间的不同变的十分简单。下面让我们看一个这方面的例子。
 
-```
+```java
 // Get duration between two dates
 final LocalDateTime from = LocalDateTime.of( 2014, Month.APRIL, 16, 0, 0, 0 );
 final LocalDateTime to = LocalDateTime.of( 2015, Month.APRIL, 16, 23, 59, 59 );
@@ -4710,7 +4700,7 @@ System.out.println( "Duration in hours: " + duration.toHours() );
 
 上面的例子计算了两个日期 2014 年 4 月 16 号与 2014 年 4 月 16 号之间的过程。下面是程序在控制台上的输出：
 
-```
+```java
 Duration in days: 365
 Duration in hours: 8783 
 ```
@@ -4721,7 +4711,7 @@ Duration in hours: 8783
 
 Nashorn，一个新的 JavaScript 引擎随着 Java 8 一起公诸于世，它允许在 JVM 上开发运行某些 JavaScript 应用。Nashorn 就是 javax.script.ScriptEngine 的另一种实现，并且它们俩遵循相同的规则，允许 Java 与 JavaScript 相互调用。下面看一个例子：
 
-```
+```java
 ScriptEngineManager manager = new ScriptEngineManager();
 ScriptEngine engine = manager.getEngineByName( "JavaScript" );
 
@@ -4731,7 +4721,7 @@ System.out.println( "Result:" + engine.eval( "function f() { return 1; }; f() + 
 
 下面是程序在控制台上的输出：
 
-```
+```java
 jdk.nashorn.api.scripting.NashornScriptEngine
 Result: 2 
 ```
@@ -4742,7 +4732,7 @@ Result: 2
 
 在 Java 8 中，[Base64 编码](http://www.javacodegeeks.com/2014/04/base64-in-java-8-its-not-too-late-to-join-in-the-fun.html)已经成为 Java 类库的标准。它的使用十分简单，下面让我们看一个例子：
 
-```
+```java
 package com.javacodegeeks.java8.base64;
 
 import java.nio.charset.StandardCharsets;
@@ -4767,7 +4757,7 @@ public class Base64s {
 
 程序在控制台上输出了编码后的字符与解码后的字符：
 
-```
+```java
 QmFzZTY0IGZpbmFsbHkgaW4gSmF2YSA4IQ==
 Base64 finally in Java 8! 
 ```
@@ -4778,7 +4768,7 @@ Base64 类同时还提供了对 URL、MIME 友好的编码器与解码器（Base
 
 Java 8 增加了大量的新方法来对数组进行并行处理。可以说，最重要的是 parallelSort()方法，因为它可以在多核机器上极大提高数组排序的速度。下面的例子展示了新方法（parallelXxx）的使用。
 
-```
+```java
 package com.javacodegeeks.java8.parallel.arrays;
 
 import java.util.Arrays;
@@ -4804,7 +4794,7 @@ public class ParallelArrays {
 
 上面的代码片段使用了 parallelSetAll()方法来对一个有 20000 个元素的数组进行随机赋值。然后，调用 parallelSort 方法。这个程序首先打印出前 10 个元素的值，之后对整个数组排序。这个程序在控制台上的输出如下（请注意数组元素是随机生产的）：
 
-```
+```java
 Unsorted: 591217 891976 443951 424479 766825 351964 242997 642839 119108 552378
 Sorted: 39 220 263 268 325 607 655 678 723 793 
 ```
@@ -4830,7 +4820,7 @@ Java 8 也带来了一些新的命令行工具。在这节里我们将会介绍�
 
 jjs 是个基于 Nashorn 引擎的命令行工具。它接受一些 JavaScript 源代码为参数，并且执行这些源代码。例如，我们创建一个具有如下内容的 func.js 文件：
 
-```
+```java
 function f() {
      return 1;
 };
@@ -4840,13 +4830,13 @@ print( f() + 1 );
 
 我们可以把这个文件作为参数传递给 jjs 使得这个文件可以在命令行中执行：
 
-```
+```java
 jjs func.js 
 ```
 
 下面是程序在控制台上的输出：
 
-```
+```java
 2 
 ```
 
@@ -4858,13 +4848,13 @@ jdeps 是一个很有用的命令行工具。它可以显示 Java 类的包级�
 
 下面我们查看现阶段较流行的[Spring 框架](http://projects.spring.io/spring-framework/)类库的依赖报告，为了简化这个例子，我们只分析一个 jar 文件：**org.springframework.core-3.0.5.RELEASE.jar**
 
-```
+```java
 jdeps org.springframework.core-3.0.5.RELEASE.jar 
 ```
 
 这个命令输出的内容很多，所以这里我们只选取一小部分。依赖信息按照包名进行分组。如果依赖不在 classpath 中，那么就会显示**not found**。
 
-```
+```java
 org.springframework.core-3.0.5.RELEASE.jar -> C:\Program Files\Java\jdk1.8.0\jre\lib\rt.jar
    org.springframework.core (org.springframework.core-3.0.5.RELEASE.jar)
       -> java.io                                            
@@ -4925,8 +4915,6 @@ PermGen 空间[被移除了，取而代之的是 Metaspace](http://www.javacodeg
 
 # Java 8 新的时间日期库的 20 个使用示例
 
-# Java 8 新的时间日期库的 20 个使用示例
-
 译文出处： [花名有孚](http://it.deepinmind.com/java/2015/03/17/20-examples-of-date-and-time-api-from-Java8.html)
 
 原文出处：[javarevisited](http://javarevisited.blogspot.sg/2015/03/20-examples-of-date-and-time-api-from-Java8.html)
@@ -4951,7 +4939,7 @@ PermGen 空间[被移除了，取而代之的是 Metaspace](http://www.javacodeg
 
 Java 8 中有一个叫 LocalDate 的类，它能用来表示今天的日期。这个类与 java.util.Date 略有不同，因为它只包含日期，没有时间。因此，如果你只需要表示日期而不包含时间，就可以使用它。
 
-```
+```java
 LocalDate today = LocalDate.now(); System.out.println("Today's Local date : " + today); 
 
 Output 
@@ -4964,7 +4952,7 @@ Today's Local date : 2014-01-14
 
 LocalDate 类中提供了一些很方便的方法可以用于提取出年月日以及其它的日期属性。使用这些方法，你可以获取到任何你所需要的日期属性，而不再需要使用 java.util.Calendar 这样的类了：
 
-```
+```java
 LocalDate today = LocalDate.now(); 
 int year = today.getYear(); 
 int month = today.getMonthValue(); 
@@ -4982,7 +4970,7 @@ Year : 2014 Month : 1 day : 14
 
 在第一个例子中，我们看到通过静态方法 now()来生成当天日期是非常简单的，不过通过另一个十分有用的工厂方法 LocalDate.of()，则可以创建出任意一个日期，它接受年月日的参数，然后返回一个等价的 LocalDate 实例。关于这个方法还有一个好消息就是它没有再犯之前 API 中的错，比方说，年只能从 1900 年开始，月必须从 0 开始，等等。这里的日期你写什么就是什么，比如说，下面这个例子中它代表的就是 1 月 14 日，没有什么隐藏逻辑。
 
-```
+```java
 LocalDate dateOfBirth = LocalDate.of(2010, 01, 14); 
 System.out.println("Your Date of birth is : " + dateOfBirth); 
 
@@ -4995,7 +4983,7 @@ Output : Your Date of birth is : 2010-01-14
 
 如果说起现实中实际的处理时间及日期的任务，有一个常见的就是要检查两个日期是否相等。你可能经常会碰到要判断今天是不是某个特殊的日子，比如生日啊，周年纪念日啊，或者假期之类。有的时候，会给你一个日期，让你检查它是不是某个日子比方说假日。下面这个例子将会帮助你在 Java 8 中完成这类任务。正如你所想的那样，LocalDate 重写了 equals 方法来进行日期的比较，如下所示：
 
-```
+```java
 LocalDate date1 = LocalDate.of(2014, 01, 14); if(date1.equals(today)){ 
     System.out.printf("Today %s and date1 %s are same date %n", today, date1); 
 } 
@@ -5010,7 +4998,7 @@ today 2014-01-14 and date1 2014-01-14 are same date
 
 在 Java 中还有一个与时间日期相关的实际任务就是检查重复事件，比如说每月的帐单日，结婚纪念日，每月还款日或者是每年交保险费的日子。如果你在一家电商公司工作的话，那么肯定会有这么一个模块，会去给用户发送生日祝福并且在每一个重要的假日给他们捎去问候，比如说圣诞节，感恩节，在印度则可能是万灯节（Deepawali）。如何在 Java 中判断是否是某个节日或者重复事件？使用 MonthDay 类。这个类由月日组合，不包含年信息，也就是说你可以用它来代表每年重复出现的一些日子。当然也有一些别的组合，比如说 YearMonth 类。它和新的时间日期库中的其它类一样也都是[不可变](http://javarevisited.blogspot.sg/2013/03/how-to-create-immutable-class-object-java-example-tutorial.html)且[线程安全](http://javarevisited.blogspot.sg/2012/01/how-to-write-thread-safe-code-in-java.html)的，并且它还是一个值类（value class）。我们通过一个例子来看下如何使用 MonthDay 来检查某个重复的日期：
 
-```
+```java
 LocalDate dateOfBirth = LocalDate.of(2010, 01, 14); 
 MonthDay birthday = MonthDay.of(dateOfBirth.getMonth(), dateOfBirth.getDayOfMonth()); 
 MonthDay currentMonthDay = MonthDay.from(today); 
@@ -5029,7 +5017,7 @@ Output: Many Many happy returns of the day !!
 
 这与第一个例子中获取当前日期非常相似。这次我们用的是一个叫 LocalTime 的类，它是没有日期的时间，与 LocalDate 是近亲。这里你也可以用静态工厂方法 now()来获取当前时间。默认的格式是 hh:mm:ss:nnn，这里的 nnn 是纳秒。可以和[Java 8 以前如何获取当前时间](http://javarevisited.blogspot.sg/2012/01/get-current-date-timestamps-java.html)做一下比较。
 
-```
+```java
 LocalTime time = LocalTime.now(); System.out.println("local time now : " + time);
 
 Output 
@@ -5042,7 +5030,7 @@ local time now : 16:33:33.369 // in hour, minutes, seconds, nano seconds
 
 很多时候我们需要增加小时，分或者秒来计算出将来的时间。Java 8 不仅提供了不可变且线程安全的类，它还提供了一些更方便的方法譬如 plusHours()来替换原来的 add()方法。顺便说一下，这些方法返回的是一个新的 LocalTime 实例的引用，因为 LocalTime 是不可变的，可别忘了存储好这个新的引用。
 
-```
+```java
 LocalTime time = LocalTime.now(); 
 LocalTime newTime = time.plusHours(2); // adding two hours 
 System.out.println("Time after 2 hours : " + newTime); 
@@ -5057,7 +5045,7 @@ Time after 2 hours : 18:33:33.369
 
 这与前一个获取 2 小时后的时间的例子类似，这里我们将学会如何获取到 1 周后的日期。LocalDate 是用来表示无时间的日期的，它有一个 plus()方法可以用来增加日，星期，或者月，ChronoUnit 则用来表示这个时间单位。由于 LocalDate 也是不可变的，因此任何修改操作都会返回一个新的实例，因此别忘了保存起来。
 
-```
+```java
 LocalDate nextWeek = today.plus(1, ChronoUnit.WEEKS); 
 System.out.println("Today is : " + today); 
 System.out.println("Date after 1 week : " + nextWeek); 
@@ -5073,7 +5061,7 @@ Date after 1 week : 2014-01-21
 
 这是上个例子的续集。上例中，我们学习了如何使用 LocalDate 的 plus()方法来给日期增加日，周或者月，现在我们来学习下如何用 minus()方法来找出一年前的那天。
 
-```
+```java
 LocalDate previousYear = today.minus(1, ChronoUnit.YEARS); 
 System.out.println("Date before 1 year : " + previousYear); 
 LocalDate nextYear = today.plus(1, YEARS); 
@@ -5090,7 +5078,7 @@ Date after 1 year : 2015-01-14
 
 Java 8 中自带了一个 Clock 类，你可以用它来获取某个时区下当前的瞬时时间，日期或者时间。可以用 Clock 来替代 System.currentTimeInMillis()与 TimeZone.getDefault()方法。
 
-```
+```java
 // Returns the current time based on your system clock and set to UTC. 
 Clock clock = Clock.systemUTC(); 
 System.out.println("Clock : " + clock); 
@@ -5106,7 +5094,7 @@ Clock : SystemClock[Z]
 
 你可以用指定的日期来和这个时钟进行比较，比如下面这样：
 
-```
+```java
 public class MyClass { 
     private Clock clock; // dependency inject ... 
 
@@ -5125,7 +5113,7 @@ public class MyClass {
 
 这也是实际项目中常见的一个任务。你怎么判断某个日期是在另一个日期的前面还是后面，或者正好相等呢？在 Java 8 中，LocalDate 类有一个 isBefore()和 isAfter()方法可以用来比较两个日期。如果调用方法的那个日期比给定的日期要早的话，isBefore()方法会返回 true。
 
-```
+```java
 LocalDate tomorrow = LocalDate.of(2014, 1, 15); 、if(tommorow.isAfter(today)){ 
     System.out.println("Tomorrow comes after today"); 
 } 
@@ -5145,7 +5133,7 @@ Yesterday is day before today
 
 Java 8 不仅将日期和时间进行了分离，同时还有时区。现在已经有好几组与时区相关的类了，比如 ZonId 代表的是某个特定的时区，而 ZonedDateTime 代表的是带时区的时间。它等同于 Java 8 以前的[GregorianCalendar 类](http://javarevisited.blogspot.sg/2013/02/convert-xmlgregoriancalendar-to-date-xmlgregoriancalendar-java-example-tutorial.html)。使用这个类，你可以将本地时间转换成另一个时区中的对应时间，比如下面这个例子：
 
-```
+```java
 // Date and time with timezone in Java 8 ZoneId america = ZoneId.of("America/New_York"); 
 LocalDateTime localtDateAndTime = LocalDateTime.now(); 
 ZonedDateTime dateAndTimeInNewYork = ZonedDateTime.of(localtDateAndTime, america ); 
@@ -5157,7 +5145,7 @@ Current date and time in a particular timezone : 2014-01-14T16:33:33.373-05:00[A
 
 可以拿它跟[之前将本地时间转换成 GMT 时间的方式](http://javarevisited.blogspot.sg/2012/04/how-to-convert-local-time-to-gmt-in.html)进行下比较。顺便说一下，正如 Java 8 以前那样，对应时区的那个文本可别弄错了，否则你会碰到这么一个异常：
 
-```
+```java
 Exception in thread "main" java.time.zone.ZoneRulesException: Unknown time-zone ID: ASIA/Tokyo
         at java.time.zone.ZoneRulesProvider.getProvider(ZoneRulesProvider.java:272)
         at java.time.zone.ZoneRulesProvider.getRules(ZoneRulesProvider.java:227)
@@ -5170,7 +5158,7 @@ Exception in thread "main" java.time.zone.ZoneRulesException: Unknown time-zone 
 
 正如 MonthDay 表示的是某个重复出现的日子的，YearMonth 又是另一个组合，它代表的是像信用卡还款日，定期存款到期日，options 到期日这类的日期。你可以用这个类来找出那个月有多少天，lengthOfMonth()这个方法返回的是这个 YearMonth 实例有多少天，这对于检查 2 月到底是 28 天还是 29 天可是非常有用的。
 
-```
+```java
 YearMonth currentYearMonth = YearMonth.now(); System.out.printf("Days in month year %s: %d%n", currentYearMonth, currentYearMonth.lengthOfMonth()); 
 YearMonth creditCardExpiry = YearMonth.of(2018, Month.FEBRUARY); 
 System.out.printf("Your credit card expires on %s %n", creditCardExpiry); 
@@ -5184,7 +5172,7 @@ Your credit card expires on 2018-02
 
 这并没什么复杂的，LocalDate 类有一个 isLeapYear()的方法能够返回当前 LocalDate 对应的那年是否是闰年。如果你还想重复造轮子的话，可以看下这段代码，这是[纯用 Java 编写的判断某年是否是闰年的逻辑](http://java67.blogspot.sg/2012/12/how-to-check-leap-year-in-java-program.html)。
 
-```
+```java
 if(today.isLeapYear()){ 
     System.out.println("This year is Leap year"); 
 }else { 
@@ -5200,7 +5188,7 @@ Output: 2014 is not a Leap year
 
 还有一个常见的任务就是计算两个给定的日期之间包含多少天，多少周或者多少年。你可以用 java.time.Period 类来完成这个功能。在下面这个例子中，我们将计算当前日期与将来的一个日期之前一共隔着几个月。
 
-```
+```java
 LocalDate java8Release = LocalDate.of(2014, Month.MARCH, 14); 
 Period periodToNextJavaRelease = 
 Period.between(today, java8Release); 
@@ -5216,7 +5204,7 @@ Months left between today and Java 8 release : 2
 
 在 Java 8 里面，你可以用 ZoneOffset 类来代表某个时区，比如印度是 GMT 或者 UTC5：30，你可以使用它的静态方法 ZoneOffset.of()方法来获取对应的时区。只要获取到了这个偏移量，你就可以拿 LocalDateTime 和这个偏移量创建出一个 OffsetDateTime。
 
-```
+```java
 LocalDateTime datetime = LocalDateTime.of(2014, Month.JANUARY, 14, 19, 30); 
 ZoneOffset offset = ZoneOffset.of("+05:30"); 
 OffsetDateTime date = OffsetDateTime.of(datetime, offset); 
@@ -5232,7 +5220,7 @@ Date and Time with timezone offset in Java : 2014-01-14T19:30+05:30
 
 如果你还记得[在 Java 8 前是如何获取当前时间戳](http://javarevisited.blogspot.sg/2012/01/get-current-date-timestamps-java.html)的，那现在这简直就是小菜一碟了。Instant 类有一个静态的工厂方法 now()可以返回当前时间戳，如下：
 
-```
+```java
 Instant timestamp = Instant.now(); 
 System.out.println("What is value of this instant " + timestamp); 
 
@@ -5246,7 +5234,7 @@ What is value of this instant 2014-01-14T08:33:33.379Z
 
 在 Java 8 之前，时间日期的格式化可是个技术活，我们的好伙伴[SimpleDateFormat 并不是线程安全](http://java67.blogspot.sg/2014/12/string-to-date-example-in-java-multithreading.html)的，而如果用作本地变量来格式化的话又显得有些笨重。多亏了线程本地变量，这使得它在多线程环境下也算有了用武之地，但 Java 维持这一状态也有很长一段时间了。这次它引入了一个全新的线程安全的日期与时间格式器。它还自带了一些预定义好的格式器，包含了常用的日期格式。比如说，本例 中我们就用了预定义的 BASIC_ISO_DATE 格式，它会将 2014 年 2 月 14 日格式化成 20140114。
 
-```
+```java
 String dayAfterTommorrow = "20140116"; 
 LocalDate formatted = LocalDate.parse(dayAfterTommorrow, 
 DateTimeFormatter.BASIC_ISO_DATE); 
@@ -5262,7 +5250,7 @@ Date generated from String 20140116 is 2014-01-16
 
 在上例中，我们使用了内建的时间日期格式器来[解析日期字符串](http://java67.blogspot.sg/2014/12/string-to-date-example-in-java-multithreading.html)。当然了，预定义的格式器的确不错但有时候你可能还是需要使用自定义的日期格式，这个时候你就得自己去创建一个自定义的日期格式器实例了。下面这个例子中的日期格式是”MMM dd yyyy”。你可以给 DateTimeFormatter 的 ofPattern 静态方法()传入任何的模式，它会返回一个实例，这个模式的字面量与前例中是相同的。比如说 M 还是代表月，而 m 仍是分。无效的模式会抛出 DateTimeParseException 异常，但如果是逻辑上的错误比如说该用 M 的时候用成 m，这样就没办法了。
 
-```
+```java
 String goodFriday = "Apr 18 2014"; 
 try { 
     DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MMM dd yyyy");     
@@ -5283,7 +5271,7 @@ Successfully parsed String Apr 18 2014, date is 2014-04-18
 
 在上两个例子中，尽管我们用到了 DateTimeFormatter 类但我们主要是进行日期字符串的解析。在这个例子中我们要做的事情正好相反。这里我们有一个 LocalDateTime 类的实例，我们要将它转换成一个格式化好的日期串。这是目前为止[Java 中将日期转换成字符串最简单便捷的方式](http://java67.blogspot.sg/2013/01/how-to-format-date-in-java-simpledateformat-example.html)了。下面这个例子将会返回一个格式化好的字符串。与前例相同的是，我们仍需使用指定的模式串去创建一个 DateTimeFormatter 类的实例，但调用的并不是 LocalDate 类的 parse 方法，而是它的 format()方法。这个方法会返回一个代表当前日期的字符串，对应的模式就是传入的 DateTimeFormatter 实例中所定义好的。
 
-```
+```java
 LocalDateTime arrivalDate = LocalDateTime.now(); 
 try { 
     DateTimeFormatter format = DateTimeFormatter.ofPattern("MMM dd yyyy hh:mm a"); 
@@ -5380,7 +5368,7 @@ Java 日期/时间 API 包含以下相应的包。
 
 1\. java.time.LocalDate：LocalDate 是一个不可变的类，它表示默认格式(yyyy-MM-dd)的日期，我们可以使用 now()方法得到当前时间，也可以提供输入年份、月份和日期的输入参数来创建一个 LocalDate 实例。该类为 now()方法提供了重载方法，我们可以传入 ZoneId 来获得指定时区的日期。该类提供与 java.sql.Date 相同的功能，对于如何使用该类，我们来看一个简单的例子。
 
-```
+```java
 package com.journaldev.java8.time;
 
 import java.time.LocalDate;
@@ -5429,7 +5417,7 @@ public class LocalDateExample {
 
 示例方法的详解都包含在注释内，当我们运行程序时，可以得到以下输出：
 
-```
+```java
 Current Date=2014-04-28
 Specific Date=2014-01-01
 Current Date in IST=2014-04-29
@@ -5439,7 +5427,7 @@ Current Date in IST=2014-04-29
 
 2\. java.time.LocalTime：LocalTime 是一个不可变的类，它的实例代表一个符合人类可读格式的时间，默认格式是 hh:mm:ss.zzz。像 LocalDate 一样，该类也提供了时区支持，同时也可以传入小时、分钟和秒等输入参数创建实例，我们来看一个简单的程序，演示该类的使用方法。
 
-```
+```java
 package com.journaldev.java8.time;
 
 import java.time.LocalTime;
@@ -5485,7 +5473,7 @@ public class LocalTimeExample {
 
 当运行以上程序时，可以看到如下输出。
 
-```
+```java
 Current Time=15:51:45.240
 Specific Time of Day=12:20:25.000000040
 Current Time in IST=04:21:45.276
@@ -5494,7 +5482,7 @@ Current Time in IST=04:21:45.276
 
 3\. java.time.LocalDateTime：LocalDateTime 是一个不可变的日期-时间对象，它表示一组日期-时间，默认格式是 yyyy-MM-dd-HH-mm-ss.zzz。它提供了一个工厂方法，接收 LocalDate 和 LocalTime 输入参数，创建 LocalDateTime 实例。我们来看一个简单的例子。
 
-```
+```java
 package com.journaldev.java8.time;
 
 import java.time.LocalDate;
@@ -5545,7 +5533,7 @@ public class LocalDateTimeExample {
 
 同时我们也看到，能够通过传入 ZoneId 得到日期/时间数据，你可以从它的 Javadoc 中得到支持的 Zoneid 的列表，当运行以上类时，可以得到以下输出。
 
-```
+```java
 Current DateTime=2014-04-28T16:00:49.455
 Current DateTime=2014-04-28T16:00:49.493
 Specific Date=2014-01-01T10:10:30
@@ -5555,7 +5543,7 @@ Current Date in IST=2014-04-29T04:30:49.493
 
 4\. java.time.Instant：Instant 类是用在机器可读的时间格式上的，它以 Unix 时间戳的形式存储日期时间，我们来看一个简单的程序。
 
-```
+```java
 package com.journaldev.java8.time;
 
 import java.time.Duration;
@@ -5580,11 +5568,11 @@ public class InstantExample {
 } 
 ```
 
-```
+```java
 上述程序的输出是： 
 ```
 
-```
+```java
 Current Timestamp = 2014-04-28T23:20:08.489Z
 Specific Time = 2014-04-28T23:20:08.489Z
 PT720H 
@@ -5592,7 +5580,7 @@ PT720H
 
 5\. 日期 API 工具：我们早些时候提到过，大多数日期/时间 API 类都实现了一系列工具方法，如：加/减天数、周数、月份数，等等。还有其他的工具方法能够使用 TemporalAdjuster 调整日期，并计算两个日期间的周期。
 
-```
+```java
 package com.journaldev.java8.time;
 
 import java.time.LocalDate;
@@ -5638,7 +5626,7 @@ public class DateAPIUtilities {
 
 上述程序的输出是：
 
-```
+```java
 Year 2014 is Leap Year? false
 Today is before 01/01/2015? true
 Current Time=2014-04-28T16:23:53.154
@@ -5656,7 +5644,7 @@ Months remaining in the year= 8
 
 6\. 解析和格式化：将一个日期格式转换为不同的格式，之后再解析一个字符串，得到日期时间对象，这些都是很常见的。我们来看一下简单的例子。
 
-```
+```java
 package com.journaldev.java8.time;
 
 import java.time.Instant;
@@ -5698,7 +5686,7 @@ public class DateParseFormatExample {
 
 当运行以上程序时，可以看到如下输出。
 
-```
+```java
 Default format of LocalDate=2014-04-28
 28::Apr::2014
 20140428
@@ -5711,7 +5699,7 @@ Default format after parsing = 2014-04-27T21:39:48
 
 7\. 旧的日期时间支持：旧的日期/时间类已经在几乎所有的应用程序中使用，因此做到向下兼容是必须的。这也是为什么会有若干工具方法帮助我们将旧的类转换为新的类，反之亦然。我们来看一下简单的例子。
 
-```
+```java
 package com.journaldev.java8.time;
 
 import java.time.Instant;
@@ -5762,7 +5750,7 @@ public class DateAPILegacySupport {
 
 当运行以上程序时，可以看到如下输出。
 
-```
+```java
 Date = 2014-04-28T16:28:54.340
 2014-04-28T23:28:54.395Z
 America/Los_Angeles
@@ -5790,7 +5778,7 @@ java.util.GregorianCalendar[time=1398727734404,areFieldsSet=true,areAllFieldsSet
 
 这里我将会给大家演示用 ConcurrentHashMap 类和 lambda 表达式实现一个本地缓存。因为 Map 有一个新的方法可以在 key 为 Null 的时候自动计算一个新的 value 值。非常完美的实现 cache。来看下代码：
 
-```
+```java
 public static void main(String[] args) {
     for (int i = 0; i < 10; i++)
         System.out.println(
@@ -5811,7 +5799,7 @@ static int fibonacci(int i) {
 
 当然，这种方式很傻瓜了。即使对于一个非常小的数，例如 fibonacci(5)，上面的代码打印出很多行，而且都是在进行重复计算，输出如下（只截取一部分）：
 
-```
+```java
 Calculating f(6)
 Calculating f(4)
 Calculating f(2)
@@ -5829,7 +5817,7 @@ f(6) = 8
 
 我们想要做的就是创建一个缓存，用来计算斐波那契数列。最直接的方法就是在缓存中存放所有的 value 值。cache 的创建如下：
 
-```
+```java
 static Map<Integer, Integer> cache = new ConcurrentHashMap<>(); 
 ```
 
@@ -5839,7 +5827,7 @@ static Map<Integer, Integer> cache = new ConcurrentHashMap<>();
 
 不过现在，我们看看如何在 fibonacci()方法中使用缓存。
 
-```
+```java
 static int fibonacci(int i) {
     if (i == 0)
         return i;
@@ -5855,7 +5843,7 @@ static int fibonacci(int i) {
 
 瞧瞧。不能比这个再简单了吧。想要证明吗？好吧，每当我们计算一个新值的时候，都在控制台输出信息：
 
-```
+```java
 static int fibonacci(int i) {
     if (i == 0)
         return i;
@@ -5874,7 +5862,7 @@ static int fibonacci(int i) {
 
 程序输出如下：
 
-```
+```java
 f(0) = 0
 f(1) = 1
 Slow calculation of 2
@@ -5899,7 +5887,7 @@ f(9) = 34
 
 这样代码就会多一些，我们可以使用 double-checked locking 来实现：
 
-```
+```java
 static int fibonacciJava7(int i) {
     if (i == 0)
         return i;
@@ -5938,8 +5926,6 @@ static int fibonacciJava7(int i) {
 译文链接： [`www.importnew.com/10227.html`](http://www.importnew.com/10227.html)
 
 **转载请保留原文出处、译者和译文链接。**
-
-# Java 8 的 default 方法能做什么？不能做什么？
 
 # Java 8 的 default 方法能做什么？不能做什么？
 
@@ -5992,7 +5978,7 @@ Java 8 发布以后，可以给接口添加新方法，但是，接口仍然可�
 
 实现类包含了 main 方法，所以我们可以在测试中执行它。它会检查是否存在命令行参数，这样，我们就可以很方便的执行调用 m()和不调用 m()的测试。
 
-```
+```java
  ~/github/test$ cat C.java
     public class C implements I1, I2 {
       public static void main(String[] args) {
@@ -6015,7 +6001,7 @@ Java 8 发布以后，可以给接口添加新方法，但是，接口仍然可�
 
 使用下面的命令行来编译运行：
 
-```
+```java
  ~/github/test$ javac -cp .:base C.java
     ~/github/test$ java -cp .:base C
     hello interface 1 
@@ -6023,7 +6009,7 @@ Java 8 发布以后，可以给接口添加新方法，但是，接口仍然可�
 
 compatible 目录包含了有 abstract 方法 m()的 I2 接口，和未修改的 I1 接口。
 
-```
+```java
  ~/github/test$ cat compatible/I2.java
     public interface I2 {
       void m();
@@ -6032,7 +6018,7 @@ compatible 目录包含了有 abstract 方法 m()的 I2 接口，和未修改的
 
 这个不能用来编译类 C：
 
-```
+```java
  ~/github/test$ javac -cp .:compatible C.java
     C.java:1: error: C is not abstract and does not override abstract method m() in I2
     public class C implements I1, I2 {
@@ -6042,7 +6028,7 @@ compatible 目录包含了有 abstract 方法 m()的 I2 接口，和未修改的
 
 错误信息非常精确。因为我们有前一次编译获得的 C.class，如果我们编译 compatible 目录下的接口，我们仍然会得到能运行实现类的两个接口：
 
-```
+```java
  ~/github/test$ javac compatible/I*.java
     ~/github/test$ java -cp .:compatible C
     hello interface 1 
@@ -6050,7 +6036,7 @@ compatible 目录包含了有 abstract 方法 m()的 I2 接口，和未修改的
 
 第三个叫做 wrong 的目录，包含的 I2 接口也定义了 m()方法：
 
-```
+```java
  ~/github/test$ cat wrong/I2.java
     public interface I2 {
       default void m(){
@@ -6061,7 +6047,7 @@ compatible 目录包含了有 abstract 方法 m()的 I2 接口，和未修改的
 
 我们应该不厌其烦的编译它。尽管 m()方法被定义了两次，但是，实现类仍然可以运行，只要它没有调用那个定义了多次的方法，但是，只要我们调用 m()方法，立即就会失败。这是我们使用的命令行参数：
 
-```
+```java
  ~/github/test$ javac wrong/*.java
     ~/github/test$ java -cp .:wrong C
     Exception in thread "main" java.lang.IncompatibleClassChangeError: Conflicting
@@ -6088,8 +6074,6 @@ compatible 目录包含了有 abstract 方法 m()的 I2 接口，和未修改的
 
 # Java 8 的 6 个问题
 
-# Java 8 的 6 个问题
-
 ## 1\. 并行 Streams 实际上可能会降低你的性能
 
 [Java8](http://jaxenter.com/tag/java-8)带来了最让人期待的新特性之–[并行](http://docs.oracle.com/javase/tutorial/collections/streams/parallelism.html)。parallelStream() 方法在集合和流上实现了并行。它将它们分解成子问题，然后分配给不同的线程进行处理，这些任务可以分给不同的 CPU 核心处理，完成后再合并到一起。实现原理主要是使用了[fork/join 框架](http://docs.oracle.com/javase/tutorial/essential/concurrency/forkjoin.html)。好吧，听起来很酷对吧！那一定可以在多核环境下使得操作大数据集合速度加快咯，对吗？
@@ -6098,7 +6082,7 @@ compatible 目录包含了有 abstract 方法 m()的 I2 接口，和未修改的
 
 基准测试将一个集合分成不同的组（主要/非主要的）：
 
-```
+```java
 Map<Boolean, List<Integer>> groupByPrimary = numbers
 .parallelStream().collect(Collectors.groupingBy(s -> Utility.isPrime(s))); 
 ```
@@ -6111,7 +6095,7 @@ Map<Boolean, List<Integer>> groupByPrimary = numbers
 
 lambda 表达式。哦，lambda 表达式。没有 lambda 表达式我们也能做到几乎一切事情，但是 lambda 是那么的优雅，摆脱了烦人的代码，所以很容易就爱上 lambda。比如说[早上](http://i.imgur.com/BLfyWGL.png)起来我想遍历世界杯的球员名单并且知道具体的人数（有趣的事实：加起来有 254 个）。
 
-```
+```java
 List lengths = new ArrayList();
 for (String countries : Arrays.asList(args)) {
     lengths.add(check(country));
@@ -6120,7 +6104,7 @@ for (String countries : Arrays.asList(args)) {
 
 现在我们用一个漂亮的 lambda 表达式来实现同样的功能：
 
-```
+```java
 Stream lengths = countries.stream().map(countries -< check(country)); 
 ```
 
@@ -6128,14 +6112,14 @@ Stream lengths = countries.stream().map(countries -< check(country));
 
 从更深层次来看，你写什么代码和调试什么代码是两码事。堆栈跟踪越来越大，使得难以调试代码。一些很简单的事情譬如添加一个空字符串到 list 中，本来是这样一个很短的堆栈跟踪
 
-```
+```java
 at LmbdaMain.check(LmbdaMain.java:19)
 at LmbdaMain.main(LmbdaMain.java:34) 
 ```
 
 变成这样：
 
-```
+```java
 at LmbdaMain.check(LmbdaMain.java:19)
 at LmbdaMain.lambda$0(LmbdaMain.java:37)
 at LmbdaMain$Lambda$1/821270929.apply(Unknown Source)
@@ -6161,7 +6145,7 @@ Default 方法允许一个功能接口中有一个默认实现，这无疑是 Ja
 
 Defalut 方法背后的主要动机是，如果我们要给现有的接口增加一个方法，我们可以不用重写实现来达到这个目的，并且使它与旧版本兼容。例如，拿这段来自[Oracle Java 教程](http://docs.oracle.com/javase/tutorial/java/IandI/defaultmethods.html)中 添加指定一个时区功能的代码来说：
 
-```
+```java
 public interface TimeClient {
 // ...
 static public ZoneId getZoneId (String zoneString) {
@@ -6197,7 +6181,7 @@ Jigsaw 项目的目标是使 Java 模块化，将 JRE 分拆成可以相互操�
 
 没有人喜欢繁琐的代码，那也是为什么 lambdas 表达式那么受欢迎的的原因。想想讨厌的异常，无论你是否需要在逻辑上 catch 或者要处理[受检异常](http://stackoverflow.com/questions/613954/the-case-against-checked-exceptions/)，你都需要 catch 它们。即使有些永远也不会发生，像下面这个异常就是永远也不会发生的：
 
-```
+```java
 try {
     httpConn.setRequestMethod("GET");
 } catch (ProtocolException pe) { /* Why don’t you call me anymore? */ } 
@@ -6211,7 +6195,7 @@ try {
 
 James Gosling，Java 之父，曾经在接受[采访](http://www.gotw.ca/publications/c_family_interview.htm)时说：“我抛弃运算符重载是因为我个人主观的原因，因为在 C++中我见过太多的人在滥用它。”有道理，但是很多人持不同的观点。其他的 JVM 语言也提供这一功能，但是另一方面，它导致有些代码像下面这样：
 
-```
+```java
 javascriptEntryPoints <<= (sourceDirectory in Compile)(base =>
     ((base / "assets" ** "*.js") --- (base / "assets" ** "_*")).get
 ) 
@@ -6241,8 +6225,6 @@ javascriptEntryPoints <<= (sourceDirectory in Compile)(base =>
 
 # Java 8 简明教程
 
-# Java 8 简明教程
-
 > “Java 并没有没落，人们很快就会发现这一点”
 
 欢迎阅读我编写的[Java 8](https://jdk8.java.net/)介绍。本教程将带领你一步一步地认识这门语言的新特性。通过简单明了的代码示例，你将会学习到如何使用默认接口方法，Lambda 表达式，方法引用和重复注解。看完这篇教程后，你还将对最新推出的[API](http://download.java.net/jdk8/docs/api/)有一定的了解，例如：流控制，函数式接口，map 扩展和新的时间日期 API 等等。
@@ -6251,7 +6233,7 @@ javascriptEntryPoints <<= (sourceDirectory in Compile)(base =>
 
 Java 8 允许我们使用 default 关键字，为接口声明添加非抽象的方法实现。这个特性又被称为**扩展方法**。下面是我们的第一个例子：
 
-```
+```java
 interface Formula {
     double calculate(int a);
 
@@ -6263,7 +6245,7 @@ interface Formula {
 
 在接口 Formula 中，除了抽象方法 caculate 以外，还定义了一个默认方法 sqrt。Formula 的实现类只需要实现抽象方法 caculate 就可以了。默认方法 sqrt 可以直接使用。
 
-```
+```java
 Formula formula = new Formula() {
     @Override
     public double calculate(int a) {
@@ -6281,7 +6263,7 @@ formula 对象以匿名对象的形式实现了 Formula 接口。代码很啰嗦
 
 让我们从最简单的例子开始，来学习如何对一个 string 列表进行排序。我们首先使用 Java 8 之前的方法来实现：
 
-```
+```java
 List<String> names = Arrays.asList("peter", "anna", "mike", "xenia");
 
 Collections.sort(names, new Comparator<String>() {
@@ -6296,7 +6278,7 @@ Collections.sort(names, new Comparator<String>() {
 
 除了创建匿名对象以外，Java 8 还提供了一种更简洁的方式，Lambda 表达式。
 
-```
+```java
 Collections.sort(names, (String a, String b) -> {
     return b.compareTo(a);
 }); 
@@ -6304,13 +6286,13 @@ Collections.sort(names, (String a, String b) -> {
 
 你可以看到，这段代码就比之前的更加简短和易读。但是，它还可以更加简短：
 
-```
+```java
 Collections.sort(names, (String a, String b) -> b.compareTo(a)); 
 ```
 
 只要一行代码，包含了方法体。你甚至可以连大括号对{}和 return 关键字都省略不要。不过这还不是最短的写法：
 
-```
+```java
 Collections.sort(names, (a, b) -> b.compareTo(a)); 
 ```
 
@@ -6324,7 +6306,7 @@ Lambda 表达式如何匹配 Java 的类型系统？每一个 lambda 都能够�
 
 举例：
 
-```
+```java
 @FunctionalInterface
 interface Converter<F, T> {
     T convert(F from);
@@ -6341,7 +6323,7 @@ System.out.println(converted);    // 123
 
 上面的代码实例可以通过静态方法引用，使之更加简洁：
 
-```
+```java
 Converter<String, Integer> converter = Integer::valueOf;
 Integer converted = converter.convert("123");
 System.out.println(converted);   // 123 
@@ -6349,7 +6331,7 @@ System.out.println(converted);   // 123
 
 Java 8 允许你通过::关键字获取方法或者构造函数的的引用。上面的例子就演示了如何引用一个静态方法。而且，我们还可以对一个对象的方法进行引用：
 
-```
+```java
 class Something {
     String startsWith(String s) {
         return String.valueOf(s.charAt(0));
@@ -6364,7 +6346,7 @@ System.out.println(converted);    // "J"
 
 让我们看看如何使用::关键字引用构造函数。首先我们定义一个示例 bean，包含不同的构造方法：
 
-```
+```java
 class Person {
     String firstName;
     String lastName;
@@ -6380,7 +6362,7 @@ class Person {
 
 接下来，我们定义一个 person 工厂接口，用来创建新的 person 对象：
 
-```
+```java
 interface PersonFactory<P extends Person> {
     P create(String firstName, String lastName);
 } 
@@ -6388,7 +6370,7 @@ interface PersonFactory<P extends Person> {
 
 然后我们通过构造函数引用来把所有东西拼到一起，而不是像以前一样，通过手动实现一个工厂来这么做。
 
-```
+```java
 PersonFactory<Person> personFactory = Person::new;
 Person person = personFactory.create("Peter", "Parker"); 
 ```
@@ -6403,7 +6385,7 @@ Person person = personFactory.create("Peter", "Parker");
 
 我们可以访问 lambda 表达式外部的 final 局部变量：
 
-```
+```java
 final int num = 1;
 Converter<Integer, String> stringConverter =
         (from) -> String.valueOf(from + num);
@@ -6413,7 +6395,7 @@ stringConverter.convert(2);     // 3
 
 但是与匿名对象不同的是，变量 num 并不需要一定是 final。下面的代码依然是合法的：
 
-```
+```java
 int num = 1;
 Converter<Integer, String> stringConverter =
         (from) -> String.valueOf(from + num);
@@ -6423,7 +6405,7 @@ stringConverter.convert(2);     // 3
 
 然而，num 在编译的时候被隐式地当做 final 变量来处理。下面的代码就不合法：
 
-```
+```java
 int num = 1;
 Converter<Integer, String> stringConverter =
         (from) -> String.valueOf(from + num);
@@ -6436,7 +6418,7 @@ num = 3;
 
 与局部变量不同，我们在 lambda 表达式的内部能获取到对成员变量或静态变量的读写权。这种访问行为在匿名对象里是非常典型的。
 
-```
+```java
 class Lambda4 {
     static int outerStaticNum;
     int outerNum;
@@ -6461,7 +6443,7 @@ class Lambda4 {
 
 默认方法无法在 lambda 表达式内部被访问。因此下面的代码是无法通过编译的：
 
-```
+```java
 Formula formula = (a) -> sqrt( a * 100); 
 ```
 
@@ -6475,7 +6457,7 @@ JDK 1.8 API 中包含了很多内置的函数式接口。有些是在以前版�
 
 Predicate 是一个布尔类型的函数，该函数只有一个输入参数。Predicate 接口包含了多种默认方法，用于处理复杂的逻辑动词（and, or，negate）
 
-```
+```java
 Predicate<String> predicate = (s) -> s.length() > 0;
 
 predicate.test("foo");              // true
@@ -6492,7 +6474,7 @@ Predicate<String> isNotEmpty = isEmpty.negate();
 
 Function 接口接收一个参数，并返回单一的结果。默认方法可以将多个函数串在一起（compse, andThen）
 
-```
+```java
 Function<String, Integer> toInteger = Integer::valueOf;
 Function<String, String> backToString = toInteger.andThen(String::valueOf);
 
@@ -6503,7 +6485,7 @@ backToString.apply("123");     // "123"
 
 Supplier 接口产生一个给定类型的结果。与 Function 不同的是，Supplier 没有输入参数。
 
-```
+```java
 Supplier<Person> personSupplier = Person::new;
 personSupplier.get();   // new Person 
 ```
@@ -6512,7 +6494,7 @@ personSupplier.get();   // new Person
 
 Consumer 代表了在一个输入参数上需要进行的操作。
 
-```
+```java
 Consumer<Person> greeter = (p) -> System.out.println("Hello, " + p.firstName);
 greeter.accept(new Person("Luke", "Skywalker")); 
 ```
@@ -6521,7 +6503,7 @@ greeter.accept(new Person("Luke", "Skywalker"));
 
 Comparator 接口在早期的 Java 版本中非常著名。Java 8 为这个接口添加了不同的默认方法。
 
-```
+```java
 Comparator<Person> comparator = (p1, p2) -> p1.firstName.compareTo(p2.firstName);
 
 Person p1 = new Person("John", "Doe");
@@ -6537,7 +6519,7 @@ Optional 不是一个函数式接口，而是一个精巧的工具接口，用�
 
 Optional 是一个简单的值容器，这个值可以是 null，也可以是 non-null。考虑到一个方法可能会返回一个 non-null 的值，也可能返回一个空值。为了不直接返回 null，我们在 Java 8 中就返回一个 Optional.
 
-```
+```java
 Optional<String> optional = Optional.of("bam");
 
 optional.isPresent();           // true
@@ -6553,7 +6535,7 @@ java.util.Stream 表示了某一种元素的序列，在这些元素上可以进
 
 我们先了解一下序列流。首先，我们通过 string 类型的 list 的形式创建示例数据：
 
-```
+```java
 List<String> stringCollection = new ArrayList<>();
 stringCollection.add("ddd2");
 stringCollection.add("aaa2");
@@ -6571,7 +6553,7 @@ Java 8 中的 Collections 类的功能已经有所增强，你可以之直接通
 
 Filter 接受一个 predicate 接口类型的变量，并将所有流对象中的元素进行过滤。该操作是一个中间操作，因此它允许我们在返回结果的基础上再进行其他的流操作（forEach）。ForEach 接受一个 function 接口类型的变量，用来执行对每一个元素的操作。ForEach 是一个中止操作。它不返回流，所以我们不能再调用其他的流操作。
 
-```
+```java
 stringCollection
     .stream()
     .filter((s) -> s.startsWith("a"))
@@ -6584,7 +6566,7 @@ stringCollection
 
 Sorted 是一个中间操作，能够返回一个排过序的流对象的视图。流对象中的元素会默认按照自然顺序进行排序，除非你自己指定一个 Comparator 接口来改变排序规则。
 
-```
+```java
 stringCollection
     .stream()
     .sorted()
@@ -6596,7 +6578,7 @@ stringCollection
 
 一定要记住，sorted 只是创建一个流对象排序的视图，而不会改变原来集合中元素的顺序。原来 string 集合中的元素顺序是没有改变的。
 
-```
+```java
 System.out.println(stringCollection);
 // ddd2, aaa2, bbb1, aaa1, bbb3, ccc, bbb2, ddd1 
 ```
@@ -6605,7 +6587,7 @@ System.out.println(stringCollection);
 
 map 是一个对于流对象的中间操作，通过给定的方法，它能够把流对象中的每一个元素对应到另外一个对象上。下面的例子就演示了如何把每个 string 都转换成大写的 string. 不但如此，你还可以把每一种对象映射成为其他类型。对于带泛型结果的流对象，具体的类型还要由传递给 map 的泛型方法来决定。
 
-```
+```java
 stringCollection
     .stream()
     .map(String::toUpperCase)
@@ -6619,7 +6601,7 @@ stringCollection
 
 匹配操作有多种不同的类型，都是用来判断某一种规则是否与流对象相互吻合的。所有的匹配操作都是终结操作，只返回一个 boolean 类型的结果。
 
-```
+```java
 boolean anyStartsWithA =
     stringCollection
         .stream()
@@ -6646,7 +6628,7 @@ System.out.println(noneStartsWithZ);      // true
 
 Count 是一个终结操作，它的作用是返回一个数值，用来标识当前流对象中包含的元素数量。
 
-```
+```java
 long startsWithB =
     stringCollection
         .stream()
@@ -6660,7 +6642,7 @@ System.out.println(startsWithB);    // 3
 
 该操作是一个终结操作，它能够通过某一个方法，对元素进行削减操作。该操作的结果会放在一个 Optional 变量里返回。
 
-```
+```java
 Optional<String> reduced =
     stringCollection
         .stream()
@@ -6679,7 +6661,7 @@ reduced.ifPresent(System.out::println);
 
 首先我们创建一个大的 list，里面的元素都是唯一的：
 
-```
+```java
 int max = 1000000;
 List<String> values = new ArrayList<>(max);
 for (int i = 0; i < max; i++) {
@@ -6692,7 +6674,7 @@ for (int i = 0; i < max; i++) {
 
 #### 顺序排序
 
-```
+```java
 long t0 = System.nanoTime();
 
 long count = values.stream().sorted().count();
@@ -6708,7 +6690,7 @@ System.out.println(String.format("sequential sort took: %d ms", millis));
 
 #### 并行排序
 
-```
+```java
 long t0 = System.nanoTime();
 
 long count = values.parallelStream().sorted().count();
@@ -6728,7 +6710,7 @@ System.out.println(String.format("parallel sort took: %d ms", millis));
 
 正如前面已经提到的那样，map 是不支持流操作的。而更新后的 map 现在则支持多种实用的新方法，来完成常规的任务。
 
-```
+```java
 Map<Integer, String> map = new HashMap<>();
 
 for (int i = 0; i < 10; i++) {
@@ -6742,7 +6724,7 @@ map.forEach((id, val) -> System.out.println(val));
 
 下面的这个例子展示了如何使用函数来计算 map 的编码
 
-```
+```java
 map.computeIfPresent(3, (num, val) -> val + num);
 map.get(3);             // val33
 
@@ -6758,7 +6740,7 @@ map.get(3);             // val33
 
 接下来，我们将学习，当给定一个 key 值时，如何把一个实例从对应的 key 中移除：
 
-```
+```java
 map.remove(3, "val3");
 map.get(3);             // val33
 
@@ -6768,13 +6750,13 @@ map.get(3);             // null
 
 另一个有用的方法：
 
-```
+```java
 map.getOrDefault(42, "not found");  // not found 
 ```
 
 将 map 中的实例合并也是非常容易的：
 
-```
+```java
 map.merge(9, "val9", (value, newValue) -> value.concat(newValue));
 map.get(9);             // val9
 
@@ -6792,7 +6774,7 @@ Java 8 包含了全新的时间日期 API，这些功能都放在了 java.time �
 
 Clock 提供了对当前时间和日期的访问功能。Clock 是对当前时区敏感的，并可用于替代 System.currentTimeMillis()方法来获取当前的毫秒时间。当前时间线上的时刻可以用 Instance 类来表示。Instance 也能够用于创建原先的 java.util.Date 对象。
 
-```
+```java
 Clock clock = Clock.systemDefaultZone();
 long millis = clock.millis();
 
@@ -6804,7 +6786,7 @@ Date legacyDate = Date.from(instant);   // legacy java.util.Date
 
 时区类可以用一个 ZoneId 来表示。时区类的对象可以通过静态工厂方法方便地获取。时区类还定义了一个偏移量，用来在当前时刻或某时间与目标时区时间之间进行转换。
 
-```
+```java
 System.out.println(ZoneId.getAvailableZoneIds());
 // prints all available timezone ids
 
@@ -6821,7 +6803,7 @@ System.out.println(zone2.getRules());
 
 本地时间类表示一个没有指定时区的时间，例如，10 p.m.或者 17：30:15，下面的例子会用上面的例子定义的时区创建两个本地时间对象。然后我们会比较两个时间，并计算它们之间的小时和分钟的不同。
 
-```
+```java
 LocalTime now1 = LocalTime.now(zone1);
 LocalTime now2 = LocalTime.now(zone2);
 
@@ -6836,7 +6818,7 @@ System.out.println(minutesBetween);     // -239
 
 LocalTime 是由多个工厂方法组成，其目的是为了简化对时间对象实例的创建和操作，包括对时间字符串进行解析的操作。
 
-```
+```java
 LocalTime late = LocalTime.of(23, 59, 59);
 System.out.println(late);       // 23:59:59
 
@@ -6853,7 +6835,7 @@ System.out.println(leetTime);   // 13:37
 
 本地时间表示了一个独一无二的时间，例如：2014-03-11。这个时间是不可变的，与 LocalTime 是同源的。下面的例子演示了如何通过加减日，月，年等指标来计算新的日期。记住，每一次操作都会返回一个新的时间对象。
 
-```
+```java
 LocalDate today = LocalDate.now();
 LocalDate tomorrow = today.plus(1, ChronoUnit.DAYS);
 LocalDate yesterday = tomorrow.minusDays(2);
@@ -6865,7 +6847,7 @@ System.out.println(dayOfWeek);    // FRIDAY<span style="font-family: Georgia, 'T
 
 解析字符串并形成 LocalDate 对象，这个操作和解析 LocalTime 一样简单。
 
-```
+```java
 DateTimeFormatter germanFormatter =
     DateTimeFormatter
         .ofLocalizedDate(FormatStyle.MEDIUM)
@@ -6879,7 +6861,7 @@ System.out.println(xmas);   // 2014-12-24
 
 LocalDateTime 表示的是日期-时间。它将刚才介绍的日期对象和时间对象结合起来，形成了一个对象实例。LocalDateTime 是不可变的，与 LocalTime 和 LocalDate 的工作原理相同。我们可以通过调用方法来获取日期时间对象中特定的数据域。
 
-```
+```java
 LocalDateTime sylvester = LocalDateTime.of(2014, Month.DECEMBER, 31, 23, 59, 59);
 
 DayOfWeek dayOfWeek = sylvester.getDayOfWeek();
@@ -6894,7 +6876,7 @@ System.out.println(minuteOfDay);    // 1439
 
 如果再加上的时区信息，LocalDateTime 能够被转换成 Instance 实例。Instance 能够被转换成以前的 java.util.Date 对象。
 
-```
+```java
 Instant instant = sylvester
         .atZone(ZoneId.systemDefault())
         .toInstant();
@@ -6905,7 +6887,7 @@ System.out.println(legacyDate);     // Wed Dec 31 23:59:59 CET 2014
 
 格式化日期-时间对象就和格式化日期对象或者时间对象一样。除了使用预定义的格式以外，我们还可以创建自定义的格式化对象，然后匹配我们自定义的格式。
 
-```
+```java
 DateTimeFormatter formatter =
     DateTimeFormatter
         .ofPattern("MMM dd, yyyy - HH:mm");
@@ -6925,7 +6907,7 @@ Java 8 中的注解是可重复的。让我们直接深入看看例子，弄明�
 
 首先，我们定义一个包装注解，它包括了一个实际注解的数组
 
-```
+```java
 @interface Hints {
     Hint[] value();
 }
@@ -6940,14 +6922,14 @@ Java 8 中的注解是可重复的。让我们直接深入看看例子，弄明�
 
 变体 1：使用注解容器（老方法）
 
-```
+```java
 @Hints({@Hint("hint1"), @Hint("hint2")})
 class Person {} 
 ```
 
 变体 2：使用可重复注解（新方法）
 
-```
+```java
 @Hint("hint1")
 @Hint("hint2")
 class Person {} 
@@ -6955,7 +6937,7 @@ class Person {}
 
 使用变体 2，Java 编译器能够在内部自动对@Hint 进行设置。这对于通过反射来读取注解信息来说，是非常重要的。
 
-```
+```java
 Hint hint = Person.class.getAnnotation(Hint.class);
 System.out.println(hint);                   // null
 
@@ -6968,7 +6950,7 @@ System.out.println(hints2.length);          // 2
 
 尽管我们绝对不会在 Person 类上声明@Hints 注解，但是它的信息仍然可以通过 getAnnotation(Hints.class)来读取。并且，getAnnotationsByType 方法会更方便，因为它赋予了所有@Hints 注解标注的方法直接的访问权限。
 
-```
+```java
 @Target({ElementType.TYPE_PARAMETER, ElementType.TYPE_USE})
 @interface MyAnnotation {} 
 ```
@@ -7003,14 +6985,14 @@ System.out.println(hints2.length);          // 2
 
 历史上，Java 集合是不能够表达内部迭代的，而只提供了一种外部迭代的方式，也就是 for 或者 while 循环。要描述内部迭代，我们需要用到 LambdaJ 这样的类库：
 
-```
+```java
 List persons = asList(new Person("Joe"), new Person("Jim"), new Person("John"));
 forEach(persons).setLastName("Doe"); 
 ```
 
 从上面的例子可以看出，我们不需要关心 last name 是怎么被设置到每一个 person 对象里面去的，也许这样的行为是支持并发执行的。现在我们可以在 Java 8 中使用类似的表达了：
 
-```
+```java
 persons.forEach(p -> p.setLastName("Doe")) 
 ```
 
@@ -7022,7 +7004,7 @@ persons.forEach(p -> p.setLastName("Doe"))
 
 流 API 允许我们声明对数据进行串行或者并行的操作：
 
-```
+```java
 List persons = …   // sequential version
 Stream stream = persons.stream();   //parallel version
 Stream parallelStream = persons.parallelStream(); 
@@ -7034,7 +7016,7 @@ Filter
 
 在数据流中实现过滤功能是首先我们可以想到的最自然的操作了。Stream 接口暴露了一个 filter 方法，它可以接受表示操作的[Predicate](http://javadocs.techempower.com/jdk18/api/java/util/function/Predicate.html)实现来使用定义了过滤条件的 lambda 表达式。
 
-```
+```java
 List persons = …
 Stream personsOver18 = persons.stream().filter(p -> p.getAge() > 18); 
 ```
@@ -7043,7 +7025,7 @@ Map
 
 假使我们现在过滤了一些数据，比如转换对象的时候。Map 操作允许我们执行一个[Function](http://javadocs.techempower.com/jdk18/api/java/util/function/Function.html)的实现（Function<tu0002cr class="calibre13">的泛型 T,R 分别表示执行输入和执行结果），它接受入参并返回。首先，让我们来看看怎样以匿名内部类的方式来描述它：</tu0002cr>
 
-```
+```java
 Stream students = persons.stream()
       .filter(p -> p.getAge() > 18)
       .map(new Function() {
@@ -7056,7 +7038,7 @@ Stream students = persons.stream()
 
 现在，把上述例子转换成使用 lambda 表达式的写法：
 
-```
+```java
 Stream map = persons.stream()
         .filter(p -> p.getAge() > 18)
         .map(person -> new Student(person)); 
@@ -7064,7 +7046,7 @@ Stream map = persons.stream()
 
 Lambda 在把参数传给 map 方法的时候，实际却并没有使用这个参数，那么我们就可以写成这样：
 
-```
+```java
 Stream map = persons.stream()
         .filter(p -> p.getAge() > 18)
         .map(Student::new); 
@@ -7074,7 +7056,7 @@ Collect
 
 “流”抽象天生就该是持续的，我们使用流来描述操作，但是如果我们要获取最终结果的话，必须收集流产生的最终结果。Stream API 提供了一系列“最终”的方法，[collect()](http://javadocs.techempower.com/jdk18/api/java/util/stream/Stream.html#collect(java.util.stream.Collector))方法就是其中的一个，我们借此可以收集操作的最终结果：
 
-```
+```java
 List students = persons.stream()
         .filter(p -> p.getAge() > 18)
         .map(Student::new)
@@ -7083,7 +7065,7 @@ List students = persons.stream()
 
 幸运的是，大多数情况下你不需要自己实现[Collector](http://javadocs.techempower.com/jdk18/api/java/util/stream/Collector.html)接口，而是利用[Collectors](http://javadocs.techempower.com/jdk18/api/java/util/stream/Collectors.html)工具类：
 
-```
+```java
 List students = persons.stream()
         .filter(p -> p.getAge() > 18)
         .map(Student::new)
@@ -7092,7 +7074,7 @@ List students = persons.stream()
 
 或者，如果我们想使用特定的实现类来收集结果：
 
-```
+```java
 List students = persons.stream()
         .filter(p -> p.getAge() > 18)
         .map(Student::new)
@@ -7103,7 +7085,7 @@ List students = persons.stream()
 
 一个使用新的 Stream API 有趣的特性是它从来都不需要所谓串行或者并行的方法，可以从一开始就并行地消费数据，或者在处理流中的任意时刻转为串行的。
 
-```
+```java
 List students = persons.stream()
         .parallel()
         .filter(p -> p.getAge() > 18)  // filtering will be performed concurrently
@@ -7117,8 +7099,6 @@ List students = persons.stream()
 **总结**
 
 好了，要结束了。新的 Stream API 和 lambda 表达式给 Java 8 带来了很多新的特性。当然，在这篇文章以外还有很多没有谈及到，但愿很快我可以给你带给你更多有趣的特性。
-
-# Java SE 8 新的时间和日期 API
 
 # Java SE 8 新的时间和日期 API
 
@@ -7156,7 +7136,7 @@ Java 开发中一直存在一个问题，JDK 提供的时间日期 API 一直对
 
 在新的 API 中所有的核心类都可以由工厂方法很方便的构建。当我通过某些类自身的字段来构建它时，可以使用**of**方法；当我通过从另外一个类型的转换来构建它时，可以使用**from**方法。同样也可以通过**parse**方法来由一个 String 参数构建它。参见代码 1. **代码 1**
 
-```
+```java
 LocalDateTime timePoint = LocalDateTime.now(
     );     // The current date and time
 LocalDate.of(2012, Month.DECEMBER, 12); // from values
@@ -7169,7 +7149,7 @@ LocalTime.parse("10:15:30"); // From a String
 
 **代码 2**
 
-```
+```java
 LocalDate theDate = timePoint.toLocalDate();
 Month month = timePoint.getMonth();
 int day = timePoint.getDayOfMonth();
@@ -7180,7 +7160,7 @@ timePoint.getSecond();
 
 **代码 3**
 
-```
+```java
 // Set the value, returning a new object
 LocalDateTime thePast = timePoint.withDayOfMonth(
     10).withYear(2010);
@@ -7195,7 +7175,7 @@ LocalDateTime yetAnother = thePast.plusWeeks(
 
 **代码 4**
 
-```
+```java
 import static java.time.temporal.TemporalAdjusters.*;
 
 LocalDateTime timePoint = ...
@@ -7214,7 +7194,7 @@ API 提供的**truncatedTo**方法适用于这种场景：他允许你从一个�
 
 **代码 5**
 
-```
+```java
 LocalTime truncatedTime = time.truncatedTo(ChronoUnit.SECONDS); 
 ```
 
@@ -7226,7 +7206,7 @@ LocalTime truncatedTime = time.truncatedTo(ChronoUnit.SECONDS);
 
 **代码 6**
 
-```
+```java
 // You can specify the zone id when creating a zoned date time
 ZoneId id = ZoneId.of("Europe/Paris");
 ZonedDateTime zoned = ZonedDateTime.of(dateTime, id);
@@ -7237,7 +7217,7 @@ assertEquals(id, ZoneId.from(zoned));
 
 **代码 7**
 
-```
+```java
 ZoneOffset offset = ZoneOffset.of("+2:00"); 
 ```
 
@@ -7247,14 +7227,14 @@ ZoneOffset offset = ZoneOffset.of("+2:00");
 
 ### 代码 8
 
-```
+```java
 ZonedDateTime.parse("2007-12-03T10:15:30+01:00[Europe/Paris]"); 
 ```
 
 *   **OffsetDateTime** 是一个带有偏移量的时间日期类。如果你的服务器处在不同的时区，他可以存入数据库中也可以用来记录某个准确的时间点。
 *   **OffsetTime** 是一个带有偏移量的时间类。参见代码 9 **代码 9**
 
-```
+```java
 OffsetTime time = OffsetTime.now();
 // changes offset, while keeping the same point on the timeline
 OffsetTime sameTimeDifferentOffset = time.withOffsetSameInstant(offset);
@@ -7272,7 +7252,7 @@ Java 中已经存在了表示时区的类—**java.util.TimeZone**—但是他�
 
 ### 代码 10
 
-```
+```java
 // 3 years, 2 months, 1 day
 Period period = Period.of(3, 2, 1);
 
@@ -7287,7 +7267,7 @@ assertEquals(1, period.get(ChronoUnit.DAYS));
 
 **Duration**类也是用来描述一段时间的, 他和**Period**类似,但是不同于**Period**的是，它表示的精度更细。参见代码 11。
 
-```
+```java
 // A duration of 3 seconds and 5 nanoseconds
 Duration duration = Duration.ofSeconds(3, 5);
 Duration oneDay = Duration.between(today, yesterday); 
@@ -7336,15 +7316,13 @@ Java SE 8 提供的**java.time**中新的日期和时间 API。很大的提升�
 
 # 在 Java 8 下更好地利用枚举
 
-# 在 Java 8 下更好地利用枚举
-
 在我们的云使用分析 API 中，返回了格式化过的分析数据（这里指生成分析图）。最近，我们添加了一个特性，允许用户选择时间段（最开始只可以按天选择）。问题是，代码中每天中的时间段部分高度耦合了……
 
 ![](img/6eac9ea1a168bfe7bf8a82ef3f168677.png)
 
 例如，下面这段代码：
 
-```
+```java
 private static List<DataPoint> createListWithZerosForTimeInterval(DateTime from,
     DateTime to,
     ImmutableSet<Metric<? extends Number>> metrics) {
@@ -7369,7 +7347,7 @@ private static List<DataPoint> createListWithZerosForTimeInterval(DateTime from,
 
 我告诉自己：“我们使用 Java8 或许可以发现一些新的特性来避免 swtich/case 的危险场面出现”。使用 Java8 的新 *[functions](http://docs.oracle.com/javase/8/docs/api/java/util/function/package-summary.html)*（不是那么新，不过你知道我的意思）。我决定使用枚举代表不同的可得到时间段。
 
-```
+```java
 public enum TimePeriod
 {
     MINUTE(Dimension.MINUTE, 
@@ -7451,13 +7429,13 @@ public enum TimePeriod
 
 原来是这样调用：
 
-```
+```java
 for (int i = 0; i <= Days.daysBetween(from, to).getDays(); i++) 
 ```
 
 变成这样调用：
 
-```
+```java
 for (int i = 0; i < timePeriod.getNumberOfPoints(from, to); i++) 
 ```
 
@@ -7472,8 +7450,6 @@ for (int i = 0; i < timePeriod.getNumberOfPoints(from, to); i++)
 译文链接： [`www.importnew.com/14040.html`](http://www.importnew.com/14040.html)
 
 **转载请保留原文出处、译者和译文链接。**
-
-# 在 Java 8 中避免 Null 检查
 
 # 在 Java 8 中避免 Null 检查
 
@@ -7497,7 +7473,7 @@ Null 引用的发明者 [Tony Hoare](http://en.wikipedia.org/wiki/Tony_Hoare) �
 
 假设我们有一个像这样的类层次结构：
 
-```
+```java
 class Outer {
     Nested nested;
     Nested getNested() {
@@ -7520,7 +7496,7 @@ class Inner {
 
 解决这种结构的深层嵌套路径是有点麻烦的。我们必须编写一堆 null 检查来确保不会导致一个 NullPointerException：
 
-```
+```java
 Outer outer = new Outer();
 if (outer != null && outer.nested != null && outer.nested.inner != null) {
     System.out.println(outer.nested.inner.foo);
@@ -7529,7 +7505,7 @@ if (outer != null && outer.nested != null && outer.nested.inner != null) {
 
 我们可以通过利用 Java 8 的 Optional 类型来摆脱所有这些 null 检查。map 方法接收一个 Function 类型的 lambda 表达式，并自动将每个 function 的结果包装成一个 Optional 对象。这使我们能够在一行中进行多个 map 操作。Null 检查是在底层自动处理的。
 
-```
+```java
 Optional.of(new Outer())
     .map(Outer::getNested)
     .map(Nested::getInner)
@@ -7539,7 +7515,7 @@ Optional.of(new Outer())
 
 还有一种实现相同作用的方式就是通过利用一个 supplier 函数来解决嵌套路径的问题：
 
-```
+```java
 Outer obj = new Outer();
 resolve(() -> obj.getNested().getInner().getFoo());
     .ifPresent(System.out::println); 
@@ -7547,7 +7523,7 @@ resolve(() -> obj.getNested().getInner().getFoo());
 
 调用 obj.getNested().getInner().getFoo()) 可能会抛出一个 NullPointerException 异常。在这种情况下，该异常将会被捕获，而该方法会返回 Optional.empty()。
 
-```
+```java
 public static <T> Optional<T> resolve(Supplier<T> resolver) {
     try {
         T result = resolver.get();
@@ -7571,7 +7547,7 @@ public static <T> Optional<T> resolve(Supplier<T> resolver) {
 
 在浏览[Java8 的特性列表](http://openjdk.java.net/projects/jdk8/features)的时候，[目标类型推断](http://openjdk.java.net/jeps/101)这个特别有趣的、鲜为人知的特性一下子吸引了我。Java 语言的设计者通过它让我们减轻了一些使用泛型时（Java5-7）的痛苦。让我们来看看过去泛型使用的示例：
 
-```
+```java
 class List<E> {
   static <Z> List<Z> nil() {..}
   static <Z> List<Z> cons(Z head, List<Z> tail) {..}
@@ -7581,7 +7557,7 @@ class List<E> {
 
 在上述例子，在[JEP：101](http://openjdk.java.net/jeps/101)中声称可以用下面的方法更好地表示：
 
-```
+```java
 // 建议写法：
 List.cons(42, List.nil());
 String s = List.nil().head();
@@ -7593,7 +7569,7 @@ String s = List.<String>nil().head();
 
 作为一个[熟练的 API 设计师](http://blog.jooq.org/2012/01/05/the-java-fluent-api-designer-crash-course/)，在 Java 路线图中看到示例中的进步着实令人激动。这些令人兴奋的变化究竟包含了什么？让我来更加详细地说明：
 
-```
+```java
 // 通过赋值语句推断泛型的类型
 List<String> l = List.nil();
 
@@ -7610,7 +7586,7 @@ String s = List.nil().head();
 
 你可能也会这么认为。因为一组流畅的 API，像 [jooq](http://www.jooq.org/ "jOOQ generates Java code from your database and lets you build typesafe SQL queries through its fluent API.") 或 Stream API 在设计时会考虑到这种调用的流畅性，在链式调用的最后才进行类型推断。为此，我下载了最新的 JDK 8 评估版本测试下面的程序：
 
-```
+```java
 public class InferenceTest {
     public static void main(String[] args) {
         List<String> ls = List.nil();
@@ -7622,7 +7598,7 @@ public class InferenceTest {
 
 以下是得到的编译结果：
 
-```
+```java
 C:\Users\Lukas\java8>javac InferenceTest.java
 InferenceTest.java:5: error: incompatible types: 
     Object cannot be converted to String

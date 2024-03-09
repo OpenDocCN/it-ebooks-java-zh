@@ -35,7 +35,7 @@ Java 通过三个关键字来控制对象的成员的外部可见性(visibility)
 
 我们先来封装以前定义的 Human 类:
 
-```
+```java
 public class Test
 {
     public static void main(String[] args)
@@ -117,7 +117,7 @@ class Human
 
 如果我们从 main 中强行调用 height:
 
-```
+```java
 System.out.println(aPerson.height);
 ```
 

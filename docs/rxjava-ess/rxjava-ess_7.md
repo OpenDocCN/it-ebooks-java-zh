@@ -1,12 +1,8 @@
 # Schedulers-解决 Android 主线程问题
 
-# Schedulers-解决 Android 主线程问题
-
 前面一章是最后一章关于 RxJava 的 Observable 的创建和操作的章节。我们学习到了如何将两个或更多的 Observables 合并在一起，`join`它们，`zip`它们，`merge`它们以及如何创建一个新的 Observable 来满足我们特殊的需求。
 
 本章中，我们提升标准看看如何使用 RxJava 的调度器来处理多线程和并发编程的问题。我们将学习到如何以响应式的方式创建网络操作，内存访问，以及耗时任务。
-
-# StrictMode
 
 # StrictMode
 
@@ -16,7 +12,7 @@
 
 为了在我们的 App 中激活`StrictMode`，我们只需要在`MainActivity`中添加几行代码，即`onCreate()`方法中这样：
 
-```
+```java
 @Override
 public void onCreate() { 
     super.onCreate();
@@ -33,13 +29,11 @@ public void onCreate() {
 
 # 避免阻塞 I/O 的操作
 
-# 避免阻塞 I/O 的操作
-
 阻塞 I/O 的操作会导致 App 必须等待结果返回（阻塞结束）才能进行下一步操作。在 UI 线程上执行一个阻塞操作会将 UI 强行卡住，直接造成很糟糕的用户体验。
 
 我们激活`StrictMode`后，我们开始收到了关于我们的 App 错误操作磁盘 I/O 的不良信息。
 
-```
+```java
 D/StrictMode  StrictMode policy violation; ~duration=998 ms: android.os.StrictMode$StrictModeDiskReadViolation: policy=31 violation=2
 at android.os.StrictMode$AndroidBlockGuardPolicy.onReadFromDisk (StrictMode.java:1135)
 at libcore.io.BlockGuardOs.open(BlockGuardOs.java:106) at libcore.io.IoBridge.open(IoBridge.java:393)
@@ -51,13 +45,11 @@ at com.packtpub.apps.rxjava_essentials.Utils.storeBitmap (Utils.java:30)
 
 上一条信息告诉我们`Utils.storeBitmap()`函数执行完耗时 998ms：在 UI 线程上近 1 秒的不必要的工作和 App 上近 1 秒不必要的迟钝。这是因为我们以阻塞的方式访问磁盘。我们的`storeBitmap()`函数包含了：
 
-```
+```java
 FileOutputStream fOut = context.openFileOutput(filename, Context.MODE_PRIVATE); 
 ```
 
 它直接访问智能手机的固态存储然后就慢了。我们该如何提高访问速度呢？`storeBitmap()`函数保存了已安装 App 的图标。他的返回值类型为`void`，因此在执行下一个操作前我们毫无理由去等待直到它完成。我们可以启动它并让它执行在不同的线程。近几年来 Android 的线程管理发生了许多变化，导致 App 出现诡异的行为。我们可以使用`AsyncTask`，但是我们要避免掉入前几章里的`onPre... onPost...doInBackGround`地狱。下面我们将换用 RxJava 的方式。调度器万岁！
-
-# Schedulers
 
 # Schedulers
 
@@ -97,11 +89,9 @@ RxJava 提供了 5 种调度器：
 
 # 非阻塞 I/O 操作
 
-# 非阻塞 I/O 操作
-
 现在我们知道如何在一个指定 I/O 调度器上来调度一个任务，我们可以修改`storeBitmap()`函数并再次检查`StrictMode`的不合规做法。为了这个例子，我们可以在新的`blockingStoreBitmap()`函数中重排代码。
 
-```
+```java
 private static void blockingStoreBitmap(Context context, Bitmap bitmap, String filename) {
     FileOutputStream fOut = null; 
     try {
@@ -125,7 +115,7 @@ private static void blockingStoreBitmap(Context context, Bitmap bitmap, String f
 
 现在我们可以使用`Schedulers.io()`创建非阻塞的版本：
 
-```
+```java
 public static void storeBitmap(Context context, Bitmap bitmap, String filename) {
     Schedulers.io().createWorker().schedule(() -> {
         blockingStoreBitmap(context, bitmap, filename);
@@ -141,13 +131,11 @@ public static void storeBitmap(Context context, Bitmap bitmap, String filename) 
 
 # SubscribeOn and ObserveOn
 
-# SubscribeOn and ObserveOn
-
 我们学到了如何在一个调度器上运行一个任务。但是我们如何利用它来和 Observables 一起工作呢？RxJava 提供了`subscribeOn()`方法来用于每个 Observable 对象。`subscribeOn()`方法用`Scheduler`来作为参数并在这个 Scheduler 上执行 Observable 调用。
 
 在“真实世界”这个例子中，我们调整`loadList()`函数。首先，我们需要一个新的`getApps()`方法来检索已安装的应用列表：
 
-```
+```java
 private Observable<AppInfo> getApps() { 
     return Observable.create(subscriber -> {
         List<AppInfo> apps = new ArrayList<>();
@@ -167,7 +155,7 @@ private Observable<AppInfo> getApps() {
 
 `getApps()`方法返回一个`AppInfo`的 Observable。它先从 Android 的 SharePreferences 读取到已安装的应用程序列表。反序列化，并一个接一个的发射 AppInfo 数据。使用新的方法来检索列表，`loadList()`函数改成下面这样：
 
-```
+```java
 private void loadList() {
     mRecyclerView.setVisibility(View.VISIBLE);
     getApps().subscribe(new Observer<AppInfo>() {
@@ -194,14 +182,14 @@ private void loadList() {
 
 如果我们运行代码，`StrictMode`将会报告一个不合规操作，这是因为`SharePreferences`会减慢 I/O 操作。我们所需要做的是指定`getApps()`需要在调度器上执行：
 
-```
+```java
  getApps().subscribeOn(Schedulers.io())
         .subscribe(new Observer<AppInfo>() { [...] 
 ```
 
 `Schedulers.io()`将会去掉`StrictMode`的不合规操作，但是我们的 App 现在崩溃了是因为：
 
-```
+```java
 at rx.internal.schedulers.ScheduledAction.run(ScheduledAction.jav a:58)
 at java.util.concurrent.Executors$RunnableAdapter.call(Executors. java:422)
 at java.util.concurrent.FutureTask.run(FutureTask.java:237) 
@@ -217,7 +205,7 @@ Only the original thread that created a view hierarchy can touch its views.
 
 我们再次回到 Android 的世界。这条信息简单的告诉我们我们试图在一个非 UI 线程来修改 UI 操作。意思是我们需要在 I/O 调度器上执行我们的代码。因此我们需要和 I/O 调度器一起执行代码，但是当结果返回时我们需要在 UI 线程上操作。RxJava 让你能够订阅一个指定的调度器并观察它。我们只需在`loadList()`函数添加几行代码，那么每一项就都准备好了：
 
-```
+```java
 getApps()
 .onBackpressureBuffer()
 .subscribeOn(Schedulers.io())
@@ -231,11 +219,9 @@ getApps()
 
 # 处理耗时的任务
 
-# 处理耗时的任务
-
 我们已经知道如何处理缓慢的 I/O 操作。让我们看一个与 I/O 无关的耗时的任务。例如，我们修改`loadList()`函数并创建一个新的`slow`函数发射我们已安装的 app 数据。
 
-```
+```java
 private Observable<AppInfo> getObservableApps(List<AppInfo> apps) {
     return Observable .create(subscriber -> {
         for (double i = 0; i < 1000000000; i++) {
@@ -251,7 +237,7 @@ private Observable<AppInfo> getObservableApps(List<AppInfo> apps) {
 
 正如你看到的，这个函数执行了一些毫无意义的计算，只是针对这个例子消耗时间，然后从`List<AppInfo>`对象中发射我们的`AppInfo`数据，现在，我们重排`loadList()`函数如下：
 
-```
+```java
 private void loadList(List<AppInfo> apps) {
     mRecyclerView.setVisibility(View.VISIBLE);
     getObservableApps(apps)
@@ -287,13 +273,13 @@ private void loadList(List<AppInfo> apps) {
 
 可以确定的是，我们将会看到下面在 logcat 中不愉快的信息：
 
-```
+```java
 I/Choreographer  Skipped 598 frames! The application may be doing too much work on its main thread. 
 ```
 
 这条信息比较清楚，Android 在告诉我们用户体验非常差的原因是我们用不必要的工作量阻塞了 UI 线程。但是我们已经知道了如何处理它：我们有调度器！我们只须添加几行代码到我们的 Observable 链中就能去掉加载慢和`Choreographer`信息：
 
-```
+```java
 getObservableApps(apps)
     .onBackpressureBuffer()
     .subscribeOn(Schedulers.computation())
@@ -302,8 +288,6 @@ getObservableApps(apps)
 ```
 
 用这几行代码，我们将可以快速关掉`Navigation Drawer`,一个漂亮的进度条，一个工作在独立的线程缓慢执行的计算任务，并在主线程返回结果让我们更新已安装的应用列表。
-
-# 执行网络任务
 
 # 执行网络任务
 
@@ -322,13 +306,13 @@ getObservableApps(apps)
 
 首先，我们创建`mDownloadProgress`
 
-```
+```java
 private PublishSubject<Integer> mDownloadProgress = PublishSubject.create(); 
 ```
 
 这个主题我们用来管理进度的更新，它和`download`函数协同工作。
 
-```
+```java
 private boolean downloadFile(String source, String destination) {
     boolean result = false;
     InputStream input = null; 
@@ -381,7 +365,7 @@ private boolean downloadFile(String source, String destination) {
 
 上面的这段代码将会触发`NetworkOnMainThreadException`异常。我们可以创建 RxJava 版本的函数进入我们挚爱的响应式世界来解决这个问题：
 
-```
+```java
 private Observable<Boolean> obserbableDownload(String source, String destination) {
     return Observable.create(subscriber -> {
         try {
@@ -401,7 +385,7 @@ private Observable<Boolean> obserbableDownload(String source, String destination
 
 现在我们需要触发下载操作，点击下载按钮:
 
-```
+```java
 @OnClick(R.id.button_download)
 void download() {
     mButton.setText(getString(R.string.downloading));
@@ -448,7 +432,7 @@ void download() {
 
 然后，我们创建一个 subscription 来观察下载进度并相应的更新进度条。很明显，我们订阅在主线程是因为进度条是 UI 元素。
 
-```
+```java
 obserbableDownload("http://archive.blender.org/fileadmin/movies/softboy.avi", "sdcardsoftboy.avi";) 
 ```
 
@@ -457,8 +441,6 @@ obserbableDownload("http://archive.blender.org/fileadmin/movies/softboy.avi", "s
 下图展示了下载进度和视频播放器选择对话框：
 
 ![](img/chapter7_6.png)
-
-# 总结
 
 # 总结
 

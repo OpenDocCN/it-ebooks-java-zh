@@ -8,7 +8,7 @@
 
 FileChannel.transferFrom 方法把数据从通道源传输到 FileChannel：
 
-```
+```java
 RandomAccessFile fromFile = new RandomAccessFile("fromFile.txt", "rw");
 FileChannel      fromChannel = fromFile.getChannel();
 
@@ -27,7 +27,7 @@ transferFrom 的参数 position 和 count 表示目标文件的写入位置和�
 
 transferTo 方法把 FileChannel 数据传输到另一个 channel,下面是案例：
 
-```
+```java
 RandomAccessFile fromFile = new RandomAccessFile("fromFile.txt", "rw");
 FileChannel      fromChannel = fromFile.getChannel();
 

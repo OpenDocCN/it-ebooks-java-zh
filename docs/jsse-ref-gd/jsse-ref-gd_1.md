@@ -1,7 +1,5 @@
 # 引言
 
-# 引言
-
 数据在网络上传播很容易被不是预期的收件人进行访问。当数据包含私人信息，如密码和信用卡号码，必须采取措施，以保证使数据不容易透露给未经授权的第三方。同样重要的是，在传输过程中要确保数据没有被修改（有意或无意地）。 Secure Sockets Layer (SSL，安全套接字层)和 Transport Layer Security (TLS，传输层安全)协议，旨在保护数据在网络传输的过程中的保密性和完整性。
 
 Java Secure Socket Extension (JSSE，Java 安全套接字扩展) 实现了安全的互联网通信。它提供了一个框架，并为执行 SSL 和 TLS 协议的 Java 版本的实现，包括数据加密，服务器认证，消息完整性和可选的客户端认证功能。使用 JSSE，开发者可以提供一个客户端和运行任何基于 TCP/IP 上的应用协议（如 HTTP，Telnet 或 FTP）的服务器之间的数据安全通道。关于 SSL 的更多介绍，请参阅 SSL 协议总览。
@@ -17,8 +15,6 @@ JSSE 是 Java SE 平台的安全组件，并且在其他基于 [Java Cryptograph
 在 Java SE 平台的其他安全组件包括 [Java Authentication Authorization Service (JAAS，Java 认证和授权服务)](https://docs.oracle.com/javase/8/docs/technotes/guides/security/jaas/JAASRefGuide.html) 和 [Java Security Tools （Java 安全工具）](https://docs.oracle.com/javase/8/docs/technotes/tools/index.html#security)。 JSSE 包含许多相同的概念和算法的 JCA 但自动适用于下面一个简单的流套接字 API。
 
 该 JSSE API 的目的是让其他的 SSL/TLS 协议，公钥基础设施（PKI）实现无缝的插入。开发者也可以提供替代的逻辑来确定是否远程主机应信任什么或验证密钥材料是否应该被发送到远程主机。
-
-# 特性和用途
 
 # 特性和用途
 
@@ -52,8 +48,6 @@ Table 1: Cryptographic Functionality Available in JSSE
 
 # JSSE 标准 API
 
-# JSSE 标准 API
-
 JSSE API 标准,可在 javax.net 和 javax.net.ssl 包找到,提供如下:
 
 *   安全套接字和服务器套接字
@@ -62,8 +56,6 @@ JSSE API 标准,可在 javax.net 和 javax.net.ssl 包找到,提供如下:
 *   一个类代表一个安全套接字上下文作为工厂用于安全套接字工厂和引擎
 *   密钥和信任管理器接口(包括特定的 X.509 密钥和信任管理器),和工厂,可以用于创建它们
 *   一个类用于安全 HTTP URL 连接(HTTPS)
-
-# SunJSSE 供应商
 
 # SunJSSE 供应商
 
@@ -76,8 +68,6 @@ Oracle 的 Java SE 的 JSSE 实现是包含了一个名为 SunJSSE 的供应商�
 *   PKCS12 实现了 JCA keystore 类型 "pkcs12"。PKCS12 不支持存储信任锚。用户应该存储信任锚在 Java keystore(JKS) 格式并保存私钥为 PKCS12 格式。
 
 更多关于这个提供者的信息可见 [SunJSSE](https://docs.oracle.com/javase/8/docs/technotes/guides/security/SunProviders.html#SunJSSEProvider) 文档
-
-# 相关文档
 
 # 相关文档
 
@@ -113,8 +103,6 @@ Oracle 的 Java SE 的 JSSE 实现是包含了一个名为 SunJSSE 的供应商�
 
 # JRE 安装目录
 
-# JRE 安装目录
-
 java-home 变量占位符的使用是为了引用 Java Runtime Environment (JRE，Java 运行时环境) 的安装目录。这个目录的确认是基于有或没有安装 JDK 的 JSSE 的运行来判断的。JDK 包括 JRE,但位于不同的文件层次结构中。
 
 java-home 的默认位置如下表：
@@ -125,8 +113,6 @@ java-home 的默认位置如下表：
 | Windows | C:\jdk1.8.0\jre | C:\jre1.8.0 |
 
 **注：**在路径名的波浪线 (~) 是代表在 Solaris，Linux 或 Mac OS X 操作系统的当前用户的主目录。
-
-# 术语和定义
 
 # 术语和定义
 
@@ -278,8 +264,6 @@ See keystore/truststore.
 
 # SSL 协议总览
 
-# SSL 协议总览
-
 Secure Sockets Layer (SSL，安全套接字层)是在网络上应用最广泛的加密协议实现。SSL 使用结合加密过程来提供网络的安全通信。本节介绍 SSL 和它所使用的加密过程。
 
 SSL 提供了一个安全的增强标准 TCP/IP 套接字用于网络通信协议。如表 3 所示,添加了安全套接字层传输层和应用层之间的标准 TCP/IP 协议栈。SSL 的应用程序中最常用的是 Hypertext Transfer Protocol (HTTP，超文本传输协议),这个是互联网网页协议。其他应用程序,如 Net News Transfer Protocol (NNTP，网络新闻传输协议)、Telnet、 Lightweight Directory Access Protocol (LDAP，轻量级目录访问协议), Interactive Message Access Protocol (IMAP，互动信息访问协议)和 File Transfer Protocol (FTP,文件传输协议),也可以使用 SSL。
@@ -299,8 +283,6 @@ SSL 是由网景公司在 1994 年,来自互联网社区的投入,现在已经�
 
 # 为何使用 SSL
 
-# 为何使用 SSL
-
 通过网络传输敏感信息是有风险的，出于以下原因:
 
 *   你不能总是确保与你交流的实体真的是你认为那位。 *网络数据可以被截获,因此它是有可能被未经授权的第三方（有时被称为一个攻击者）所读取。* 　攻击者截获数据并可能修改它才将其发送给接收者。
@@ -314,8 +296,6 @@ SSL　解决了这些问题。它解决了第一个问题的方式是,有选择�
 一旦客户机和服务器都熟悉了彼此的身份,SSL　通过加密算法来提供隐私和数据完整性。这使得敏感信息,比如信用卡号码,通过互联网传输会变得安全。
 
 尽管　SSL　提供身份验证、隐私和数据完整性,它不提供＂不可抵赖性＂服务。Nonrepudiation（不可抵赖性）意味着一个实体发送一条消息后不能否认发送过它。当数字相当于一个与消息有关的签名,那么发送消息之后还是可以证明发送过。SSL　本身没有提供不可抵赖性。
-
-# SSL 如何工作
 
 # SSL 如何工作
 
@@ -508,8 +488,6 @@ The SSL messages are sent in the following order:
 
 # JSSE 类和接口
 
-# JSSE 类和接口
-
 为了安全地通信，连接双方必须启用 SSL。在 JSSE API，端点类的连接是 SSLSocket 和 SSLEngine。在图 2 中，用于创建 SSLSocket 和 SSLEngine 的主要类是按逻辑顺序摆放。图下面的文字，解释了图中的内容。
 
 Figure 2: Classes Used to Create SSLSocket and SSLEngine
@@ -518,36 +496,18 @@ Figure 2: Classes Used to Create SSLSocket and SSLEngine
 
 # 核心类和接口
 
-# 核心类和接口
-
 # 支持类和接口
-
-# 支持类和接口
-
-# 次要支持类和接口
 
 # 次要支持类和接口
 
 # 自定义 JSSE
 
-# 自定义 JSSE
-
 # TLS 重新协商问题
-
-# TLS 重新协商问题
-
-# 硬件加速和智能卡的支持
 
 # 硬件加速和智能卡的支持
 
 # Kerberos 密码套件
 
-# Kerberos 密码套件
-
 # 额外的 Keystore 格式(PKCS12)
-
-# 额外的 Keystore 格式(PKCS12)
-
-# SNI 扩展
 
 # SNI 扩展

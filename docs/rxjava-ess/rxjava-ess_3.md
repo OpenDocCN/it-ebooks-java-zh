@@ -1,10 +1,6 @@
 # 向响应式世界问好
 
-# 向响应式世界问好
-
 在上一章中，我们对观察者模式有个理论上的快速概述。我们也看了从头开始、从列表、或者从已经存在的函数来创建 Observables。在本章中，我们将用我们学到的来创建我们第一个响应式 Android 应用程序。首先，我们需要搭建环境，导入需要的库和有用的库。然后我们将创建一个简单的应用程序，在不同的 flavors 中包含几个用 RxJava 填充的 RecycleView items。
-
-# 启动引擎
 
 # 启动引擎
 
@@ -26,8 +22,6 @@ RxAndroid 是 RxJava 家族的一部分。它基于 RxJava1.0.x,在普通的 RxJ
 
 # 工具
 
-# 工具
-
 出于实用，我们引入了 Lombok 和 Butter Knife。这两个可以帮助我们在 Android 应用程序中少写许多模板类代码。
 
 ### Lombok
@@ -44,13 +38,11 @@ Butter Knife 使用注解的方式来帮助我们免去写`findViewById()`和设
 
 # 我们的第一个 Observable
 
-# 我们的第一个 Observable
-
 在我们的第一个列子里，我们将检索安装的应用列表并填充 RecycleView 的 item 来展示它们。我们也设想一个下拉刷新的功能和一个进度条来告知用户当前任务正在执行。
 
 首先，我们创建 Observable。我们需要一个函数来检索安装的应用程序列表并把它提供给我们的观察者。我们一个接一个的发射这些应用程序数据，将它们分组到一个单独的列表中，以此来展示响应式方法的灵活性。
 
-```
+```java
 private Observable<AppInfo> getApps(){
     return Observable.create(subscriber -> {
         List<AppInfoRich> apps = new ArrayList<AppInfoRich>();
@@ -84,7 +76,7 @@ private Observable<AppInfo> getApps(){
 
 AppInfo 对象如下：
 
-```
+```java
 @Data
 @Accessors(prefix = "m")
 public class AppInfo implements Comparable<Object> {
@@ -115,7 +107,7 @@ public class AppInfo implements Comparable<Object> {
 
 使用 Butter Knife,我们得到 list 和下拉刷新组件的引用：
 
-```
+```java
 @InjetcView(R.id.fragment_first_example_list)
 RecyclerView mRecycleView;
 
@@ -129,7 +121,7 @@ SwipeRefreshLayout mSwipeRefreshLayout;
 
 我们使用一个下拉刷新方法，因此列表数据可以来自初始化加载，或由用户触发的一个刷新动作。针对这两个场景，我们用同样的行为，因此我们把我们的观察者放在一个易被复用的函数里面。下面是我们的观察者，定义了成功、失败、完成要做的事情：
 
-```
+```java
 private void refreshTheList() {
     getApps().toSortedList()
             .subscribe(new Observer<List<AppInfo>>() {
@@ -157,7 +149,7 @@ private void refreshTheList() {
 
 定义一个函数使我们能够用同样一个 block 来处理两种场景成为了可能。当 fragment 加载时我们只需调用`refreshTheList()`方法并设置`refreshTheList()`方法作为用户下拉这一行为所触发的方法。
 
-```
+```java
 mSwipeRefreshLayout.setOnRefreshListener(this::refreshTheList); 
 ```
 
@@ -167,21 +159,19 @@ mSwipeRefreshLayout.setOnRefreshListener(this::refreshTheList);
 
 # 从列表创建一个 Observable
 
-# 从列表创建一个 Observable
-
 在这个例子中，我们将引入`from()`函数。使用这个特殊的“创建”函数，我们可以从一个列表中创建一个 Observable。Observable 将发射出列表中的每一个元素，我们可以通过订阅它们来对这些发出的元素做出响应。
 
 为了实现和第一个例子同样的结果，我们在每一个`onNext()`函数更新我们的适配器，添加元素并通知插入。
 
 我们将复用和第一个例子同样的结构。主要的不同的是我们不再检索已安装的应用列表。列表由外部实体提供：
 
-```
+```java
 mApps = ApplicationsList.getInstance().getList(); 
 ```
 
 获得列表后，我们仅需将它响应化并填充 RecyclerView 的 item:
 
-```
+```java
 private void loadList(List<AppInfo> apps) {
     mRecyclerView.setVisibility(View.VISIBLE);
     Observable.from(apps)
@@ -212,15 +202,13 @@ private void loadList(List<AppInfo> apps) {
 
 # 再多几个例子
 
-# 再多几个例子
-
 在这一节中，我们将基于 RxJava 的`just()`,`repeat()`,`defer()`,`range()`,`interval()`,和`timer()`方法展示一些例子。
 
 ## just()
 
 假如我们只有 3 个独立的 AppInfo 对象并且我们想把他们转化为 Observable 并填充到 RecyclerView 的 item 中：
 
-```
+```java
 List<AppInfo> apps = ApplicationsList.getInstance().getList();
 
 AppInfo appOne = apps.get(0);
@@ -234,7 +222,7 @@ loadApps(appOne,appTwo,appThree);
 
 我们可以像我们之前的例子那样检索列表并提取出这三个元素。然后我们将他们传到这个`loadApps()`函数里面：
 
-```
+```java
 private void loadApps(AppInfo appOne,AppInfo appTwo,AppInfo appThree) {
     mRecyclerView.setVisibility(View.VISIBLE);
     Observable.just(appOne,appTwo,appThree)
@@ -269,7 +257,7 @@ private void loadApps(AppInfo appOne,AppInfo appTwo,AppInfo appThree) {
 
 假如你想对一个 Observable 重复发射三次数据。例如，我们用`just()`例子中的 Observable：
 
-```
+```java
 private void loadApps(AppInfo appOne,AppInfo appTwo,AppInfo appThree) {
     mRecyclerView.setVisibility(View.VISIBLE);
     Observable.just(appOne,appTwo,appThree)
@@ -303,7 +291,7 @@ private void loadApps(AppInfo appOne,AppInfo appTwo,AppInfo appThree) {
 
 有这样一个场景，你想在这声明一个 Observable 但是你又想推迟这个 Observable 的创建直到观察者订阅时。看下面的`getInt()`函数：
 
-```
+```java
 private Observable<Integer> getInt(){
     return Observable.create(subscriber -> {
         if(subscriber.isUnsubscribed()){
@@ -318,13 +306,13 @@ private Observable<Integer> getInt(){
 
 这比较简单，并且它没有做太多事情，但是它正好为我们服务。现在，我们可以创建一个新的 Observable 并且应用`defer()`:
 
-```
+```java
 Observable<Integer> deferred = Observable.defer(this::getInt); 
 ```
 
 这次，`deferred`存在，但是`getInt()` `create()`方法还没有调用:logcat 日志也没有“GETINT”打印出来:
 
-```
+```java
 deferred.subscribe(number -> {
     App.L.debug(String.valueOf(number));
 }); 
@@ -336,7 +324,7 @@ deferred.subscribe(number -> {
 
 你需要从一个指定的数字 X 开始发射 N 个数字吗？你可以用`range`:
 
-```
+```java
 Observable.range(10,3)
     .subscribe(new Observer<Integer>() {
 
@@ -363,7 +351,7 @@ Observable.range(10,3)
 
 `interval()`函数在你需要创建一个轮询程序时非常好用。
 
-```
+```java
 Subscription stopMePlease = Observable.interval(3,TimeUnit.SECONDS)
     .subscribe(new Observer<Integer>() {
 
@@ -390,7 +378,7 @@ Subscription stopMePlease = Observable.interval(3,TimeUnit.SECONDS)
 
 如果你需要一个一段时间之后才发射的 Observable，你可以像下面的例子使用`timer()`：
 
-```
+```java
 Observable.timer(3,TimeUnit.SECONDS)
     .subscribe(new Observer<Long>() {
 
@@ -413,7 +401,7 @@ Observable.timer(3,TimeUnit.SECONDS)
 
 它将 3 秒后发射 0,然后就完成了。让我们使用`timer()`的第三个参数，就像下面的例子：
 
-```
+```java
 Observable.timer(3,3,TimeUnit.SECONDS)
     .subscribe(new Observer<Long>() {
 
@@ -435,8 +423,6 @@ Observable.timer(3,3,TimeUnit.SECONDS)
 ```
 
 用这个代码，你可以创建一个以初始值来延迟（上一个例子是 3 秒）执行的`interval()`版本，然后每隔 N 秒就发射一个新的数字（前面的例子是 3 秒）。
-
-# 总结
 
 # 总结
 

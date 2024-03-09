@@ -8,7 +8,7 @@
 
 打开一个 DatagramChannel 你这么操作：
 
-```
+```java
 DatagramChannel channel = DatagramChannel.open();
 channel.socket().bind(new InetSocketAddress(9999));
 ```
@@ -19,7 +19,7 @@ channel.socket().bind(new InetSocketAddress(9999));
 
 接收数据，直接调用 DatagramChannel 的 receive()方法：
 
-```
+```java
 ByteBuffer buf = ByteBuffer.allocate(48);
 buf.clear();
 
@@ -32,7 +32,7 @@ receive()方法会把接收到的数据包中的数据拷贝至给定的 Buffer 
 
 发送数据是通过 DatagramChannel 的 send()方法：
 
-```
+```java
 String newData = "New String to wrte to file..."               +System.currentTimeMillis();
 ByteBuffer buf = ByteBuffer.allocate(48);
 buf.clear();
@@ -50,16 +50,16 @@ DatagramChannel 实际上是可以指定到网络中的特定地址的。由于 
 
 看一个例子先：
 
-```
+```java
 channel.connect(new InetSocketAddress("jenkov.com"), 80));
 ```
 
 当连接上后，可以向使用传统的通道那样调用 read()和 Writer()方法。区别是数据的读写情况得不到保证。下面是几个示例：
 
-```
+```java
 int bytesRead = channel.read(buf);
 ```
 
-```
+```java
 int bytesWritten = channel.write(buf);
 ```

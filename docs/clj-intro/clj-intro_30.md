@@ -14,7 +14,7 @@
 
 下面是个简要的例子要使用 clojure.java.shell 获取当前的工作目录。
 
-```
+```java
 (use 'clojure.java.shell)
 (def directory (sh "pwd")) 
 ```

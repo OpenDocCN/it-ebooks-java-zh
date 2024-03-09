@@ -30,7 +30,7 @@
 
 *表示 Todo 模型的类 ToDoItem*
 
-```
+```java
     package com.manning.gia.todo.model;
 
     public class ToDoItem implements Comparable<ToDoItem> {
@@ -43,7 +43,7 @@
 
 *模型持久化接口 ToDoRepository*
 
-```
+```java
     package com.manning.gia.todo.repository;
 
     import com.manning.gia.todo.model.ToDoItem;
@@ -60,7 +60,7 @@
 
 接下来创建一个可扩展的、线程安全的实现：
 
-```
+```java
     package com.manning.gia.todo.repository;
 
     public class InMemoryToDoRepository implements ToDoRepository {
@@ -103,7 +103,7 @@
 
 *应用程序的入口*
 
-```
+```java
     package com.manning.gia.todo;
     import com.manning.gia.todo.utils.CommandLineInput;
     import com.manning.gia.todo.utils.CommandLineInputHandler;
@@ -141,7 +141,7 @@ Gradle 插件能够自动化完成这些任务，插件引入了一些领域特�
 
 每个 Gradle 项目都会创建一个 build.gradle 文件，如果你想使用 java 插件只需要添加下面这行代码：
 
-```
+```java
     apply plugin: 'java'
 ```
 
@@ -153,7 +153,7 @@ Gradle 插件能够自动化完成这些任务，插件引入了一些领域特�
 
 现在你可以构建你的项目了，java 插件添加了一个 build 任务到你项目中，build 任务编译你的代码、运行测试然后打包成 jar 文件，所有都是按序执行的。运行 gradle build 之后你的输出应该是类似这样的：
 
-```
+```java
     $ gradle build
     :compileJava
     :processResources UP-TO-DATE
@@ -178,7 +178,7 @@ Gradle 插件能够自动化完成这些任务，插件引入了一些领域特�
 
 你只需要使用 JDK 的 java 命令就可以执行这个应用了：
 
-```
+```java
     $ java -cp build/classes/main com.manning.gia.todo.ToDoApp
     --- To Do Application ---
     Please make a choice:
@@ -201,7 +201,7 @@ Java 插件是一个非常固执的框架，对于项目很多的方面它都假
 
 接下来你将学习如何指定项目的版本号、Java 源代码的兼容级别，前面你用的 java 命令来运行应用程序，你需要通过命令行选项-cp build/classes/main 指定 class 文件的位置给 Java 运行时。但是要从 JAR 文件中启动应用，你需要在 manifest 文件 MANIFEST.MF 中包含首部 Main-Class。看下面的脚本你就明白怎么操作了：
 
-```
+```java
     //Identifies project’sversion through a number scheme
     version = 0.1
 
@@ -221,7 +221,7 @@ Java 插件是一个非常固执的框架，对于项目很多的方面它都假
 
 接下来学习如何改变项目的默认布局：
 
-```
+```java
     //Replaces conventional source code directory with list of different directories
 
     sourceSets {
@@ -248,7 +248,7 @@ Java 插件是一个非常固执的框架，对于项目很多的方面它都假
 
 在 Java 世界里，依赖是分布的以 JAR 文件的形式存在，许多库都从仓库里获得，比如一个文件系统或中央服务器。Gradle 需要你指定至少一个仓库作为依赖下载的地方，比如 mavenCentral： //Shortcut notation for configuring Maven Central 2 repository accessible under http://repo1.maven.org/maven2
 
-```
+```java
     repositories {
         mavenCentral()
     }
@@ -258,7 +258,7 @@ Java 插件是一个非常固执的框架，对于项目很多的方面它都假
 
 接下来就是定义依赖，依赖通过 group 标识，name 和 version 来确定，比如下面这个：
 
-```
+```java
     dependencies {
         compile group: 'org.apache.commons', name: 'commons-lang3', version: '3.1'
     }
@@ -270,7 +270,7 @@ Gradle 是通过配置来给依赖分组，Java 插件引入的一个配置是 c
 
 Gradle 能够自动检测并下载项目定义的依赖：
 
-```
+```java
     $ gradle build
     :compileJava
     Download http://repo1.maven.org/maven2/org/apache/commons/commons-lang3/3.1/commons-lang3-3.1.pom
@@ -305,7 +305,7 @@ Gradle 提供拆箱插件用来打包 WAR 文件以及部署 Web 应用到本地
 
 下面这个就是 web 控制器 ToDoServlet，用来处理所有的 URL 请求：
 
-```
+```java
     package com.manning.gia.todo.web;
 
     public class ToDoServlet extends HttpServlet {
@@ -351,7 +351,7 @@ Gradle 支持构建和运行 Web 应用，接下来我将介绍两个 web 应用
 
 你用来实现 Web 应用的帮助类不是 java 标准的一部分，比如 javax.servlet.HttpServlet,在运行 build 之前，你应该确保你声明了这些外部依赖，War 插件引入了两个新的依赖配置，用于 Servlet 依赖的配置是 providedCompile，这个用于那些编译器需要但是由运行时环境提供的依赖，你现在的运行时环境是 Jetty，因此用 provided 标记的依赖不会打包到 WAR 文件里面，运行时依赖比如 JSTL 这些在编译器不需要，但是运行时需要，他们将成为 WAR 文件的一部分。
 
-```
+```java
     dependencies {
        providedCompile 'javax.servlet:servlet-api:2.5'
        runtime 'javax.servlet:jstl:1.1.2'
@@ -360,7 +360,7 @@ Gradle 支持构建和运行 Web 应用，接下来我将介绍两个 web 应用
 
 build Web 项目和 Java 项目一样，运行 gradle build 后打包的 WAR 文件在目录 build/libs 下，输出如下：
 
-```
+```java
     $ gradle build
     :compileJava
     :processResources UP-TO-DATE
@@ -385,7 +385,7 @@ War 插件确保打包的 WAR 文件符合 JAVA EE 规范，war 任务拷贝 web
 
 ![](img/dag20.png)
 
-```
+```java
     //Changes web application source directory
 
     webAppDirName = 'webfiles'
@@ -402,7 +402,7 @@ War 插件确保打包的 WAR 文件符合 JAVA EE 规范，war 任务拷贝 web
 
 运行 Web 应用需要用到的任务是 jettyRun,启动 Jetty 容器并且无需创建 WAR 文件，这个命令的输出应该类似这样的：
 
-```
+```java
     $ gradle jettyRun
     :compileJava
     :processResources UP-TO-DATE
@@ -414,7 +414,7 @@ War 插件确保打包的 WAR 文件符合 JAVA EE 规范，war 任务拷贝 web
 
 Jetty 插件默认监听的端口是 8080，上下文路径是 todo-webapp-jetty,你也可以自己配置成想要的：
 
-```
+```java
     jettyRun {
        httpPort = 9090
        contextPath = 'todo'
@@ -433,7 +433,7 @@ Jetty 插件默认监听的端口是 8080，上下文路径是 todo-webapp-jetty
 
 在设置你的包装器之前，你需要做两件事情：创建一个包装任务，执行这个任务生成包装文件。为了能让你的项目下载压缩的 Gradle 运行时，定义一个 Wrapper 类型的任务 在里面指定你想使用的 Gradle 版本：
 
-```
+```java
     task wrapper(type: Wrapper) {
         gradleVersion = '1.7'
     }
@@ -441,7 +441,7 @@ Jetty 插件默认监听的端口是 8080，上下文路径是 todo-webapp-jetty
 
 然后执行这个任务：
 
-```
+```java
     $ gradle wrapper
     :wrapper
 ```
@@ -460,7 +460,7 @@ Jetty 插件默认监听的端口是 8080，上下文路径是 todo-webapp-jetty
 
 上面生成了两个执行脚本，一个是运行在*nix 系统上的 gradlew，另一个是运行在 Windows 系统上的 gradlew.bat,你只需要根据你的系统环境来执行对应的那一个脚本，比如上面提到的 Mike 执行了 gradlew.bat jettyRun 任务，下面是输出：
 
-```
+```java
     > gradlew.bat jettyRun
 
     Downloading http://services.gradle.org/distributions/gradle-1.7-bin.zip
@@ -485,7 +485,7 @@ Jetty 插件默认监听的端口是 8080，上下文路径是 todo-webapp-jetty
 
 一些公司的安全措施非常严格，特别是当你给政府工作的时候，你能够访问外网的能力是被限制的，在这种情况下你怎么让你的项目使用 Gradle 包装器？所以你需要修改默认配置：
 
-```
+```java
     task wrapper(type: Wrapper) {
         //Requested Gradle version
         gradleVersion = '1.2'

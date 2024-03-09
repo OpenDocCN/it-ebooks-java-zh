@@ -1,7 +1,5 @@
 # 八、精简的 JRE 详解
 
-# 八、精简的 JRE 详解
-
 > 来源：[Java 8 新特性探究（八）精简的 JRE 详解](http://my.oschina.net/benhaile/blog/211804)
 
 Oracle 公司如期发布了 Java 8 正式版！没有让广大 javaer 失望。对于一个人来说，18 岁是人生的转折点，从稚嫩走向成熟，法律意味着你是完全民事行为能力人，不再收益于未成年人保护法，到今年为止，java 也走过了 18 年，java8 是一个新的里程碑，带来了前所未有的诸多特性，lambda 表达式，Stream API，新的 Date time api，多核并发支持，重大安全问题改进等，相信 java 会越来越好，丰富的类库以及庞大的开源生态环境是其他语言所不具备的，说起丰富的类库，很多同学就吐槽了，java 该减肥了，确实是该减肥，java8 有个很好的特性，即 JEP161([`openjdk.java.net/jeps/161`](http://openjdk.java.net/jeps/161) ),该特性定义了 Java SE 平台规范的一些子集，使 java 应用程序不需要整个 JRE 平台即可部署和运行在小型设备上。开发人员可以基于目标硬件的可用资源选择一个合适的 JRE 运行环境。
@@ -25,7 +23,7 @@ javac –bootclasspath, or javac –profile
 
 如果不符合 compact 的 api，则报错。
 
-```
+```java
 $ javac -profile compact2 Test.java
 Test.java:7: error: ThreadMXBean is not available in profile 'compact2'
  ThreadMXBean bean = ManagementFactory.getThreadMXBean();
@@ -44,7 +42,7 @@ Test.java:7: error: ManagementFactory is not available in profile 'compact2'
 
 java8 新增一个工具，用来分析应用程序所依赖的 profile，有三个参数比较常用 -p，-v，-r
 
-```
+```java
 import java.util.Set;
 import java.util.HashSet;
 
@@ -56,7 +54,7 @@ public class Deps {
 } 
 ```
 
-```
+```java
 ************** PROFILE ********************
 jdeps -P Deps.class 
 Deps.class -> /Library/Java/JavaVirtualMachines/jdk1.8.0.jdk/Contents/Home/jre/lib/rt.jar
@@ -122,7 +120,7 @@ Deps.class -> /Library/Java/JavaVirtualMachines/jdk1.8.0.jdk/Contents/Home/jre/l
 
 ### **在 linux 上构建 profile**
 
-```
+```java
 $ hg clone http://hg.openjdk.java.net/jdk8/jdk8/
 $ cd jdk8
 $ make images profiles : 

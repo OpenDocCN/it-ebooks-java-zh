@@ -1,5 +1,3 @@
-# 注解
-
 # 注解（Annotations）
 
 注解为程序提供元数据，但是，它不是程序的一部分。它们不会直接影响在注解的代码操作。
@@ -14,7 +12,7 @@
 
 格式如下：
 
-```
+```java
 @Entity 
 ```
 
@@ -22,7 +20,7 @@
 
 注解可以包含有名字或者没有名字的元素（elements），如：
 
-```
+```java
 @Author(
    name = "Benjamin Franklin",
    date = "3/27/2003"
@@ -32,14 +30,14 @@ class MyClass() { ... }
 
 或者
 
-```
+```java
 @SuppressWarnings(value = "unchecked")
 void myMethod() { ... } 
 ```
 
 当只有一个元素名字是 value 时，该名字可以省略，如：
 
-```
+```java
 @SuppressWarnings("unchecked")
 void myMethod() { ... } 
 ```
@@ -48,7 +46,7 @@ void myMethod() { ... }
 
 同一个声明可以用多个注解：
 
-```
+```java
 @Author(name = "Jane Doe")
 @EBook
 class MyClass { ... } 
@@ -56,7 +54,7 @@ class MyClass { ... }
 
 若注解包含相同的类型，则被称为重复注解(repeating annotation)：
 
-```
+```java
 @Author(name = "Jane Doe")
 @Author(name = "John Smith")
 class MyClass { ... } 
@@ -72,26 +70,26 @@ Java SE8 开始，注解也可以应用于类型使用（type use），称为类
 
 *   类实例创建表达式
 
-```
+```java
 new @Interned MyObject() 
 ```
 
 *   类型投射
 
-```
+```java
 myString = (@NonNull String) str; 
 ```
 
 *   实现条款
 
-```
+```java
 class UnmodifiableList<T> implements
         @Readonly List<@Readonly T> { ... } 
 ```
 
 *   抛出异常声明
 
-```
+```java
 void monitorTemperature() throws
         @Critical TemperatureException { ... } 
 ```
@@ -102,7 +100,7 @@ void monitorTemperature() throws
 
 假设传统的软件组在每个类的类体的开始，使用注释提供了重要的信息：
 
-```
+```java
 public class Generation3List extends Generation2List {
 
    // Author: John Doe
@@ -119,7 +117,7 @@ public class Generation3List extends Generation2List {
 
 使用注解提供一样的元数据，首先要声明一个注解类型，语法是：
 
-```
+```java
 @interface ClassPreamble {
    String author();
    String date();
@@ -137,7 +135,7 @@ public class Generation3List extends Generation2List {
 
 一旦注解定义好了，就可以在使用注解时，填充注解的值，就像这样：
 
-```
+```java
 @ClassPreamble (
    author = "John Doe",
    date = "3/17/2002",
@@ -156,7 +154,7 @@ public class Generation3List extends Generation2List {
 
 **注：**要让`@ClassPreamble`的信息出现在 Javadoc 生成的文档，必须使用`@Documented`注解定义`@ClassPreamble`
 
-```
+```java
 // import this to use @Documented
 import java.lang.annotation.*;
 
@@ -178,7 +176,7 @@ import java.lang.annotation.*;
 
 `@Deprecated`注解指示，标识的元素是废弃的(deprecated)，不应该再使用。编译器会在任何使用到`@Deprecated`的类，方法，字段的程序时产生警告。当元素是废弃的，它也应该使用 Javadoc 的 `@deprecated` 标识文档化，如下面的例子。两个 Javadoc 注释和注解中的“@”符号的使用不是巧合 - 它们是相关的概念上。另外，请注意 Javadoc 标记开始用小写字母“d”和注解开始以大写字母“D”。
 
-```
+```java
 // Javadoc comment follows
     /**
      * @deprecated
@@ -191,7 +189,7 @@ import java.lang.annotation.*;
 
 `@Override`注解通知编译器，覆盖父类声明的元素。
 
-```
+```java
 // mark method as a superclass method
 // that has been overridden
 @Override 
@@ -202,7 +200,7 @@ int overriddenMethod() { }
 
 `@SuppressWarnings`告诉编译器，抑制正常情况下会产生的特定的警告。下面的例子，一个废弃的方法被使用，编译器正常会产生警告，而这个情况下，这个注解导致警告会被抑制。
 
-```
+```java
 // use a deprecated method and tell 
 // compiler not to generate a warning
 @SuppressWarnings("deprecation")
@@ -215,7 +213,7 @@ void useDeprecatedMethod() {
 
 每个编译器的警告属于一个类别。Java 语言规范有两个类别："deprecation" 和"unchecked"。"unchecked" 会在使用以前的写的泛型的遗留代码进行交互时，产生警告。抑制更多类别的警告，使用下面的语法：
 
-```
+```java
 @SuppressWarnings({"unchecked", "deprecation"}) 
 ```
 
@@ -258,7 +256,7 @@ Java SE8 之前，注解只能用于声明，从 Java SE8 开始，注解也可�
 
 例如，要确保在你的程序中一个特定变量从未被分配到 null ,从而避免引发 NullPointerException 异常。您可以编写自定义插件来检查这一点。然后，您可以修改代码以注明这个特定变量，以表明它是永远不会分配给 null。变量声明可能是这样的：
 
-```
+```java
 @NonNull String str; 
 ```
 
@@ -276,7 +274,7 @@ Java SE8 之前，注解只能用于声明，从 Java SE8 开始，注解也可�
 
 比如，你正在编写的代码使用计时器服务，使您能够在特定的时间或在某个计划，类似于 UNIX cron 服务运行的方法。现在，你要设置一个计时器，在下午 11:00 运行的方法，doPeriodicCleanup，在每月和每周五的最后一天要设置定时运行，创建一个`@Schedule`注释，并两次将其应用到了 doPeriodicCleanup 方法。在第一次使用指定月的最后一天和第二指定星期五在下午 11 点，使用如下：
 
-```
+```java
 @Schedule(dayOfMonth="last")
 @Schedule(dayOfWeek="Fri", hour="23")
 public void doPeriodicCleanup() { ... } 
@@ -284,7 +282,7 @@ public void doPeriodicCleanup() { ... }
 
 上面的示例是将注解应用在方法上。你可以在任何使用标准的注解地方使用重复注解。例如，你有一个类来处理未授权的访问异常。有一个`@Alert`注解的类标注为管理人员和另一个用于管理员：
 
-```
+```java
 @Alert(role="Manager")
 @Alert(role="Administrator")
 public class UnauthorizedAccessException extends SecurityException { ... } 
@@ -296,7 +294,7 @@ public class UnauthorizedAccessException extends SecurityException { ... }
 
 重复注解用 @Repeatable 元注解标记。下面例子定义一个自定义的 @Schedule 重复注解：
 
-```
+```java
 import java.lang.annotation.Repeatable;
 
 @Repeatable(Schedules.class)
@@ -315,7 +313,7 @@ public @interface Schedule {
 
 容器注解类型必须有数组类型的元素 value,而数组类型的组件类型必须是重复注解类型，示例如下：
 
-```
+```java
 public @interface Schedules {
     Schedule[] value();
 } 

@@ -1,7 +1,5 @@
 # 为什么是 Observables?
 
-# 为什么是 Observables?
-
 在面向对象的架构中，开发者致力于创建一组解耦的实体。这样的话，实体就可以在不用妨碍整个系统的情况下可以被测试、复用和维护。设计这种系统就带来一个棘手的负面影响：维护相关对象之间的统一。
 
 在 Smalltalk MVC 架构中，创建模式的第一个例子就是用来解决这个问题的。用户界面框架提供一种途径使 UI 元素与包含数据的实体对象相分离，并且同时，它提供一种灵活的方法来保持它们之间的同步。
@@ -9,8 +7,6 @@
 在这本畅销的四人组编写的《设计模式——可复用面向对象软件的基础》一书中，观察者模式是最有名的设计模式之一。它是一种行为模式并提供一种以一对多的依赖来绑定对象的方法：即当一个对象发生变化时，依赖它的所有对象都会被通知并且会自动更新。
 
 在本章中，我们将会对观察者模式有一个概述，它是如何实现的以及如何用 RxJava 来扩展，Observable 是什么，以及 Observables 如何与 Iterables 相关联。
-
-# 观察者模式
 
 # 观察者模式
 
@@ -28,15 +24,11 @@
 
 # 你什么时候使用观察者模式？
 
-# 你什么时候使用观察者模式？
-
 观察者模式很适合下面这些场景中的任何一个：
 
 *   当你的架构有两个实体类，一个依赖另一个，你想让它们互不影响或者是独立复用它们时。
 *   当一个变化的对象通知那些与它自身变化相关联的未知数量的对象时。
 *   当一个变化的对象通知那些无需推断具体是谁的对象时。
-
-# RxJava 观察者模式工具包
 
 # RxJava 观察者模式工具包
 
@@ -48,8 +40,6 @@
 *   Subjects
 
 Observables 和 Subjects 是两个“生产”实体，Observers 和 Subscribers 是两个“消费”实体。
-
-# Observable
 
 # Observable
 
@@ -84,7 +74,7 @@ Observable 的生命周期包含了三种可能的易于与 Iterable 生命周�
 
 create()方法使开发者有能力从头开始创建一个 Observable。它需要一个 OnSubscribe 对象,这个对象继承 Action1,当观察者订阅我们的 Observable 时，它作为一个参数传入并执行 call()函数。
 
-```
+```java
 Observable.create(new Observable.OnSubscribe<Object>(){
         @Override
         public void call(Subscriber<? super Object> subscriber) {
@@ -95,7 +85,7 @@ Observable.create(new Observable.OnSubscribe<Object>(){
 
 Observable 通过使用 subscriber 变量并根据条件调用它的方法来和观察者通信。让我们看一个“现实世界”的例子：
 
-```
+```java
 Observable<Integer> observableString = Observable.create(new Observable.OnSubscribe<Integer>() {
         @Override
         public void call(Subscriber<? super Integer> observer) {
@@ -140,7 +130,7 @@ Subscription subscriptionPrint = observableString.subscribe(new Observer<Integer
 
 在下面的例子代码中，我们从一个已有的列表中创建一个 Observable 序列：
 
-```
+```java
 List<Integer> items = new ArrayList<Integer>();
 items.add(1);
 items.add(10);
@@ -174,7 +164,7 @@ Subscription subscriptionPrint = observableString.subscribe(new Observer<Integer
 
 如果我们已经有了一个传统的 Java 函数，我们想把它转变为一个 Observable 又改怎么办呢？我们可以用`create()`方法，正如我们先前看到的，或者我们也可以像下面那样使用以此来省去许多模板代码：
 
-```
+```java
 Observable<String> observableString = Observable.just(helloWorld());
 
 Subscription subscriptionPrint = observableString.subscribe(new Observer<String>() {
@@ -197,7 +187,7 @@ Subscription subscriptionPrint = observableString.subscribe(new Observer<String>
 
 `helloWorld()`方法比较简单，像这样：
 
-```
+```java
 private String helloWorld(){
     return "Hello World";
 } 
@@ -212,8 +202,6 @@ private String helloWorld(){
 #### Observable.empty(),Observable.never(),和 Observable.throw()
 
 当我们需要一个 Observable 毫无理由的不再发射数据正常结束时，我们可以使用`empty()`。我们可以使用`never()`创建一个不发射数据并且也永远不会结束的 Observable。我们也可以使用`throw()`创建一个不发射数据并且以错误结束的 Observable。
-
-# Subject = Observable + Observer
 
 # Subject = Observable + Observer
 
@@ -232,7 +220,7 @@ RxJava 提供四种不同的 Subject：
 
 Publish 是 Subject 的一个基础子类。让我们看看用 PublishSubject 实现传统的 Observable `Hello World`:
 
-```
+```java
 PublishSubject<String> stringPublishSubject = PublishSubject.create();
 Subscription subscriptionPrint = stringPublishSubject.subscribe(new Observer<String>() {
     @Override
@@ -261,7 +249,7 @@ stringPublishSubject.onNext("Hello World");
 
 首先，我们创建一个新的 PublishSubject 来响应它的`onNext()`方法，并且外部也可以访问它。
 
-```
+```java
 final PublishSubject<Boolean> subject = PublishSubject.create();
 
 subject.subscribe(new Observer<Boolean>() {
@@ -284,7 +272,7 @@ subject.subscribe(new Observer<Boolean>() {
 
 然后，我们创建“私有”的 Observable，只有 subject 才可以访问的到。
 
-```
+```java
 Observable.create(new Observable.OnSubscribe<Integer>() {
     @Override
     public void call(Subscriber<? super Integer> subscriber) {
@@ -309,7 +297,7 @@ Observable.create(new Observable.OnSubscribe<Integer>() {
 
 简单的说，BehaviorSubject 会首先向他的订阅者发送截至订阅前最新的一个数据对象（或初始值）,然后正常发送订阅后的数据流。
 
-```
+```java
 BehaviorSubject<Integer> behaviorSubject = BehaviorSubject.create(1); 
 ```
 
@@ -319,7 +307,7 @@ BehaviorSubject<Integer> behaviorSubject = BehaviorSubject.create(1);
 
 ReplaySubject 会缓存它所订阅的所有数据,向任意一个订阅它的观察者重发:
 
-```
+```java
 ReplaySubject<Integer> replaySubject = ReplaySubject.create(); 
 ```
 
@@ -327,11 +315,9 @@ ReplaySubject<Integer> replaySubject = ReplaySubject.create();
 
 当 Observable 完成时 AsyncSubject 只会发布最后一个数据给已经订阅的每一个观察者。
 
-```
+```java
 AsyncSubject<Integer> asyncSubject = AsyncSubject.create(); 
 ```
-
-# 总结
 
 # 总结
 

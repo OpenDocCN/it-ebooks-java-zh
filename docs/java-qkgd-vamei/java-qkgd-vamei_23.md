@@ -36,7 +36,7 @@ Java 中的事件使用对象表示，比如 ActionEvent。每个事件有作用
 
  (这个例子改编自 Core Java 2，Volume 1， Example 8-1)
 
-```
+```java
 import javax.swing.*;
 import java.awt.event.*;
 import java.awt.*;

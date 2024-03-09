@@ -1,7 +1,5 @@
 # 二、深入解析默认方法
 
-# 二、深入解析默认方法
-
 > 来源：[Java 8 新特性探究（二）深入解析默认方法](http://my.oschina.net/benhaile/blog/176007)
 
 上篇讲了 [lambda 表达式](http://www.importnew.com/14899.html)的语法，但只是 [JEP126](http://openjdk.java.net/projects/jdk8/features) 特性的一部分，另一部分就是默认方法（也称为虚拟扩展方法或防护方法）
@@ -16,7 +14,7 @@
 
 一个接口 A，Clazz 类实现了接口 A。
 
-```
+```java
 public interface A {
     default void foo(){
        System.out.println("Calling A.foo()");
@@ -57,7 +55,7 @@ public class Clazz implements A {
 
 如果想调用 A 的默认函数，则用到新语法 X.super.m(…),下面修改 C 类，实现 A 接口，重写一个 hello 方法，如下所示：
 
-```
+```java
 public class C implements A{
 
     @Override

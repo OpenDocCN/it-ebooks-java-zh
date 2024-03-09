@@ -10,7 +10,7 @@ FileChannel 不可以设置为非阻塞模式，他只能在阻塞模式下运�
 
 在使用 FileChannel 前必须打开通道，打开一个文件通道需要通过输入/输出流或者 RandomAccessFile，下面是通过 RandomAccessFile 打开文件通道的案例：
 
-```
+```java
 RandomAccessFile aFile = new RandomAccessFile("data/nio-data.txt", "rw");
 FileChannel inChannel = aFile.getChannel();
 ```
@@ -19,7 +19,7 @@ FileChannel inChannel = aFile.getChannel();
 
 读取文件通道的数据可以通过 read 方法：
 
-```
+```java
 ByteBuffer buf = ByteBuffer.allocate(48);
 int bytesRead = inChannel.read(buf);
 ```
@@ -30,7 +30,7 @@ int bytesRead = inChannel.read(buf);
 
 写数据用 write 方法，入参是 Buffer：
 
-```
+```java
 String newData = "New String to write to file..." + System.currentTimeMillis();
 
 ByteBuffer buf = ByteBuffer.allocate(48);
@@ -50,7 +50,7 @@ while(buf.hasRemaining()) {
 
 操作完毕后，需要把通道关闭：
 
-```
+```java
 channel.close();
 ```
 
@@ -58,7 +58,7 @@ channel.close();
 
 当操作 FileChannel 的时候读和写都是基于特定起始位置的（position），获取当前的位置可以用 FileChannel 的 position()方法，设置当前位置可以用带参数的 position(long pos)方法。
 
-```
+```java
 long pos channel.position();
 
 channel.position(pos +123);
@@ -70,7 +70,7 @@ channel.position(pos +123);
 
 size()方法可以返回 FileChannel 对应的文件的文件大小：
 
-```
+```java
 long fileSize = channel.size();
 ```
 
@@ -78,7 +78,7 @@ long fileSize = channel.size();
 
 利用 truncate 方法可以截取指定长度的文件：
 
-```
+```java
 channel.truncate(1024);
 ```
 
@@ -86,6 +86,6 @@ channel.truncate(1024);
 
 force 方法会把所有未写磁盘的数据都强制写入磁盘。这是因为在操作系统中出于性能考虑回把数据放入缓冲区，所以不能保证数据在调用 write 写入文件通道后就及时写到磁盘上了，除非手动调用 force 方法。 force 方法需要一个布尔参数，代表是否把 meta data 也一并强制写入。
 
-```
+```java
 channel.force(true);
 ```

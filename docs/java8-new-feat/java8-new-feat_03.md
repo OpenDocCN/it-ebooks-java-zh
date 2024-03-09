@@ -1,7 +1,5 @@
 # 三、解开 lambda 最强作用的神秘面纱
 
-# 三、解开 lambda 最强作用的神秘面纱
-
 > 来源：[Java 8 新特性探究（三）解开 lambda 最强作用的神秘面纱](http://my.oschina.net/benhaile/blog/177148)
 
 我们期待了很久 lambda 为 java 带来闭包的概念，但是如果我们不在集合中使用它的话，就损失了很大价值。现有接口迁移成为 lambda 风格的问题已经通过 default methods 解决了，在这篇文章将深入解析 Java 集合里面的批量数据操作（bulk operation），解开 lambda 最强作用的神秘面纱。
@@ -14,7 +12,7 @@ JSR 是 Java Specification Requests 的缩写，意思是 Java 规范请求,Java
 
 以前 Java 集合是不能够表达内部迭代的，而只提供了一种外部迭代的方式，也就是 for 或者 while 循环。
 
-```
+```java
 List persons = asList(new Person("Joe"), new Person("Jim"), new Person("John"));
 for (Person p :  persons) {
    p.setLastName("Doe");
@@ -25,7 +23,7 @@ for (Person p :  persons) {
 
 要描述内部迭代，我们需要用到 Lambda 这样的类库,下面利用 lambda 和 Collection.forEach 重写上面的循环
 
-```
+```java
 persons.forEach(p->p.setLastName("Doe")); 
 ```
 
@@ -47,7 +45,7 @@ persons.forEach(p->p.setLastName("Doe"));
 
 在数据流中实现过滤功能是首先我们可以想到的最自然的操作了。Stream 接口暴露了一个 filter 方法，它可以接受表示操作的[Predicate](http://javadocs.techempower.com/jdk18/api/java/util/function/Predicate.html)实现来使用定义了过滤条件的 lambda 表达式。
 
-```
+```java
 List persons = …
 Stream personsOver18 = persons.stream().filter(p -> p.getAge() > 18);//过滤 18 岁以上的人 
 ```
@@ -56,7 +54,7 @@ Stream personsOver18 = persons.stream().filter(p -> p.getAge() > 18);//过滤 18
 
 假使我们现在过滤了一些数据，比如转换对象的时候。Map 操作允许我们执行一个[Function](http://javadocs.techempower.com/jdk18/api/java/util/function/Function.html)的实现（Function<tu0002cr class="calibre23">的泛型 T,R 分别表示执行输入和执行结果），它接受入参并返回。首先，让我们来看看怎样以匿名内部类的方式来描述它：</tu0002cr>
 
-```
+```java
 Stream adult= persons
               .stream()
               .filter(p -> p.getAge() > 18)
@@ -70,7 +68,7 @@ Stream adult= persons
 
 现在，把上述例子转换成使用 lambda 表达式的写法：
 
-```
+```java
 Stream map = persons.stream()
                     .filter(p -> p.getAge() > 18)
                     .map(person -> new Adult(person)); 
@@ -80,7 +78,7 @@ Stream map = persons.stream()
 
 count 方法是一个流的终点方法，可使流的结果最终统计，返回 int，比如我们计算一下满足 18 岁的总人数
 
-```
+```java
 int countOfAdult=persons.stream()
                        .filter(p -> p.getAge() > 18)
                        .map(person -> new Adult(person))
@@ -91,7 +89,7 @@ int countOfAdult=persons.stream()
 
 collect 方法也是一个流的终点方法，可收集最终的结果
 
-```
+```java
 List adultList= persons.stream()
                        .filter(p -> p.getAge() > 18)
                        .map(person -> new Adult(person))
@@ -100,7 +98,7 @@ List adultList= persons.stream()
 
 或者，如果我们想使用特定的实现类来收集结果：
 
-```
+```java
 List adultList = persons
                  .stream()
                  .filter(p -> p.getAge() > 18)
@@ -116,13 +114,13 @@ List adultList = persons
 
 顺序流：
 
-```
+```java
 List <Person> people = list.getStream.collect(Collectors.toList()); 
 ```
 
 并行流：
 
-```
+```java
 List <Person> people = list.getStream.parallel().collect(Collectors.toList()); 
 ```
 
@@ -130,7 +128,7 @@ List <Person> people = list.getStream.parallel().collect(Collectors.toList());
 
 **3.2.1 并行流原理：**
 
-```
+```java
 List originalList = someData;
 split1 = originalList(0, mid);//将数据分小部分
 split2 = originalList(mid,end);
@@ -145,7 +143,7 @@ List revisedList = split1 + split2;//将结果合并
 
 如果是多核机器，理论上并行流则会比顺序流快上一倍，下面是测试代码
 
-```
+```java
 long t0 = System.nanoTime();
 
 //初始化一个范围 100 万整数流,求能被 2 整除的数字，toArray（）是终点方法

@@ -1,7 +1,5 @@
 # 实战 Groovy: SwingBuilder 和 Twitter API，第 1 部分
 
-# 实战 Groovy: SwingBuilder 和 Twitter API，第 1 部分
-
 *构建基于 Swing 的 GUI 从未如此简便*
 
 在这一期 [*实战 Groovy*](http://www.ibm.com/developerworks/cn/java/j-pg/) 中，Scott Davis 要讨论一个令大多数服务器端 Java™ 开发人员畏惧的主题：Swing。Groovy 的 `SwingBuilder` 可以让这个强大但复杂的 GUI 框架使用起来简单一些。
@@ -18,7 +16,7 @@
 
 ##### 清单 1\. Twitter 搜索 Atom 结果
 
-```
+```java
 <feed xml:lang="en-US" >
   <entry>
     <title>thirstyhead: New series from Andrew Glover: Java Development 2.0
@@ -50,7 +48,7 @@
 
 ##### 清单 2\. 解析 Atom 结果的 Groovy 脚本
 
-```
+```java
 if(args){
  def username = args[0]
  def addr = "http://search.twitter.com/search.atom?q=${username}"
@@ -70,7 +68,7 @@ if(args){
 
 ##### 清单 3\. 运行 searchCli.groovy 脚本
 
-```
+```java
 $ groovy searchCli thirstyhead
 
 thirstyhead (ThirstyHead.com)
@@ -97,7 +95,7 @@ Groovy 脚本很适合编写非正式的实用程序和证实概念，但是编�
 
 ##### 清单 4\. Tweet.groovy
 
-```
+```java
 class Tweet{
   String content
   String published
@@ -115,7 +113,7 @@ class Tweet{
 
 ##### 清单 5\. Search.groovy
 
-```
+```java
 class Search{
   static final String addr = "http://search.twitter.com/search.atom?q="
 
@@ -140,7 +138,7 @@ class Search{
 
 ##### 清单 6\. SearchTest.groovy
 
-```
+```java
 class SearchTest extends GroovyTestCase{
   void testSearchByKeyword(){
     def results = Search.byKeyword("thirstyhead")
@@ -156,7 +154,7 @@ class SearchTest extends GroovyTestCase{
 
 ##### 清单 7\. 成功测试的运行结果
 
-```
+```java
 $ groovy SearchTest
 .
 Time: 4.64
@@ -178,7 +176,7 @@ Groovy 的 `SwingBuilder` 并不能降低各种任务内在的复杂性，比如
 
 ##### 清单 8\. HelloJavaSwing.java
 
-```
+```java
 import javax.swing.*;
 
 public class HelloJavaSwing {
@@ -206,7 +204,7 @@ public class HelloJavaSwing {
 
 ##### 清单 9\. HelloGroovySwing.groovy
 
-```
+```java
 import groovy.swing.SwingBuilder
 import javax.swing.*
 
@@ -235,7 +233,7 @@ swingBuilder.frame(title:"Hello Groovy Swing",
 
 ##### 清单 10\. Gwitter UI 的骨架
 
-```
+```java
 import groovy.swing.SwingBuilder
 import javax.swing.*
 import java.awt.*
@@ -269,7 +267,7 @@ class Gwitter{
 
 ##### 清单 11\. 在 Gwitter 中添加 `File` 菜单
 
-```
+```java
 import groovy.swing.SwingBuilder
 import javax.swing.*
 import java.awt.*
@@ -321,7 +319,7 @@ class Gwitter{
 
 ##### 清单 12\. 添加搜索面板
 
-```
+```java
 import groovy.swing.SwingBuilder
 import javax.swing.*
 import java.awt.*
@@ -379,7 +377,7 @@ class Gwitter{
 
 ##### 清单 13\. 添加 `resultsPanel`
 
-```
+```java
 import groovy.swing.SwingBuilder
 import javax.swing.*
 import java.awt.*
@@ -454,7 +452,7 @@ Swing 的缺点在于，它期望图形设计师能够应付多线程问题，�
 
 ##### 清单 14\. 使用 `doOutside` 闭包
 
-```
+```java
 def searchPanel = {
   swingBuilder.panel(constraints: BorderLayout.NORTH){
     searchField = textField(columns:15)
@@ -479,7 +477,7 @@ def searchPanel = {
 
 ##### 清单 15\. 在 `toString()` 方法中返回 HTML
 
-```
+```java
 class Tweet{
   String content
   String published
@@ -506,7 +504,7 @@ class Tweet{
 
 ##### 清单 16\. 创建有条纹效果的 `CellRenderer`
 
-```
+```java
 import java.awt.*;
 import javax.swing.*;
 
@@ -530,7 +528,7 @@ class StripeRenderer extends DefaultListCellRenderer {
 
 ##### 清单 17\. 在 `JList` 中添加定制的 `CellRenderer`
 
-```
+```java
 def resultsPanel = {
   swingBuilder.scrollPane(constraints: BorderLayout.CENTER){
     //resultsList = list()

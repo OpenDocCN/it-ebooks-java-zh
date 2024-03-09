@@ -8,7 +8,7 @@
 
 我们沿用之前定义的 Human 类，并有一个 Test 类:
 
-```
+```java
 public class Test
 {
     public static void main(String[] args)
@@ -49,7 +49,7 @@ class Human
 
 外部可以调用类来创建对象，比如上面在 Test 类中:
 
-```
+```java
 Human aPerson = new Human(160);
 ```
 
@@ -89,7 +89,7 @@ Human aPerson = new Human(160);
 
 一个对象可以有多个引用 (一个人可以放多个风筝)。当程序通过某个引用修改对象时，通过其他引用也可以看到该修改。我们可以用以下 Test 类来测试实际效果:
 
-```
+```java
 public class Test
 {
     public static void main(String[] args)

@@ -1,7 +1,5 @@
 # 面向对象编程
 
-# 面向对象编程
-
 ## 编程的抽象
 
 我们将问题空间中的元素以及它们在方案空间的表示物称作“对象”（Object）。当然，还有一些在问题空间没有对应体的其他对象。通过添加新的对象类型，程序可进行灵活的调整，以便与特定的问题配合。与现实世界的“对象”或者“物体”相比，编程“对 象”与它们也存在共通的地方：它们都有自己的状态(state)和行为(behavior)。比如，狗的状态有名字、颜色等，狗的行为有叫唤、摇尾等。
@@ -24,7 +22,7 @@
 
 下面是一个 Bicycle (自行车)类的实现：
 
-```
+```java
 class Bicycle {
 
     int cadence = 0;
@@ -61,7 +59,7 @@ class Bicycle {
 
 下面是 BicycleDemo 类，创建两个单独的 Bicycle 对象，并调用其方法：
 
-```
+```java
 class BicycleDemo {
     /**
      * @param args
@@ -94,7 +92,7 @@ class BicycleDemo {
 
 执行程序，输出为：
 
-```
+```java
 cadence:50 speed:10 gear:2
 cadence:40 speed:20 gear:3 
 ```
@@ -111,7 +109,7 @@ cadence:40 speed:20 gear:3
 
 ![](img/light.jpg)
 
-```
+```java
 Light lt = new Light();
 lt.on(); 
 ```
@@ -122,7 +120,7 @@ lt.on();
 
 对应自行车的行为，可以定义如下接口：
 
-```
+```java
 interface Bicycle {
 
     // wheel revolutions per minute
@@ -138,7 +136,7 @@ interface Bicycle {
 
 实现该接口的类 ACMEBicycle，使用 implements 关键字：
 
-```
+```java
 class ACMEBicycle implements Bicycle {
 
     int cadence = 0;
@@ -297,7 +295,7 @@ Java 采用三个显式关键字以及一个隐式关键字来设置类边界：
 
 继承使用 extends 关键字：
 
-```
+```java
 class MountainBike extends Bicycle {
 
     // new fields and methods defining 

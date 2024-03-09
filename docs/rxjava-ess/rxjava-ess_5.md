@@ -8,8 +8,6 @@
 
 # *map 家族
 
-# *map 家族
-
 RxJava 提供了几个 mapping 函数：`map()`,`flatMap()`,`concatMap()`,`flatMapIterable()`以及`switchMap()`.所有这些函数都作用于一个可观测序列，然后变换它发射的值，最后用一种新的形式返回它们。让我们用合适的“真实世界”的例子一个个的学习下。
 
 ## Map
@@ -22,7 +20,7 @@ RxJava 的`map`函数接收一个指定的`Func`对象然后将它应用到每�
 
 我们的`loadList()`函数可以改成这样：
 
-```
+```java
 private void loadList(List<AppInfo> apps) {
     mRecyclerView.setVisibility(View.VISIBLE);
     Observable.from(apps)
@@ -93,7 +91,7 @@ RxJava 的`scan()`函数可以看做是一个累积函数。`scan()`函数对原
 
 作为一个通用的例子，给出一个累加器：
 
-```
+```java
 Observable.just(1,2,3,4,5)
         .scan((sum,item) -> sum + item)
         .subscribe(new Subscriber<Integer>() {
@@ -116,7 +114,7 @@ Observable.just(1,2,3,4,5)
 
 我们得到的结果是：
 
-```
+```java
 RXJAVA: item is: 1
 RXJAVA: item is: 3
 RXJAVA: item is: 6
@@ -127,7 +125,7 @@ RXJAVA: Sequence completed.
 
 我们也可以创建一个新版本的`loadList()`函数用来比较每个安装应用的名字从而创建一个名字长度递增的列表。
 
-```
+```java
 private void loadList(List<AppInfo> apps) {
     mRecyclerView.setVisibility(View.VISIBLE);
     Observable.from(apps)
@@ -171,8 +169,6 @@ private void loadList(List<AppInfo> apps) {
 
 # GroupBy
 
-# GroupBy
-
 拿第一个例子开始，我们安装的应用程序列表按照字母表的顺序排序。然而，如果现在我们想按照最近更新日期来排序我们的 App 时该怎么办？RxJava 提供了一个有用的函数从列表中按照指定的规则：`groupBy()`来分组元素。下图中的例子展示了`groupBy()`如何将发射的值根据他们的形状来进行分组。
 
 ![](img/chapter5_8.png)
@@ -181,7 +177,7 @@ private void loadList(List<AppInfo> apps) {
 
 为了创建一个分组了的已安装应用列表，我们在`loadList()`函数中引入了一个新的元素：
 
-```
+```java
 Observable<GroupedObservable<String,AppInfo>> groupedItems = Observable.from(apps)
     .groupBy(new Func1<AppInfo,String>(){
         @Override
@@ -196,7 +192,7 @@ Observable<GroupedObservable<String,AppInfo>> groupedItems = Observable.from(app
 
 这一点，我们已经创建了几个发射`AppInfo`数据的 Observable，用来填充我们的列表。我们想保留字母排序和分组排序。我们将创建一个新的 Observable 将所有的联系起来，像往常一样然后订阅它：
 
-```
+```java
 Observable.concat(groupedItems)
     .subscribe(new Observer<AppInfo>() {
 
@@ -225,8 +221,6 @@ Observable.concat(groupedItems)
 
 # Buffer
 
-# Buffer
-
 RxJava 中的`buffer()`函数将源 Observable 变换一个新的 Observable，这个新的 Observable 每次发射一组列表值而不是一个一个发射。
 
 ![](img/chapter5_10.png)
@@ -241,8 +235,6 @@ RxJava 中的`buffer()`函数将源 Observable 变换一个新的 Observable，�
 
 # Window
 
-# Window
-
 RxJava 的`window()`函数和`buffer()`很像，但是它发射的是 Observable 而不是列表。下图展示了`window()`如何缓存 3 个数据项并把它们作为一个新的 Observable 发射出去。
 
 ![](img/chapter5_13.png)
@@ -253,13 +245,9 @@ RxJava 的`window()`函数和`buffer()`很像，但是它发射的是 Observable
 
 # Cast
 
-# Cast
-
 RxJava 的`cast()`函数是本章中最后一个操作符。它是`map()`操作符的特殊版本。它将源 Observable 中的每一项数据都转换为新的类型，把它变成了不同的`Class`。
 
 ![](img/chapter5_15.png)
-
-# 总结
 
 # 总结
 

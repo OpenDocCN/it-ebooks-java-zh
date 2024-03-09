@@ -26,7 +26,7 @@ Java 有两类注释: implementation comments（实现注释）和 documentation
 
 块注释之首应该有一个空行，用于把块注释和代码分割开来，比如：
 
-```
+```java
  /*
      * Here is a block comment.
      */ 
@@ -34,7 +34,7 @@ Java 有两类注释: implementation comments（实现注释）和 documentation
 
 块注释可以以/*-开头，这样 indent(1)就可以将之识别为一个代码块的开始，而不会重排它。
 
-```
+```java
  /*-
      * Here is a block comment with some very special
      * formatting that I want indent(1) to ignore.
@@ -51,7 +51,7 @@ Java 有两类注释: implementation comments（实现注释）和 documentation
 
 短注释可以显示在一行内，并与其后的代码具有一样的缩进层级。如果一个注释不能在一行内写完，就该采用块注释(参见"5.1.1 块注释")。单行注释之前应该有一个空行。以下是一个 Java 代码中单行注释的例子：:
 
-```
+```java
  if (condition) {
 
         /* Handle the condition. */
@@ -65,7 +65,7 @@ Java 有两类注释: implementation comments（实现注释）和 documentation
 
 以下是一个 Java 代码中尾端注释的例子：
 
-```
+```java
  if (a == 2) {
         return TRUE;            /* special case */
     } else {
@@ -77,7 +77,7 @@ Java 有两类注释: implementation comments（实现注释）和 documentation
 
 注释界定符 `//` ，可以注释掉整行或者一行中的一部分。它一般不用于连续多行的注释文本；然而，它可以用来注释掉连续多行的代码段。以下是所有三种风格的例子：
 
-```
+```java
  if (foo > 1) {
 
         // Do a double-flip.
@@ -109,7 +109,7 @@ Java 有两类注释: implementation comments（实现注释）和 documentation
 
 文档注释描述 Java 的类、接口、构造器，方法，以及字段(field)。每个文档注释都会被置于注释定界符 `/**...*/`之中，一个注释对应一个类、接口或成员。该注释应位于声明之前：
 
-```
+```java
  /**
      * The Example class provides ...
      */

@@ -1,7 +1,5 @@
 # Chapter 1\. Introduction 介绍
 
-# Chapter 1\. Introduction 介绍
-
 ## License 协议
 
 Activiti 基于 [Apache V2](http://www.apache.org/licenses/LICENSE-2.0.txt) 协议.。Activiti Modeler 使用了不同的协议 [LGPL 2.1](http://opensource.org/licenses/LGPL-2.1)
@@ -92,7 +90,7 @@ Table 2.2\. The webapp tools
 
 另外，注意 Activiti Explorer 自动生成了 demo 用的默认用户和群组，流程定义，数据模型。要想禁用这个功能，要修改 WEB-INF/classes 目录下的 属性文件。 禁用 demo 安装，可以设置所有属性为 false 。从代码中也可以看出，我们可以单独启用或禁用每一项功能。
 
-```
+```java
 # demo data properties
 create.demo.users=true
 create.demo.definitions=true
@@ -108,7 +106,7 @@ create.demo.reports=true
 
 如果不想用 Maven，你也可以自己把这些 jar 引入到你的项目中。Activiti 下载 zip 包包含了一个 libs 目录，包含了所有 Activiti 的 jar 包（和源代码 jar 包）。依赖没有用这种方式发 布。 Activiti 引擎必须的依赖如下所示（通过 mvn dependency:tree 生成）：
 
-```
+```java
 org.activiti:activiti-engine:jar:5.17.0
 +- org.activiti:activiti-bpmn-converter:jar:5.17.0:compile
 |  \- org.activiti:activiti-bpmn-model:jar:5.17.0:compile
@@ -151,13 +149,13 @@ Activiti 流程引擎的配置文件是名为 activiti.cfg.xml 文件。 注意�
 
 获得 ProcessEngine 最简单的办法是 使用 org.activiti.engine.ProcessEngines 类：
 
-```
+```java
 ProcessEngine processEngine = ProcessEngines.getDefaultProcessEngine() 
 ```
 
 它会在 classpath 下搜索 activiti.cfg.xml， 并基于这个文件中的配置构建引擎。 下面代码展示了实例配置。 后面的章节会给出配置参数的详细介绍。
 
-```
+```java
 <beans 
 
        xsi:schemaLocation="http://www.springframework.org/schema/beans   http://www.springframework.org/schema/beans/spring-beans.xsd">
@@ -186,7 +184,7 @@ ProcessEngine processEngine = ProcessEngines.getDefaultProcessEngine()
 
 配置文件中使用的 ProcessEngineConfiguration 可以通过编程方式创建。 可以使用不同的 bean id（比如，例子第三行）。
 
-```
+```java
 ProcessEngineConfiguration.createProcessEngineConfigurationFromResourceDefault();
 ProcessEngineConfiguration.createProcessEngineConfigurationFromResource(String resource);
 ProcessEngineConfiguration.createProcessEngineConfigurationFromResource(String resource, String beanName);
@@ -196,14 +194,14 @@ ProcessEngineConfiguration.createProcessEngineConfigurationFromInputStream(Input
 
 也可以不使用配置文件，基于默认创建配置 （参考[各种支持类](http://www.activiti.org/userguide/index.html#configurationClasses)）
 
-```
+```java
 ProcessEngineConfiguration.createStandaloneProcessEngineConfiguration();
 ProcessEngineConfiguration.createStandaloneInMemProcessEngineConfiguration(); 
 ```
 
 所有这些 ProcessEngineConfiguration.createXXX() 方法都返回 ProcessEngineConfiguration，后续可以调整成所需的对象。 在调用 buildProcessEngine() 后， 就会创建一个 ProcessEngine：
 
-```
+```java
 ProcessEngine processEngine = ProcessEngineConfiguration.createStandaloneInMemProcessEngineConfiguration()
   .setDatabaseSchemaUpdate(ProcessEngineConfiguration.DB_SCHEMA_UPDATE_FALSE)
   .setJdbcUrl("jdbc:h2:mem:my-own-db;DB_CLOSE_DELAY=1000")
@@ -218,7 +216,7 @@ ProcessEngine processEngine = ProcessEngineConfiguration.createStandaloneInMemPr
 
 activiti.cfg.xml 必须包含一个 bean, id 为'processEngineConfiguration'。
 
-```
+```java
 <bean id="processEngineConfiguration" class="org.activiti.engine.impl.cfg.StandaloneProcessEngineConfiguration"> 
 ```
 
@@ -249,7 +247,7 @@ activiti.cfg.xml 必须包含一个 bean, id 为'processEngineConfiguration'。
 
 数据配置示例:
 
-```
+```java
 <property name="jdbcUrl" value="jdbc:h2:mem:activiti;DB_CLOSE_DELAY=1000" />
 <property name="jdbcDriver" value="org.h2.Driver" />
 <property name="jdbcUsername" value="sa" />
@@ -259,7 +257,7 @@ activiti.cfg.xml 必须包含一个 bean, id 为'processEngineConfiguration'。
 也可以使用 javax.sql.DataSource 实现 （比如，[Apache Commons](http://commons.apache.org/
 dbcp/) 的 DBCP）：
 
-```
+```java
 <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" > 
  <property name="driverClassName" value="com.mysql.jdbc.Driver" />  
  <property name="url" value="jdbc:mysql://localhost:3306/activiti" />  
@@ -289,7 +287,7 @@ dbcp/) 的 DBCP）：
 
 要想把 Activiti Explorer 和 Activiti Rest 应用从 db.properties 转换为使用 JNDI 数据库配 置，需要打开原始的 Spring 配置文件 （activiti-webapp-explorer2/src/main/webapp/WEBINF/activiti-standalone-context.xml 和 activiti-webapp-rest2/src/main/resources/ activiti-context.xml）， 删除"dbProperties"和"dataSource"两个 bean，然后添加如下 bean：
 
-```
+```java
 <bean id="dataSource" class="org.springframework.jndi.JndiObjectFactoryBean">    
 <property name="jndiName" value="java:comp/env/jdbc/activitiDB"/>
 </bean> 
@@ -297,7 +295,7 @@ dbcp/) 的 DBCP）：
 
 接下来，我们需要添加包含了默认的 H2 配置的 context.xml 文件。 如果已经有了 JNDI 配置， 会覆盖这些配置。 对 Activiti Explorer 来说，对应的配置文件 activiti-webapp-explorer2/src/main/webapp/META-INF/context.xml 如下所示：
 
-```
+```java
 <Context antiJARLocking="true" path="/activiti-explorer2">
     <Resource auth="Container"
               name="jdbc/activitiDB"
@@ -318,7 +316,7 @@ dbcp/) 的 DBCP）：
 
 对于 Activiti REST web 应用，添加的 activiti-webapp-rest2/src/main/webapp/META-INF/context.xml 如下所示：
 
-```
+```java
 <?xml version="1.0" encoding="UTF-8"?>
 <Context antiJARLocking="true" path="/activiti-rest2">
     <Resource auth="Container"
@@ -346,7 +344,7 @@ JNDI 数据库配置会因为你使用的 Servlet 容器 不同而不同。 下�
 
 如果使用 Tomcat，JNDI 资源配置在 $CATALINA_BASE/conf/[enginename]/[hostname]/[warname].xml （对于 Activiti Explorer 来说，通常是在 $CATALINA_BASE/conf/ Catalina/localhost/activiti-explorer.war）。 当应用第一次发布时，会把这个文件从 war 中复制出来。 所以如果这个文件已经存在了，你需要替换它。要想修改 JNDI 资源让应用连接 mysql 而不是 H2，可以像下面这样修改：
 
-```
+```java
 <?xml version="1.0" encoding="UTF-8"?>
     <Context antiJARLocking="true" path="/activiti-explorer2">
         <Resource auth="Container"
@@ -395,7 +393,7 @@ Table 3.1\. Supported databases
 
 不过，一般情况只有数据库管理员才能执行 DDL 语句。 在生产环境，这也是最明智的选择。SQL DDL 语句可以从 Activiti 下载页或 Activiti 发布目录里找到，在 database 子目录下。 脚本 也包含在引擎的 jar 中(activiti-engine-x.jar)， 在 org/activiti/db/create 包下（drop 目录里是删除语句）。 SQL 文件的命名方式如下
 
-```
+```java
 activiti.{db}.{create|drop}.{type}.sql 
 ```
 
@@ -437,7 +435,7 @@ Activiti 的表都以 ACT_ 开头。 第二部分是表示表的用途的两个�
 
 要升级，你要把下面的配置 放到 activiti.cfg.xml 配置文件里：
 
-```
+```java
 <beans ... >
 
   <bean id="processEngineConfiguration" class="org.activiti.engine.impl.cfg.StandaloneProcessEngineConfiguration">
@@ -467,7 +465,7 @@ JobExecutor 是管理一系列线程的组件，可以触发定时器（也包�
 
 默认，JobExecutor 在流程引擎启动时就会激活。 如果不想在流程引擎启动后自动激活 JobExecutor，可以设置
 
-```
+```java
 <property name="jobExecutorActivate" value="false" /> 
 ```
 
@@ -481,7 +479,7 @@ AsyncExecutor 是管理线程池的组件，可以触发定时器和异步任务
 
 默认，AsyncExecutor 是不启用的，由于遗留原因使用的是 JobExecutor。不过建议使用新的 AsyncExecutor 来代替。可以通过定义两个属性
 
-```
+```java
 <property name="asyncExecutorEnabled" value="true" />
 <property name="asyncExecutorActivate" value="true" /> 
 ```
@@ -500,7 +498,7 @@ asyncExecutorEnabled 属性启用 Async executor 代替旧的 Job executor。第
 
 可以选择定制历史存储的配置。你可以通过配置影响引擎的历史功能。 参考 History configuration 配置这一节。
 
-```
+```java
 <property name="history" value="audit" /> 
 ```
 
@@ -516,13 +514,13 @@ asyncExecutorEnabled 属性启用 Async executor 代替旧的 Job executor。第
 
 所有流程定义都被缓存了（解析之后）避免每次使用前都要访问数据库， 因为流程定义数据是不会改变的。 默认，不会限制这个缓存。如果想限制流程定义缓存，可以添加如下配置
 
-```
+```java
 <property name="processDefinitionCacheLimit" value="10" /> 
 ```
 
 这个配置会把默认的 hashmap 缓存替换成 LRU 缓存，来提供限制。 当然，这个配置的最佳值跟流程定义的总数有关， 实际使用中会具体使用多少流程定义也有关。 也你可以注入自己的缓存实现。这个 bean 必须实现 org.activiti.engine.impl.persistence.deploy.DeploymentCache 接口：
 
-```
+```java
 <property name="processDefinitionCache">
   <bean class="org.activiti.MyCache" />
 </property> 
@@ -544,7 +542,7 @@ activiti-explorer 和 activiti-rest 应用都使用了 Log4j 绑定。执行所�
 
 **特别提醒如果容器 classpath 中存在 commons-logging**： 为了把 spring 日志转发给 SLF4J，需要使用桥接（参考 [`www.slf4j.org/legacy.html#jclOverSLF4J`](http://www.slf4j.org/legacy.html#jclOverSLF4J)）。 如果你的容器提 供了 commons-logging 实现，请参考下面网页： [`www.slf4j.org/codes.html#release`](http://www.slf4j.org/codes.html#release) 来确保稳定性。 使用 Maven 的实例（忽略版本）：
 
-```
+```java
 <dependency>
   <groupId>org.slf4j</groupId>
   <artifactId>slf4j-log4j12</artifactId>
@@ -557,7 +555,7 @@ activiti-explorer 和 activiti-rest 应用都使用了 Log4j 绑定。执行所�
 
 使用 Maven 的实例（忽略版本）：
 
-```
+```java
 <dependency>
   <groupId>org.slf4j</groupId>
   <artifactId>jcl-over-slf4j</artifactId>
@@ -576,7 +574,7 @@ activiti-explorer 和 activiti-rest 应用都使用了 Log4j 绑定。执行所�
 
 默认不会记录这些信息。可以配置日志使用期望的格式来显示它们，扩展通常的日志信息。比如，下面的 log4j 配置定义会让日志显示上面提及的信息：
 
-```
+```java
 log4j.appender.consoleAppender.layout.ConversionPattern =ProcessDefinitionId=%X{mdcProcessDefinitionID}
 executionId=%X{mdcExecutionId} mdcProcessInstanceID=%X{mdcProcessInstanceID} mdcBusinessKey=%X{mdcBusinessKey} %m%n" 
 ```
@@ -597,7 +595,7 @@ Activiti 5.15 中实现了一种事件机制。它允许在引擎触发事件时
 
 实现事件监听器的唯一要求是实现 org.activiti.engine.delegate.event.ActivitiEventListener。 西面是一个实现监听器的例子，它会把所有监听到的事件打印到标准输出中，包括 job 执行的事件异常：
 
-```
+```java
 public class MyEventListener implements ActivitiEventListener {
 
   @Override
@@ -636,7 +634,7 @@ isFailOnException() 方法决定了当事件分发时，onEvent(..) 方法抛出
 
 eventListeners 属性需要 org.activiti.engine.delegate.event.ActivitiEventListener 的队列。 通常，我们可以声明一个内部的 bean 定义，或使用 ref 引用已定义的 bean。 下面的代码，向配置添加了一个事件监听器，任何事件触发时都会提醒它，无论事件是什么类型：
 
-```
+```java
 <bean id="processEngineConfiguration" class="org.activiti.engine.impl.cfg.StandaloneProcessEngineConfiguration">
     ...
     <property name="eventListeners">
@@ -649,7 +647,7 @@ eventListeners 属性需要 org.activiti.engine.delegate.event.ActivitiEventList
 
 为了监听特定类型的事件，可以使用 typedEventListeners 属性，它需要一个 map 参数。 map 的 key 是逗号分隔的事件名（或单独的事件名）。 map 的 value 是 org.activiti.engine.delegate.event.ActivitiEventListener 队列。 下面的代码演示了向配置中添加一个事件监听器，可以监听 job 执行成功或失败：
 
-```
+```java
 <bean id="processEngineConfiguration" class="org.activiti.engine.impl.cfg.StandaloneProcessEngineConfiguration">
     ...
     <property name="typedEventListeners">
@@ -670,7 +668,7 @@ eventListeners 属性需要 org.activiti.engine.delegate.event.ActivitiEventList
 
 可以通过 API（RuntimeService）在运行阶段添加或删除额外的事件监听器
 
-```
+```java
 /**
  * Adds an event-listener which will be notified of ALL events by the dispatcher.
  * @param listenerToAdd the listener to add
@@ -702,7 +700,7 @@ void addEventListener(ActivitiEventListener listenerToAdd, ActivitiEventType... 
 
 下面代码为一个流程定义添加了两个监听器。第一个监听器会接收所有类型的事件，它是通过全类名定义的。 第二个监听器只接收作业成功或失败的事件，它使用了定义在流程引擎配置中的 beans 属性中的一个 bean。
 
-```
+```java
 <process id="testEventListeners">
   <extensionElements>
     <activiti:eventListener class="org.activiti.engine.test.MyEventListener" />
@@ -716,7 +714,7 @@ void addEventListener(ActivitiEventListener listenerToAdd, ActivitiEventType... 
 
 对于实体相关的事件，也可以设置为针对某个流程定义的监听器，实现只监听发生在某个流程定义上的某个类型实体事件。 下面的代码演示了如何实现这种功能。可以用于所有实体事件（第一个例子），也可以只监听特定类型的事件（第二个例子）
 
-```
+```java
 <process id="testEventListeners">
   <extensionElements>
     <activiti:eventListener class="org.activiti.engine.test.MyEventListener" entityType="task" />
@@ -730,7 +728,7 @@ void addEventListener(ActivitiEventListener listenerToAdd, ActivitiEventType... 
 
 entityType 支持的值有：attachment, comment, execution,identity-link, job, process-instance, process-definition, task。
 
-```
+```java
 <process id="testEventListeners">
   <extensionElements>
     <activiti:eventListener class="org.activiti.engine.test.MyEventListener" entityType="task" />
@@ -748,7 +746,7 @@ entityType 支持的值有：attachment, comment, execution,identity-link, job, 
 
 另一种处理事件的方法是抛出一个 BPMN 事件。请注意它只针对与抛出一个 activiti 事件类型的 BPMN 事件。 比如，抛出一个 BPMN 事件，在流程实例删除时，会导致一个错误。 下面的代码演示了如何在流程实例中抛出一个 signal，把 signal 抛出到外部流程（全局），在流程实例中抛出一个消息事件， 在流程实例中抛出一个错误事件。除了使用 class 或 delegateExpression， 还使用了 throwEvent 属性，通过额外属性，指定了抛出事件的类型。
 
-```
+```java
  <process id="testEventListeners">
       <extensionElements>
         <activiti:eventListener throwEvent="signal" signalName="My signal" events="TASK_ASSIGNED" />
@@ -756,7 +754,7 @@ entityType 支持的值有：attachment, comment, execution,identity-link, job, 
     </process> 
 ```
 
-```
+```java
  <process id="testEventListeners">
       <extensionElements>
         <activiti:eventListener throwEvent="globalSignal" signalName="My signal" events="TASK_ASSIGNED" />
@@ -764,7 +762,7 @@ entityType 支持的值有：attachment, comment, execution,identity-link, job, 
     </process> 
 ```
 
-```
+```java
  <process id="testEventListeners">
       <extensionElements>
         <activiti:eventListener throwEvent="message" messageName="My message" events="TASK_ASSIGNED" />
@@ -772,7 +770,7 @@ entityType 支持的值有：attachment, comment, execution,identity-link, job, 
     </process> 
 ```
 
-```
+```java
  <process id="testEventListeners">
       <extensionElements>
         <activiti:eventListener throwEvent="error" errorCode="123" events="TASK_ASSIGNED" />
@@ -793,7 +791,7 @@ entityType 支持的值有：attachment, comment, execution,identity-link, job, 
 
 我们提供了通过 API 使用事件机制的方法，允许大家触发定义在引擎中的任何自定义事件。 建议（不强制）只触发类型为 CUSTOM 的 ActivitiEvents。可以通过 RuntimeService 触发事件：
 
-```
+```java
 /**
  * Dispatches the given event to any listeners that are registered.
  * @param event event to dispatch.
@@ -868,7 +866,7 @@ Table 1\. Supported events
 
 ![](img/879dc365.png)
 
-```
+```java
 ProcessEngine processEngine = ProcessEngines.getDefaultProcessEngine();
 
 RuntimeService runtimeService = processEngine.getRuntimeService();
@@ -920,7 +918,7 @@ ProcessEngines 会扫描所有 activiti.cfg.xml 和 activiti-context.xml 文件�
 
 Activiti 中的基础异常为 org.activiti.engine.ActivitiException，一个非检查异常。 这个异常可以在任何时候被 API 抛出，不过特定方法抛出的“特定”的异常都记录在 [javadocs](http://www.activiti.org/javadocs/index.html)中。 例如，下面的 TaskService：
 
-```
+```java
 /**
  * Called when the task is successfully executed.
  * @param taskId the id of the task to complete, cannot be null.
@@ -956,7 +954,7 @@ Activiti 中的基础异常为 org.activiti.engine.ActivitiException，一个非
 
 在 src/test/resources/org/activiti/test 目录下创建一个新的 xml 文件 VacationRequest.bpmn20.xml（如果不使用单元测试模板，你也可以在任何地方创建）， 内容如下。注意这一章不会解释例子中使用的 xml 结构。 如果有需要可以先阅读 bpmn 2.0 章来了解这些。
 
-```
+```java
 <?xml version="1.0" encoding="UTF-8" ?>
 <definitions id="definitions"
              targetNamespace="http://activiti.org/bpmn20" 
@@ -1045,7 +1043,7 @@ Activiti 中的基础异常为 org.activiti.engine.ActivitiException，一个非
 
 为了让 Activiti 引擎知道这个流程，我们必须先进行“部署”。 部署意味着引擎会把 BPMN 2.0 xml 解析成可以执行的东西， “部署包”中的所有流程定义都会添加到数据库中。 这样，当引擎重启时，它依然可以获得“已部署”的流程：
 
-```
+```java
 ProcessEngine processEngine = ProcessEngines.getDefaultProcessEngine();
 RepositoryService repositoryService = processEngine.getRepositoryService();
 repositoryService.createDeployment()
@@ -1063,7 +1061,7 @@ Log.info("Number of process definitions: " + repositoryService.createProcessDefi
 
 所有与流程运行状态相关的东西都可以通过 **RuntimeService** 获得。 有很多方法可以启动一个新流程实例。在下面的代码中，我们使用定义在流程定义 xml 中的 key 来启动流程实例。 我们也可以在流程实例启动时添加一些流程变量，因为第一个用户任务的表达式需要这些变量。 流程变量经常会被用到，因为它们赋予来自同一个流程定义的不同流程实例的特别含义。 简单来说，流程变量是区分流程实例的关键。
 
-```
+```java
 Map<String, Object> variables = new HashMap<String, Object>();
 variables.put("employeeName", "Kermit");
 variables.put("numberOfDays", new Integer(4));
@@ -1080,7 +1078,7 @@ Log.info("Number of process instances: " + runtimeService.createProcessInstanceQ
 
 流程启动后，第一步就是用户任务。这是必须由系统用户处理的一个环节。 通常，用户会有一个“任务列表”，展示了所有须由整个用户处理的任务。 下面的代码展示了对应的查询可能是怎样的：
 
-```
+```java
 // Fetch all tasks for the management group
 TaskService taskService = processEngine.getTaskService();
 List<Task> tasks = taskService.createTaskQuery().taskCandidateGroup("management").list();
@@ -1091,7 +1089,7 @@ for (Task task : tasks) {
 
 为了让流程实例继续运行，我们需要完成整个任务。对 Activiti 来说，就是需要 complete 任务。 下面的代码展示了如何做这件事：
 
-```
+```java
 Task task = tasks.get(0);
 
 Map<String, Object> taskVariables = new HashMap<String, Object>();
@@ -1106,7 +1104,7 @@ taskService.complete(task.getId(), taskVariables);
 
 我们可以挂起一个流程定义。当挂起流程定时时， 就不能创建新流程了（会抛出一个异常）。 可以通过 RepositoryService 挂起一个流程
 
-```
+```java
 repositoryService.suspendProcessDefinitionByKey("vacationRequest");
 try {
   runtimeService.startProcessInstanceByKey("vacationRequest");
@@ -1127,7 +1125,7 @@ try {
 
 有两种方法可以从引擎中查询数据：查询 API 和原生查询。查询 API 提供了完全类型安全的 API。 你可以为自己的查询条件添加很多条件 （所有条件都以 AND 组合）和精确的排序条件。下面的代码展示了一个例子：
 
-```
+```java
 List<Task> tasks = taskService.createTaskQuery()
          .taskAssignee("kermit")
          .processVariableValueEquals("orderId", "0815")
@@ -1137,7 +1135,7 @@ List<Task> tasks = taskService.createTaskQuery()
 
 有时，你需要更强大的查询，比如使用 OR 条件或不能使用查询 API 实现的条件。 这时，我们推荐原生查询，它让你可以编写自己的 SQL 查询。 返回类型由你使用的查询对象决定，数据会映射到正确的对象上。比如，任务，流程实例，执行，等等。 因为查询会作用在数据库上，你必须使用数据库中定义的表名和列名；这要求了解内部数据结构， 因此使用原生查询 时一定要注意。表名可以通过 API 获得，可以尽量减少对数据库的依赖。
 
-```
+```java
 List<Task> tasks = taskService.createNativeTaskQuery()
     .sql("SELECT count(*) FROM " + managementService.getTableName(Task.class) + " T WHERE T.NAME_ = #{taskName}")
     .parameter("taskName", "gonzoTask")
@@ -1159,13 +1157,13 @@ long count = taskService.createNativeTaskQuery()
 
 任何 startProcessInstanceXXX 方法都有一个可选的参数来提供变量，当流程实例创建和开始时。例如, RuntimeService:
 
-```
+```java
 ProcessInstance startProcessInstanceByKey(String processDefinitionKey, Map<String, Object> variables); 
 ```
 
 在流程执行时可以添加变量。例如(RuntimeService):
 
-```
+```java
 void setVariable(String executionId, String variableName, Object value);
 void setVariableLocal(String executionId, String variableName, Object value);
 void setVariables(String executionId, Map<String, ? extends Object> variables);
@@ -1176,7 +1174,7 @@ void setVariablesLocal(String executionId, Map<String, ? extends Object> variabl
 
 变量也可以再次获取,如下所示。注意,类似的方法在 TaskService 存在。这意味着任务跟执行一样,可以使用局部变量,为了任务的持续时间 而 alive (存活)。
 
-```
+```java
 Map<String, Object> getVariables(String executionId);
 Map<String, Object> getVariablesLocal(String executionId);
 Map<String, Object> getVariables(String executionId, Collection<String> variableNames);
@@ -1187,7 +1185,7 @@ Object getVariable(String executionId, String variableName);
 
 变量 经常使用在 [Java delegates](http://www.activiti.org/userguide/index.html#bpmnJavaServiceTask), 表达式, execution- 或者 tasklisteners ,脚本,等等。在这些结构,当前执行或任务对象是可用的,它可以用于变量设置和/或检索。最简单的方法是:
 
-```
+```java
 execution.getVariables();
 execution.getVariables(Collection<String> variableNames);
 execution.getVariable(String variableName);
@@ -1202,7 +1200,7 @@ execution.setVariable(String variableName, Object value);
 
 当然,当使用大量的变量或者只是当您想要严格控制数据库查询和交互的时候,这是不合适的。Activiti 5.17 以来,新方法介绍了给一个更严格的控制,通过添加一个可选参数的新方法,告诉引擎是否需要在幕后将所有变量获取并缓存:
 
-```
+```java
 Map<String, Object> getVariables(Collection<String> variableNames, boolean fetchAllVariables);
 Object getVariable(String variableName, boolean fetchAllVariables);
 void setVariable(String variableName, Object value, boolean fetchAllVariables); 
@@ -1250,7 +1248,7 @@ Activiti 支持 JUnit 3 和 4 进行单元测试。使用 JUnit 3 时， 必须�
 
 把这些放在一起，JUnit 3 测试看起来像这样。
 
-```
+```java
 public class MyBusinessProcessTest extends ActivitiTestCase {
 
   @Deployment
@@ -1270,7 +1268,7 @@ public class MyBusinessProcessTest extends ActivitiTestCase {
 
 下面的代码演示了 JUnit 4 单元测试并使用了 ActivitiRule 的例子。
 
-```
+```java
 public class MyBusinessProcessTest {
 
   @Rule
@@ -1330,7 +1328,7 @@ org.h2.tools.Server.createWebServer("-web").start()
 
 ProcessEngine 是线程安全的， 可以在多线程下共享。在 web 应用中， 意味着可以在容器启动时创建流程引擎， 在容器关闭时关闭流程引擎。 下面代码演示了如何编写一个 ServletContextListener 在普通的 Servlet 环境下初始化和销毁流程引擎：
 
-```
+```java
 public class ProcessEnginesServletContextListener implements ServletContextListener {
 
   public void contextInitialized(ServletContextEvent servletContextEvent) {
@@ -1346,13 +1344,13 @@ public class ProcessEnginesServletContextListener implements ServletContextListe
 
 contextInitialized 方法会执行 ProcessEngines.init()。 这会查找 classpath 下的 activiti.cfg.xml 文 件， 根据配置文件创建一个 ProcessEngine（比如，多个 jar 中都包含配置文件）。 如果 classpath 中包含多个配置文件，确认它们有不同的名字。 当需要使用流程引擎时，可以通过
 
-```
+```java
 ProcessEngines.getDefaultProcessEngine() 
 ```
 
 或者
 
-```
+```java
 ProcessEngines.getProcessEngine("myName"); 
 ```
 

@@ -8,7 +8,7 @@
 
 `loop` / `recur` 组合把一个看似递归的调用变成一个迭代 — 迭代不需要占用栈空间。 `loop` special form 跟 `let` special form 类似的地方是它们都会建立一个本地 binding，但是同时它也建立一个递归点， 而这个递归点就是 recur 的参数里面的那个函数。 `loop` 给这些 binding 一个初始值。对 `recur` 的调用使得程序的控制权返回给 `loop` 并且给那些本地 binding 赋了新的值。给 recur 传递的参数一定要和 loop 所创建的 binding 的个数一样。同样 recur 只能出现在 loop 这个 special form 的最后一行。
 
-```
+```java
 (defn factorial-1 [number]
   "computes the factorial of a positive integer
    in a way that doesn't consume stack space"
@@ -24,7 +24,7 @@
 
 另外一种实现 factorial 函数的方法是使用 `reduce` 函数。这个我们在 “集合” 那一节就已经介绍过了。它支持一种更加“函数”的方式来做这个事情。不过不幸的是，在这种情况下，它的效率要低一点。注意一下 `range` 函数返回一个数字的范围， 这个范围包括它的左边界，但是不包括它的右边界。
 
-```
+```java
 (defn factorial-2 [number] (reduce * (range 2 (inc number))))
 
 (println (time (factorial-2 5))) ; -> "Elapsed time: 0.335 msecs"\n120 

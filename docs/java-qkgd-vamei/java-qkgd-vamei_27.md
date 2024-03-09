@@ -12,7 +12,7 @@ HTTP 协议是按照“请求-响应”的方式工作。Play 框架的核心是
 
 在项目的根目录下，使用命令：
 
-```
+```java
 play eclipse
 ```
 
@@ -32,7 +32,7 @@ Java 是静态语言，可以在编译时就决定对象的类型，因此能方
 
 URL 路由是一个文件，即项目根目录下的 conf/routes。文件的每一行是一条记录，规定了某个 URL 的对应动作。比如：
 
-```
+```java
 # Home page
 GET     /                           controllers.Application.index()
 ```
@@ -43,7 +43,7 @@ GET     /                           controllers.Application.index()
 
 我对默认生成的 Application.java 略作修改。新的 app/controllers/Application.java 为：
 
-```
+```java
 package controllers;
 
 import play.*;
@@ -70,7 +70,7 @@ public class Application extends Controller {
 
 根据 network 工具的监视，响应的状态码为 200。响应的类型为 text/plain。这是 ok()生成 Result 对象时自动决定的。我可以手动控制响应类型，比如将 index()的返回语句改为：
 
-```
+```java
 return ok("Hello World!").as("text/html");
 ```
 
@@ -80,7 +80,7 @@ return ok("Hello World!").as("text/html");
 
 除了 ok()之外，Play 还提供了其他的一些便捷方法，用以生成不同状态的响应。这些方法的名字和状态的名字相同，比如：
 
-```
+```java
 return badRequest("bad request"); // 400, 坏请求
 return unauthorized("You are forbidden"); // 401, 未授权
 return redirect("/new");    // 303, 重新定向
@@ -90,7 +90,7 @@ return redirect("/new");    // 303, 重新定向
 
 此外，我还可以直接使用 status()来说明数字形式的状态码
 
-```
+```java
 return status(200, "good");
 ```
 
@@ -100,7 +100,7 @@ return status(200, "good");
 
 在上面的控制器 Application 中，增加一个新的动作，用于显示
 
-```
+```java
 <p>See you!</p>
 ```
 
@@ -110,13 +110,13 @@ return status(200, "good");
 
 URL 路由是由一行一行的记录组成的。上面我们看到了 GET 方法，还可以是其它 HTTP 方法，比如 POST：
 
-```
+```java
 POST    /somePost                   controllers.Application.somePost()
 ```
 
 我要在 Application 类中增加 somePost()动作来处理该请求，比如：
 
-```
+```java
 public static Result somePost() {
     return ok("posted");
 }
@@ -126,7 +126,7 @@ POST 方法常用于向服务器提交数据。我将在以后深入。
 
 url 还可以有用户定义的变量，从而让一行记录对应不止一个请求，比如：
 
-```
+```java
 GET    /record/:id            controllers.Application.record(id: Long)
 ```
 
@@ -136,7 +136,7 @@ GET    /record/:id            controllers.Application.record(id: Long)
 
 相应的 record()动作为：
 
-```
+```java
 public static Result record(Long id) {
     return ok("record:" + id.toString());
 }
@@ -146,7 +146,7 @@ public static Result record(Long id) {
 
 除了":"之外，还有另一个提示符"*"。与":"不同，"*"表示的区间不受"/"限制。
 
-```
+```java
 GET    /newRecord/*name           controllers.Application.newRecord(name: String)
 ```
 

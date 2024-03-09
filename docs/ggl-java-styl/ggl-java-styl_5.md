@@ -48,7 +48,7 @@
 
 每个常量都是一个静态 final 字段，但不是所有静态 final 字段都是常量。在决定一个字段是否是一个常量时， 考虑它是否真的感觉像是一个常量。例如，如果任何一个该实例的观测状态是可变的，则它几乎肯定不会是一个常量。 只是永远不`打算`改变对象一般是不够的，它要真的一直不变才能将它示为常量。
 
-```
+```java
 // Constants
 static final int NUMBER = 5;
 static final ImmutableList<String> NAMES = ImmutableList.of("Ed", "Ann");
@@ -120,7 +120,7 @@ static final String[] nonEmptyArray = {"these", "can", "change"};
 
 示例：
 
-```
+```java
 Prose form                Correct               Incorrect
 ------------------------------------------------------------------
 "XML HTTP request"        XmlHttpRequest        XMLHTTPRequest

@@ -12,7 +12,7 @@
 
 Javadoc 块的基本格式如下所示：
 
-```
+```java
 /**
  * Multiple lines of Javadoc text are written here,
  * wrapped normally...
@@ -22,7 +22,7 @@ public int method(String p1) { ... }
 
 或者是以下单行形式：
 
-```
+```java
 /** An especially short bit of Javadoc. */ 
 ```
 

@@ -43,7 +43,7 @@
 
 例如：
 
-```
+```java
 String unitAbbrev = "μs";                                 | 赞，即使没有注释也非常清晰
 String unitAbbrev = "\u03bcs"; // "μs"                    | 允许，但没有理由要这样做
 String unitAbbrev = "\u03bcs"; // Greek letter mu, "s"    | 允许，但这样做显得笨拙还容易出错

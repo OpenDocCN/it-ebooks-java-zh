@@ -12,7 +12,7 @@
 
 包的建立非常简单。我们只用在 Java 程序的开始加入 package 就可以了。我们以 Human 类为例，将它放入包中:
 
-```
+```java
 package com.vamei.society;
 
 public class Human
@@ -64,7 +64,7 @@ package com.vamei.society;
 
 如果整个包(也就是 com 文件夹)位于当前的工作路径中，那么不需要特别的设置，就可以使用包了，比如下面的 TestAgain.java:
 
-```
+```java
 import com.vamei.society.*;
 
 public class TestAgain
@@ -82,7 +82,7 @@ import 用于识别路径。利用 import 语句，我们可以引入相应路�
 
 我们也可以提供类的完整的路径。这可以区分同名但不同路径的类，比如:
 
-```
+```java
 public class TestAgain
 {
     public static void main(String[] args)

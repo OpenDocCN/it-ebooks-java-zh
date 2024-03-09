@@ -22,7 +22,7 @@ Gradle 运用了领域驱动的设计理念（DDD）来给自己的领域构建�
 
 Project 实例允许你访问你项目所有的 Gradle 特性，比如任务的创建和依赖了管理，记住一点当访问你项目的属性和方法时你并不需要显式的使用 project 变量--Gradle 假定你的意思是 Project 实例，看看下面这个例子：
 
-```
+```java
     //没有使用 project 变量来设置项目的描述
     setDescription("myProject")
     //使用 Grovvy 语法来访问名字和描述
@@ -45,7 +45,7 @@ Project 实例允许你访问你项目所有的 Gradle 特性，比如任务的�
 
 外部属性一般存储在键值对中，要添加一个属性，你需要使用 ext 命名空间，看一个例子：
 
-```
+```java
     //Only initial declaration of extra property requires you to use ext namespace
     project.ext.myProp = 'myValue'
     ext {
@@ -60,14 +60,14 @@ Project 实例允许你访问你项目所有的 Gradle 特性，比如任务的�
 
 相似的，外部属性可以定义在一个属性文件中： 通过在<user_home>/.gradle 路径或者项目根目录下的 gradle.properties 文件来定义属性可以直接注入到你的项目中，他们可以通过 project 实例来访问，注意<user_home>/.gradle 目录下只能有一哥 Gradle 属性文件即使你有多个项目，在属性文件中定义的属性可以被所有的项目访问，假设你在你的 gradle.properties 文件中定义了下面的属性：</user_home></user_home>
 
-```
+```java
     exampleProp = myValue
     someOtherProp = 455
 ```
 
 你可以在项目中访问这两个变量：
 
-```
+```java
     assert project.exampleProp == 'myValue'
 
     task printGradleProperty << {
@@ -105,7 +105,7 @@ doFirst 和 doLast，当任务执行的时候，定义在闭包里的动作逻�
 
 接下来我们会写一个简单的任务 printVersion,任务的作用就是打印项目的版本号，在任务 的最后一个动作定义这个逻辑。
 
-```
+```java
     version = '0.1-SNAPSHOT'
 
     task printVersion {
@@ -117,7 +117,7 @@ doFirst 和 doLast，当任务执行的时候，定义在闭包里的动作逻�
 
 前面我们讲过左移操作符是方法 doLast 的快捷键，他们的作用是一样的，当你执行 gradle printVersion,你应该得到下面的输出：
 
-```
+```java
     gradle printVersion
     :printVersion
     Version: 0.1-SNAPSHOT
@@ -125,7 +125,7 @@ doFirst 和 doLast，当任务执行的时候，定义在闭包里的动作逻�
 
 如果你用 doFirst 方法的话输出的结果是一样的：
 
-```
+```java
     task printVersion {
         doFirst {
         println "Version: $version"
@@ -137,7 +137,7 @@ doFirst 和 doLast，当任务执行的时候，定义在闭包里的动作逻�
 
 到目前为止，你只是给 printVersion 这个任务添加了单个动作，要么是第一个或者最后一个，对于每个任务可以有多个动作，实际上，当任务创建的时候你可以添加任意多个动作，每一个任务都有一个动作清单，他们在运行的时候是执行的，接下来我们来修改之前的例子：
 
-```
+```java
     task printVersion {
     //任务的初始声明可以添加 first 和 last 动作
         doFirst {
@@ -152,7 +152,7 @@ doFirst 和 doLast，当任务执行的时候，定义在闭包里的动作逻�
 
 //你可以在任务的动作列表的最前面添加其他任务，比如：
 
-```
+```java
     printVersion.doFirst { println "First action" }
 ```
 
@@ -162,7 +162,7 @@ doFirst 和 doLast，当任务执行的时候，定义在闭包里的动作逻�
 
 接下来我们来改善一下输出版本号的方法，Gradle 提供一个基于 SLF4J 库的日志实现，除了实现了基本的日志级别（DEBUG, ERROR, INFO, TRACE, WARN)）外，还添加了额外的级别，日志实例可以通过任务的方法来直接访问，接下来，你将用 QUIET 级别打印项目的版本号：
 
-```
+```java
     task printVersion << {
         logger.quiet "Version: $version"
     }
@@ -170,7 +170,7 @@ doFirst 和 doLast，当任务执行的时候，定义在闭包里的动作逻�
 
 访问任务的属性是不是很容易？接下来我将给你展示两个其他的属性，group 和 description，两个都是 documentation 任务的一部分，description 属性简短的表示任务的目的，group 表示任务的逻辑分组。
 
-```
+```java
     task printVersion(group: 'versioning', description:     'Prints project version.') << {
         logger.quiet "Version: $version"
     }
@@ -178,7 +178,7 @@ doFirst 和 doLast，当任务执行的时候，定义在闭包里的动作逻�
 
 你也可以通过 setter 方法来设置属性：
 
-```
+```java
     task printVersion {
         group = 'versioning'
         description = 'Prints project version.'
@@ -190,7 +190,7 @@ doFirst 和 doLast，当任务执行的时候，定义在闭包里的动作逻�
 
 当你运行 gradle tasks,你会看到任务显示在正确的分组里和它的描述信息：
 
-```
+```java
     gradle tasks
     :tasks
     ...
@@ -204,7 +204,7 @@ doFirst 和 doLast，当任务执行的时候，定义在闭包里的动作逻�
 
 dependsOn 方法用来声明一个任务依赖于一个或者多个任务，接下来通过一个例子来讲解运用不同的方法来应用依赖：
 
-```
+```java
     task first << { println "first" }
     task second << { println "second" }
 
@@ -220,7 +220,7 @@ dependsOn 方法用来声明一个任务依赖于一个或者多个任务，接�
 
 你可以通过命令行调用 third 任务来执行这个任务依赖链：
 
-```
+```java
     $ gradle -q third
     first
     second
@@ -238,7 +238,7 @@ Gradle 并不保证依赖的任务能够按顺序执行，dependsOn 方法只是
 
 在实际情况中，你可能需要在一个任务执行之后进行一些清理工作，一个典型的例子就是 Web 容器在部署应用之后要进行集成测试，Gradle 提供了一个 finalizer 任务来实现这个功能，你可以用 finalizedBy 方法来结束一个指定的任务：
 
-```
+```java
     task first << { println "first" }
     task second << { println "second" }
     //声明 first 结束后执行 second 任务
@@ -247,7 +247,7 @@ Gradle 并不保证依赖的任务能够按顺序执行，dependsOn 方法只是
 
 你会发现任务 first 结束后自动触发任务 second：
 
-```
+```java
     $ gradle -q first
     first
     second
@@ -257,7 +257,7 @@ Gradle 并不保证依赖的任务能够按顺序执行，dependsOn 方法只是
 
 接下来我们来学习怎么在 build 脚本中定义一些随机的代码，在实际情况下，如果你熟悉 Groovy 的语法你可以编写一些类或者方法，接下来你将会创建一个表示版本的类，在 Java 中一个 class 遵循 bean 的约定（POJO），就是添加 setter 和 getter 方法来访问类的域，到后面发现手工写这些方法很烦人，Groovy 有个对应的概念叫 POGO(plain-old Groovy object),他们的 setter 和 getter 方法在生成字节码的时候自动添加，因此运行的时候可以直接访问，看下面这个例子：
 
-```
+```java
     version = new ProjectVersion(0, 1)
 
     class ProjectVersion {
@@ -290,7 +290,7 @@ Gradle 并不保证依赖的任务能够按顺序执行，dependsOn 方法只是
 
 在你写代码之前，你要新建一个属性文件 version.properties,内容如下：
 
-```
+```java
     major = 0
     minor = 1
     release = false
@@ -300,7 +300,7 @@ Gradle 并不保证依赖的任务能够按顺序执行，dependsOn 方法只是
 
 接下来我们将声明一个任务 loadVersion 来从属性文件中读取版本号并赋给 ProjectVersion 实例，第一眼看起来和其他定义的任务一样，仔细一看你会注意到你没有定义动作或者使用左移操作符，在 Gradle 里称之为任务配置块(task configuration)。
 
-```
+```java
     ext.versionFile = file('version.properties')
     //配置任务没有左移操作符
     task loadVersion {
@@ -329,7 +329,7 @@ Gradle 并不保证依赖的任务能够按顺序执行，dependsOn 方法只是
 
 接下来运行 printVersion，你会看到 loadVersion 任务先执行了：
 
-```
+```java
     $ gradle printVersion
     Reading the version file.
     :printVersion
@@ -360,7 +360,7 @@ Gradle 通过比较两次 build 之间输入和输出有没有变化来确定这
 
 输入可以是一个目录、一个或者多个文件或者随机的属性，任务的输出可以是路径或者文件，输入和输出在 DefaultTask 类中用域来表示。假设你想创建一个任务把项目的版本由 SNAPSHOT 改为 release，下面的代码定义一个新任务给 release 变量赋值为 true，然后把改变写入到文件中。
 
-```
+```java
     task makeReleaseVersion(group: 'versioning', description: 'Makes project a release version.') << {
         version.release = true
         //ant 的 propertyfile 任务提供很方便的方法来修改属性文件
@@ -372,7 +372,7 @@ Gradle 通过比较两次 build 之间输入和输出有没有变化来确定这
 
 运行这个任务会修改版本属性并写入到文件中。
 
-```
+```java
     $ gradle makeReleaseVersion
     :makeReleaseVersion
 
@@ -389,7 +389,7 @@ makeReleaseVersion 的逻辑比较简单，你可能不用考虑代码维护的�
 
 之前提到过，Gradle 会给每一个任务创建一个 DefaultTask 类型的实例，当你要创建一个自定义的任务时，你需要创建一个继承自 DefaultTask 的类，看看下面这个例子：
 
-```
+```java
     class ReleaseVersionTask extends DefaultTask {
         //通过注解声明任务的输入和输出    
         @Input Boolean release
@@ -419,7 +419,7 @@ makeReleaseVersion 的逻辑比较简单，你可能不用考虑代码维护的�
 
 上面我们实现了自定义的动作方法，但是我们怎么使用这个方法，你需要在 build 脚本中创建一个 ReleaseVersionTask 类型的任务，通过给属性赋值来设定输入和输出：
 
-```
+```java
     //定义一个 ReleaseVersionTask 类型的任务
     task makeReleaseVersion(type: ReleaseVersionTask) {
         //设定任务属性
@@ -432,7 +432,7 @@ makeReleaseVersion 的逻辑比较简单，你可能不用考虑代码维护的�
 
 假设你在另一个项目中想使用前面这个自定义的任务，在另一个项目中需求又不太一样，用来表示版本的 POGO 有不同的域，比如下面这个：
 
-```
+```java
     class ProjectVersion {
         Integer min
         Integer maj
@@ -447,7 +447,7 @@ makeReleaseVersion 的逻辑比较简单，你可能不用考虑代码维护的�
 
 此外，你还想把版本文件名改为 project-version.properties,需要怎么做才能复用上面那个自定义的任务呢？
 
-```
+```java
     task makeReleaseVersion(type: ReleaseVersionTask) {
         release = version.prodReady
         //不同的版本文件
@@ -461,7 +461,7 @@ Gradle 自带的任务类型继承自 DefaultTask，Gradle 提供了很多自带
 
 //eg.使用任务类型来备份发布版本
 
-```
+```java
     task createDistribution(type: Zip, dependsOn:     makeReleaseVersion) {
         //引用 war 任务的输出
         from war.outputs.files
@@ -490,7 +490,7 @@ Gradle 自带的任务类型继承自 DefaultTask，Gradle 提供了很多自带
 
 你可能注意到上面通过 dependsOn 方法来显示声明两个任务之间的依赖，可是，一些任务并不是直接依赖于其他任务(比如上面 createDistribution 依赖于 war)。Gradle 怎么知道在任务之前执行哪个任务？通过使用一个任务的输出作为另一个任务的输入，依赖就推导出来了，结果依赖的任务自动执行了，我们来看一下完整的执行图：
 
-```
+```java
     $ gradle release
     :makeReleaseVersion
     :compileJava
@@ -515,7 +515,7 @@ Gradle 自带的任务类型继承自 DefaultTask，Gradle 提供了很多自带
 
 不过要记住把这些类放在源代码目录需要额外的工作，这和在脚本文件中定义有点不一样，你需要导入 Gradle 的 API，看看下面这个例子：
 
-```
+```java
     package com.manning.gia
     import org.gradle.api.DefaultTask
     import org.gradle.api.tasks.Input
@@ -529,7 +529,7 @@ Gradle 自带的任务类型继承自 DefaultTask，Gradle 提供了很多自带
 
 反过来，你的构建脚本需要从 buildSrc 中导入编译的 classes(比如 com.manning.gia.ReleaseVersionTask)，下面这个是编译任务输出：
 
-```
+```java
     $ gradle makeReleaseVersion
     :buildSrc:compileJava UP-TO-DATE
     :buildSrc:compileGroovy
@@ -567,7 +567,7 @@ Gradle 自带的任务类型继承自 DefaultTask，Gradle 提供了很多自带
 
 接下来我们来添加相应的监听方法，下面这段代码通过调用 whenReady 方法来注册回调接口，当任务图创建的时候这个回调会自动执行，你知道这个逻辑会在任何任务之前执行，所以你可以移除 makeReleaseVersion 任务。
 
-```
+```java
     gradle.taskGraph.whenReady { TaskExecutionGraph taskGraph ->
        //检查任务图是否包括 release 任务
         if(taskGraph.hasTask(release)) {
@@ -591,7 +591,7 @@ Gradle 自带的任务类型继承自 DefaultTask，Gradle 提供了很多自带
 
 下面是编程实现：
 
-```
+```java
     class ReleaseVersionListener implements TaskExecutionGraphListener  {
         final static String releaseTaskPath = ':release'
 

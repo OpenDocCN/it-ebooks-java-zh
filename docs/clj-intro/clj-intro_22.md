@@ -22,7 +22,7 @@ Wikipedia 上面对于并发有个很精准的定义：
 
 为了演示 `future` 的用法， 我们加了一些 println 的方法调用，它能帮助我们观察方法执行的状态，注意输出的消息的顺序。
 
-```
+```java
 (println "creating future")
 (def my-future (future (f-prime 2))) ; f-prime is called in another thread
 (println "created future")
@@ -32,7 +32,7 @@ Wikipedia 上面对于并发有个很精准的定义：
 
 如果 `f-prime` 是一个比较耗时的方法的话, 那么输出应该是这样的：
 
-```
+```java
 creating future
 created future
 derivative entered

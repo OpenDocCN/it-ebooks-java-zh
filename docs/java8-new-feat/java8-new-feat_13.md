@@ -1,7 +1,5 @@
 # 十三：JavaFX8 新特性以及开发 2048 游戏
 
-# 十三：JavaFX8 新特性以及开发 2048 游戏
-
 > 来源：[Java 8 新特性探究（十三）JavaFX 8 新特性以及开发 2048 游戏](http://my.oschina.net/benhaile/blog/335109)
 
 JavaFX 主要致力于富客户端开发，以弥补 swing 的缺陷，主要提供图形库与 media 库，支持 audio,video,graphics,animation,3D 等，同时采用现代化的 css 方式支持界面设计。同时又采用 XUI 方式以 XML 方式设计 UI 界面，达到显示与逻辑的分离。与 android 这方面确实有点相似性。

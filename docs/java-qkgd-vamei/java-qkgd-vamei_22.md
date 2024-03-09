@@ -28,7 +28,7 @@ KTurtle 绘制。参看[把你的孩子打造成为码农](http://www.cnblogs.co
 
 Java 的 GUI 功能主要集中在 awt 和 swing 两个包中。awt 是 GUI 底层包。swing 包是高层的封装，更容易移植。这里将更侧重于 swing 包。
 
-```
+```java
 import javax.swing.*;
 import java.awt.*;
 
@@ -89,7 +89,7 @@ Content Pane 的 setLayout()方法决定了元素的布局(layout)方式。布�
 
 除了按钮之外，我们还可以在 GUI 中增加更多的元素，这些元素大都是 JComponent 的衍生类。比如:
 
-```
+```java
 import javax.swing.*;
 import java.awt.*;
 public class HelloWorldSwing {

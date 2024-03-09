@@ -1,7 +1,5 @@
 # Chapter 10\. JPA
 
-# Chapter 10\. JPA
-
 你可以使用 JPA 实体作为流程变量，并且可以这样做：
 
 *   基于流程变量更新已有的 JPA 实体，它可以在用户任务的表单中填写或者由服务任务生成。
@@ -26,7 +24,7 @@
 
 下面例子中的配置是使用 jpaPersistenceUnitName：
 
-```
+```java
 <bean id="processEngineConfiguration"
   class="org.activiti.engine.impl.cfg.StandaloneInMemProcessEngineConfiguration">
 
@@ -48,7 +46,7 @@
 
 接下来例子中的配置提供了一个我们自定义的 `EntityManagerFactory`(在这个例子中，使用了 OpenJPA 实体管理器)。注意该代码片段仅仅包含与例子相关的 beans，去掉了其他 beans。OpenJPA 实体管理的完整并可以使用的例子可以在 activiti-spring-examples(`/activiti-spring/src/test/java/org/activiti/spring/test/jpa/JPASpringTest.java`)中找到。
 
-```
+```java
 <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
   <property name="persistenceUnitManager" ref="pum"/>
   <property name="jpaVendorAdapter">
@@ -71,7 +69,7 @@
 
 同样的配置也可以在编程式创建一个引擎时完成，例如：
 
-```
+```java
 ProcessEngine processEngine = ProcessEngineConfiguration
 .createProcessEngineConfigurationFromResourceDefault()
 .setJpaPersistenceUnitName("activiti-pu")
@@ -97,7 +95,7 @@ ProcessEngine processEngine = ProcessEngineConfiguration
 
 我们将使用一个简单的实体作为测试，其中包含有一个 id 和 `String` 类型的 value 属性，这也将会被持久化。在允许测试之前，我们创建一个实体并且保存它。
 
-```
+```java
 @Entity(name = "JPA_ENTITY_FIELD")
 public class FieldAccessJPAEntity {
 
@@ -131,7 +129,7 @@ public class FieldAccessJPAEntity {
 
 我们开始一个新的流程实例，添加实体作为变量。与其它的变量一样，它们存储在引擎的持久存储区。当下次这个变量被请求，它会从基于类和 Id 的存储的 `EntityManager` 中加载。
 
-```
+```java
 Map<String, Object> variables = new HashMap<String, Object>();
 variables.put("entityToUpdate", entityToUpdate);
 
@@ -140,14 +138,14 @@ ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("Upda
 
 在我们的流程定义的第一个节点包含一个 `serviceTask` 将调用方法 在 `entityToUpdate` 上 `setValue`，它解析为 JPA 变量，我们启动流程实例并将从相关联的当前引擎的上下文“EntityManager”进行加载。
 
-```
+```java
 <serviceTask id='theTask' name='updateJPAEntityTask'
   activiti:expression="${entityToUpdate.setValue('updatedValue')}" /> 
 ```
 
 当 service-task 完成后，流程实例等在流程定义中定义的 userTask，这使我们能够检查流程实例。在这一点上，EntityManager 已刷新并更改到实体已经被推到数据库。当我们得到变量 entityToUpdate 值时，它再次加载，我们得到实体，并将实体中的属性 `value` 设置到 `updatedValue` 。
 
-```
+```java
 // Servicetask in process 'UpdateJPAValuesProcess' should have set value on entityToUpdate.
 Object updatedEntity = runtimeService.getVariable(processInstance.getId(), "entityToUpdate");
 assertTrue(updatedEntity instanceof FieldAccessJPAEntity);
@@ -158,7 +156,7 @@ assertEquals("updatedValue", ((FieldAccessJPAEntity)updatedEntity).getValue());
 
 可以查询 `ProcessInstances` 和 `Execution` 包含 JPA 实体作为变量值。注意 只有 在 ProcessInstanceQuery 和 ExecutionQuery ，`variableValueEquals(name, entity)` 是支持 JPA 实体的 。 方法 `variableValueNotEquals`, `variableValueGreaterThan`, `variableValueGreaterThanOrEqual`, `variableValueLessThan`和 `variableValueLessThanOrEqual` 不支持，并且当一个 JPA 实体传递作为值时，会抛出 `ActivitiException`。
 
-```
+```java
 ProcessInstance result = runtimeService.createProcessInstanceQuery()
     .variableValueEquals("entityToQuery", entityToQuery).singleResult(); 
 ```
@@ -178,7 +176,7 @@ JPASpringTest 例子可以在 activiti-spring-examples 中找到。它的使用�
 
 ![](img/eac62021.png)
 
-```
+```java
 <?xml version="1.0" encoding="UTF-8"?>
 <definitions id="taskAssigneeExample"
 

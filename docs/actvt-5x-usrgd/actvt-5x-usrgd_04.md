@@ -1,7 +1,5 @@
 # Chapter 9\. Forms 表单
 
-# Chapter 9\. Forms 表单
-
 Activiti 提供了一种方便而且灵活的方式在业务流程中以手工方式添加表单。我们对表单的 支持有 2 种方式： 通过表单属性对内置表单进行渲染和外置表单进行渲染。
 
 # Form properties 表单属性
@@ -14,25 +12,25 @@ Activiti 提供了一种方便而且灵活的方式在业务流程中以手工�
 
 使用 Activiti API 的方法查看公开的属性信息。然后，任意 UI 技术都能够在这些属性上面构建一个表单。该属性专门（并且更多局限性）为流程变量提供了一个视图。 表单所需要显示的属性可以从下面例子中的返回值 FormData 中获取。
 
-```
+```java
 StartFormData FormService.getStartFormData(String processDefinitionId) 
 ```
 
 或者
 
-```
+```java
 TaskFormdata FormService.getTaskFormData(String taskId) 
 ```
 
 在默认情况下，内置的表单引擎，这些属性就像对流程变量一样。如果任务表单属性和流程变量是一对一的关系，那么任务表单属性就不需要进行申明了，例如，下面的申明：
 
-```
+```java
 <startEvent id="start" /> 
 ```
 
 当执行到开始事件时，所有的流程变量都是可用的，但
 
-```
+```java
 formService.getStartFormData(String processDefinitionId).getFormProperties() 
 ```
 
@@ -50,7 +48,7 @@ formService.getStartFormData(String processDefinitionId).getFormProperties()
 
 举例
 
-```
+```java
 <userTask id="task">
   <extensionElements>
     <activiti:formProperty id="room" />
@@ -78,7 +76,7 @@ formService.getStartFormData(String processDefinitionId).getFormProperties()
 
 对于申明每一个表单属性，以下的 FormProperty 信息可以通过 List <formproperty class="calibre27">formService.getStartFormData(String processDefinitionId).getFormProperties() 和 List <formproperty class="calibre27">formService.getTaskFormData(String taskId).getFormProperties() 获取。</formproperty></formproperty>
 
-```
+```java
 public interface FormProperty {
   /** the key used to submit the property in {@link FormService#submitStartFormData(String, java.util.Map)}
    * or {@link FormService#submitTaskFormData(String, java.util.Map)} */
@@ -101,7 +99,7 @@ public interface FormProperty {
 
 举例
 
-```
+```java
 <startEvent id="start">
   <extensionElements>
     <activiti:formProperty id="speaker"
@@ -128,7 +126,7 @@ public interface FormProperty {
 
 Activiti 控制台支持表单属性并且可以根据表单定义对表单进行渲染。例如下面的 XML 片段
 
-```
+```java
 <startEvent>
   <extensionElements>
     <activiti:formProperty id="numberOfDays" name="Number of days" value="${numberOfDays}" type="long" required="true"/>

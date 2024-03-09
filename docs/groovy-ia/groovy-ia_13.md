@@ -1,7 +1,5 @@
 # 实战 Groovy: 用 Groovy 打造服务器端
 
-# 实战 Groovy: 用 Groovy 打造服务器端
-
 *用 Groovlet 和 GSP 进行动态服务器端编程*
 
 Groovlet 和 GroovyServer Pages（GSP）框架都是建立在 Java Servlet API 基础之上。不过，与 Strut 和 JSF 不同，Groovy 的服务器端实现不意味着适用于所有情况。相反，它提供了一种快速而又方便地开发服务器端应用程序的简化方法。下面请跟随 Groovy 的鼓吹者 Andrew Glover，听听他如何介绍这些框架，并展示它们的应用。
@@ -30,7 +28,7 @@ Groovlet 和 GroovyServer Pages（GSP）框架的目的是提供一种优雅而�
 
 ##### 清单 1\. 这就是 def!
 
-```
+```java
 def logCollection(coll){
   counter = 0;
   coll.each{ x | 
@@ -47,7 +45,7 @@ logCollection(mp)
 
 ##### 清单 2\. 在 def 中 return 语句是可选的
 
-```
+```java
 def getJavaType(val){
   val.class.getName()
 }
@@ -67,7 +65,7 @@ println getJavaType(tst)
 
 ##### 清单 3\. groove 上下文的目录列表
 
-```
+```java
 ./groove:
 drwxrwxrwx+   3 aglover  users        0 Jan 19 12:14 WEB-INF
 ./WEB-INF:
@@ -82,7 +80,7 @@ drwxrwxrwx+   2 aglover  users        0 Jan 19 17:12 lib
 
 ##### 清单 4\. 一个完全配置的 web.xml 文件
 
-```
+```java
 <?xml version="1.0" encoding="ISO-8859-1"?>
 <web-app 
 
@@ -123,7 +121,7 @@ drwxrwxrwx+   2 aglover  users        0 Jan 19 17:12 lib
 
 ##### 清单 5\. 开始使用 Groovlet
 
-```
+```java
 println """
 <html><head>
 <title>Groovlets 101</title>
@@ -162,7 +160,7 @@ ${application.getServerInfo()}
 
 ##### 清单 6\. 一个诊断 Groovlet
 
-```
+```java
 import com.vanward.resource.hibernate.factory.DefaultHibernateSessionFactory
 /**
  * Tests VM version from environment- note, even 1.5 will
@@ -231,7 +229,7 @@ println """
 
 ##### 清单 7\. 一个简单的 GSP
 
-```
+```java
 <html>
 <head><title>index.gsp</title></head>
 <body>
@@ -268,7 +266,7 @@ println """
 
 ##### 清单 8\. 重构后的数据库报告应用程序
 
-```
+```java
 import groovy.sql.Sql
 /**
  * forwards to passed in page
@@ -319,7 +317,7 @@ forward("mysqlreport.gsp", request, response)
 
 ##### 清单 9\. 报告的视图部分
 
-```
+```java
 <html><head>
 <title>MySql Health Report</title>
 </head>

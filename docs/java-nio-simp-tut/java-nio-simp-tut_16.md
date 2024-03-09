@@ -14,7 +14,7 @@ Files.exits()方法用来检查给定的 Path 在文件系统中是否存在。 
 
 下面是一个使用 Files.exists()的示例：
 
-```
+```java
 Path path = Paths.get("data/logging.properties");
 
 boolean pathExists =
@@ -30,7 +30,7 @@ boolean pathExists =
 
 Files.createDirectory()会创建 Path 表示的路径，下面是一个示例：
 
-```
+```java
 Path path = Paths.get("data/subdir");
 
 try {
@@ -51,7 +51,7 @@ try {
 
 Files.copy()方法可以吧一个文件从一个地址复制到另一个位置。例如：
 
-```
+```java
 Path sourcePath      = Paths.get("data/logging.properties");
 Path destinationPath = Paths.get("data/logging-copy.properties");
 
@@ -73,7 +73,7 @@ try {
 
 copy 操作可以强制覆盖已经存在的目标文件。下面是具体的示例：
 
-```
+```java
 Path sourcePath      = Paths.get("data/logging.properties");
 Path destinationPath = Paths.get("data/logging-copy.properties");
 
@@ -94,7 +94,7 @@ try {
 
 Java NIO 的 Files 类也包含了移动的文件的接口。移动文件和重命名是一样的，但是还会改变文件的目录位置。java.io.File 类中的 renameTo()方法与之功能是一样的。
 
-```
+```java
 Path sourcePath      = Paths.get("data/logging-copy.properties");
 Path destinationPath = Paths.get("data/subdir/logging-moved.properties");
 
@@ -115,7 +115,7 @@ try {
 
 Files.delete()方法可以删除一个文件或目录：
 
-```
+```java
 Path path = Paths.get("data/subdir/logging-moved.properties");
 
 try {
@@ -134,7 +134,7 @@ Files.walkFileTree()方法具有递归遍历目录的功能。walkFileTree 接�
 
 下面先来看一下 FileVisitor 这个接口的定义：
 
-```
+```java
 public interface FileVisitor {
 
     public FileVisitResult preVisitDirectory(
@@ -156,7 +156,7 @@ FileVisitor 需要调用方自行实现，然后作为参数传入 walkFileTree(
 
 下面看一个 walkFileTree()的示例：
 
-```
+```java
 Files.walkFileTree(path, new FileVisitor<Path>() {
   @Override
   public FileVisitResult preVisitDirectory(Path dir, BasicFileAttributes attrs) throws IOException {
@@ -207,7 +207,7 @@ SKIP_SUBTREE 表示继续访问，但是不需要访问该目录下的子目录�
 
 下面看一个例子，我们通过 walkFileTree()来寻找一个 README.txt 文件：
 
-```
+```java
 Path rootPath = Paths.get("data");
 String fileToFind = File.separator + "README.txt";
 
@@ -235,7 +235,7 @@ try {
 
 Files.walkFileTree()也可以用来删除一个目录以及内部的所有文件和子目。Files.delete()只用用于删除一个空目录。我们通过遍历目录，然后在 visitFile()接口中三次所有文件，最后在 postVisitDirectory()内删除目录本身。
 
-```
+```java
 Path rootPath = Paths.get("data/to-delete");
 
 try {

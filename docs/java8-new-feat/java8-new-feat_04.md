@@ -1,7 +1,5 @@
 # 四、类型注解：复杂还是便捷
 
-# 四、类型注解：复杂还是便捷
-
 > 来源：[Java 8 新特性探究（四）类型注解 复杂还是便捷](http://my.oschina.net/benhaile/blog/179642)
 
 本文将介绍 java 8 的第二个特性：类型注解。
@@ -14,25 +12,25 @@
 
 *   创建类实例
 
-```
+```java
 new @Interned MyObject(); 
 ```
 
 *   类型映射
 
-```
+```java
 myString = (@NonNull String) str; 
 ```
 
 *   implements 语句中
 
-```
+```java
 class UnmodifiableList<T> implements @Readonly List<@Readonly T> { … } 
 ```
 
 *   throw exception 声明
 
-```
+```java
 void monitorTemperature() throws @Critical TemperatureException { … } 
 ```
 
@@ -42,7 +40,7 @@ void monitorTemperature() throws @Critical TemperatureException { … }
 
 先看看下面代码
 
-```
+```java
 Collections.emptyList().add("One");
 int i=Integer.parseInt("hello");
 System.console().readLine(); 
@@ -56,13 +54,13 @@ System.console().readLine();
 
 check framework 是第三方工具，配合 Java 的类型注解效果就是 1+1>2。它可以嵌入到 javac 编译器里面，可以配合 ant 和 maven 使用，也可以作为
 
-```
+```java
 [Eclipse](http://res.importnew.com/eclipse "Eclipse ImportNew 主页") 
 ```
 
 插件。地址是[`types.cs.washington.edu/checker-framework/。`](http://types.cs.washington.edu/checker-framework/。) check framework 可以找到类型注解出现的地方并检查，举个简单的例子：
 
-```
+```java
 import checkers.nullness.quals.*;
 public class GetStarted {
     void sample() {
@@ -73,19 +71,19 @@ public class GetStarted {
 
 使用 javac 编译上面的类
 
-```
+```java
 javac -processor checkers.nullness.NullnessChecker GetStarted.java 
 ```
 
 编译是通过，但如果修改成
 
-```
+```java
 @NonNull Object ref = null; 
 ```
 
 再次编译，则出现
 
-```
+```java
 GetStarted.java:5: incompatible types.
 found   : @Nullable <nulltype>
 required: @NonNull Object
@@ -96,7 +94,7 @@ required: @NonNull Object
 
 如果你不想使用类型注解检测出来错误，则不需要 processor，直接 javac GetStarted.java 是可以编译通过的，这是在[java 8 with Type Annotation Support](https://jdk8.java.net/type-annotations/)版本里面可以，但 java 5,6,7 版本都不行，因为 javac 编译器不知道@NonNull 是什么东西，但 check framework 有个向下兼容的解决方案，就是将类型注解 nonnull 用/**/注释起来，比如上面例子修改为
 
-```
+```java
 import checkers.nullness.quals.*;
 public class GetStarted {
     void sample() {
@@ -121,13 +119,13 @@ JSR 308 通过如下方法解决上述两个问题：
 
 对 JSR308，有人反对，觉得更复杂更静态了，比如
 
-```
+```java
 @NotEmpty List<@NonNull String> strings = new ArrayList<@NonNull String>()> 
 ```
 
 换成动态语言为
 
-```
+```java
 var strings = ["one", "two"]; 
 ```
 

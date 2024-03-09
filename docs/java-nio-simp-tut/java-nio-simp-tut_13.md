@@ -14,7 +14,7 @@
 
 打开一个管道通过调用 Pipe.open()工厂方法，如下：
 
-```
+```java
 Pipe pipe = Pipe.open();
 ```
 
@@ -22,13 +22,13 @@ Pipe pipe = Pipe.open();
 
 向管道写入数据需要访问他的 sink channel：
 
-```
+```java
 Pipe.SinkChannel sinkChannel = pipe.sink();
 ```
 
 接下来就是调用 write()方法写入数据了：
 
-```
+```java
 String newData = "New String to write to file..." + System.currentTimeMillis();
 
 ByteBuffer buf = ByteBuffer.allocate(48);
@@ -46,13 +46,13 @@ while(buf.hasRemaining()) {
 
 类似的从管道中读取数据需要访问他的 source channel：
 
-```
+```java
 Pipe.SourceChannel sourceChannel = pipe.source();
 ```
 
 接下来调用 read()方法读取数据：
 
-```
+```java
 ByteBuffer buf = ByteBuffer.allocate(48);
 
 int bytesRead = inChannel.read(buf);

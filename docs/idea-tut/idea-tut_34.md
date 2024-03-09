@@ -64,7 +64,7 @@ JRebel 的安装方法有两种， 一种是直接在 Tomcat 启动参数上面�
 
 Windows 输入:
 
-```
+```java
 -noverify
 -agentpath:D:/dev_env/jrebel/jrebel_running/lib/jrebel64.dll 
 ```
@@ -75,7 +75,7 @@ Windows 输入:
 
 Linux 用这个：
 
-```
+```java
 -agentpath:/dev_env/jrebel/jrebel_running/lib/libjrebel64.so 
 ```
 
@@ -85,7 +85,7 @@ Linux 用这个：
 
 Mac OS 用这个：
 
-```
+```java
 -agentpath:/dev_env/jrebel/jrebel_running/lib/libjrebel64.dylib 
 ```
 
